@@ -1,0 +1,3 @@
+[submodule "themes/personal-blog-theme"]
+	path = themes/personal-blog-theme
+	url = https://codeberg.org/bw20/personal-blog-theme.git

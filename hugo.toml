@@ -1,3 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'http://localhost'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'Personal blog'
+theme = 'personal-blog-theme'

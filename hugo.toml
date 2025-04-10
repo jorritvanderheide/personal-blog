@@ -2,3 +2,18 @@ baseURL = 'http://localhost'
 languageCode = 'en-us'
 title = 'Personal blog'
 theme = 'personal-blog-theme'
+
+[[menus.main]]
+name = 'Home'
+pageRef = '/'
+weight = 10
+
+[[menus.main]]
+name = 'Posts'
+pageRef = '/posts'
+weight = 20
+
+[[menus.main]]
+name = 'Tags'
+pageRef = '/tags'
+weight = 30

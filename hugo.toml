@@ -1,3 +1,18 @@
+[build]
+  [build.buildStats]
+    enable = true
+  [[build.cachebusters]]
+    source = 'assets/notwatching/hugo_stats\.json'
+    target = 'css'
+[module]
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'
+  [[module.mounts]]
+    disableWatch = true
+    source = 'hugo_stats.json'
+    target = 'assets/notwatching/hugo_stats.json'
+
 baseURL = 'http://localhost'
 languageCode = 'en-us'
 title = 'Personal blog'
@@ -7,6 +22,11 @@ theme = 'personal-blog-theme'
 name = 'Home'
 pageRef = '/'
 weight = 10
+
+[[menus.main]]
+name = 'Articles'
+pageRef = '/articles'
+weight = 20
 
 [[menus.main]]
 name = 'Posts'

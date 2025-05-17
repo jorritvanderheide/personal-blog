@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@source "hugo_stats.json";
+
+:root {
+  --background: #fbf6de;
+  --surface: #fbf6de;
+  --on-surface: #1a0614;
+  --header: 12rem;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1a0614;
+    --surface: #1a0614;
+    --on-surface: #fbf6de;
+  }
+} */
+
+@theme {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+
+  --spacing-header: var(--header);
+  --spacing-0: 0;
+  --spacing-1: 0.4rem;
+  --spacing-2: 0.8rem;
+  --spacing-3: 1.2rem;
+  --spacing-4: 1.6rem;
+  --spacing-5: 2.0rem;
+  --spacing-6: 2.4rem;
+  --spacing-7: 2.8rem;
+  --spacing-8: 3.2rem;
+  --spacing-9: 3.6rem;
+  --spacing-10: 4.0rem;
+  --spacing-12: 4.8rem;
+  --spacing-14: 5.6rem;
+  --spacing-16: 6.4rem;
+  --spacing-18: 7.2rem;
+  --spacing-20: 8.0rem;
+  --spacing-24: 9.6rem;
+  --spacing-28: 11.2rem;
+  --spacing-32: 12.8rem;
+  --spacing-36: 14.4rem;
+  --spacing-40: 16.0rem;
+  --spacing-48: 19.2rem;
+  --spacing-56: 22.4rem;
+  --spacing-64: 25.6rem;
+  --spacing-72: 28.8rem;
+  --spacing-80: 32.0rem;
+  --spacing-96: 38.8rem;
+  --spacing-128: 51.2rem;
+}
+
+
+@layer base {
+  html {
+    font-kerning: normal;
+    font-size: 62.5%;
+    font-smooth: always;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+
+  body {
+    @apply bg-background text-on-surface;
+    font-size: 1.6rem;
+    overscroll-behavior: contain;
+  }
+
+  /* ::-webkit-scrollbar {
+    @apply w-[0.25rem] sm:w-[0.5rem];
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-on-surface;
+  } */
+}

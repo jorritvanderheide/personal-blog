@@ -15,7 +15,7 @@
         packages = with pkgs; [
           hugo # Static site generator
           just # Task runner
-          tailwindcss # CSS framework
+          tailwindcss_4 # CSS framework
         ];
 
         shellHook = ''

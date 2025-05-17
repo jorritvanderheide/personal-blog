@@ -7,14 +7,14 @@
     {{ partialCached "css.html" . }} {{ partial "head.html" . }}
   </head>
   <body class="h-[100svh] w-screen flex flex-col">
-    <header class="flex justify-between items-center h-header shrink-0">
+    <header class="flex justify-between items-center h-header shrink-0 bg-surface">
       {{ partial "header.html" . }}
     </header>
     <div
       class="min-h-[calc(100svh_-_var(--header))] h-full flex flex-col overflow-y-auto"
     >
-      <main class="grow-1">{{ block "main" . }}{{ end }}</main>
-      <footer class="bg-red-500">{{ partial "footer.html" . }}</footer>
+      <main class="grow-1 max-w-[90ch] mx-auto">{{ block "main" . }}{{ end }}</main>
+      <footer class="bg-surface">{{ partial "footer.html" . }}</footer>
     </div>
   </body>
 </html>

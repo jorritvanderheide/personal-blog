@@ -2,24 +2,40 @@
 @source "hugo_stats.json";
 
 :root {
-  --background: #fbf6de;
-  --surface: #fbf6de;
-  --on-surface: #1a0614;
+  --background: #f9f5d7;
+  --surface: #f5edca;
+  --on-surface: #4f3829;
+  --on-surface-dim: #654735;
+  --accent-yellow: #d8a657;
+  --accent-green: #a9b665;
+  --accent-aqua: #89b482;
+
   --header: 12rem;
+
+  --slope: (maxFontSize - minFontSize) / (maxWidth - minWidth)
+    --yAxisIntersection = -minWidth * slope + minFontSize;
 }
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
   :root {
-    --background: #1a0614;
-    --surface: #1a0614;
-    --on-surface: #fbf6de;
+    --background: #1d2021;
+    --surface: #282828;
+    --on-surface: #ddc7a1;
+    --on-surface-dim: #d4be98;
+    --accent-yellow: #b47109;
+    --accent-green: #6c782e;
+    --accent-aqua: #4c7a5d;
   }
-} */
+}
 
 @theme {
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-on-surface: var(--on-surface);
+  --color-on-surface-dim: var(--on-surface-dim);
+  --color-accent-yellow: var(--accent-yellow);
+  --color-accent-greeen: var(--accent-green);
+  --color-accent-aqua: var(--accent-aqua);
 
   --spacing-header: var(--header);
   --spacing-0: 0;
@@ -27,31 +43,36 @@
   --spacing-2: 0.8rem;
   --spacing-3: 1.2rem;
   --spacing-4: 1.6rem;
-  --spacing-5: 2.0rem;
+  --spacing-5: 2rem;
   --spacing-6: 2.4rem;
   --spacing-7: 2.8rem;
   --spacing-8: 3.2rem;
   --spacing-9: 3.6rem;
-  --spacing-10: 4.0rem;
+  --spacing-10: 4rem;
   --spacing-12: 4.8rem;
   --spacing-14: 5.6rem;
   --spacing-16: 6.4rem;
   --spacing-18: 7.2rem;
-  --spacing-20: 8.0rem;
+  --spacing-20: 8rem;
   --spacing-24: 9.6rem;
   --spacing-28: 11.2rem;
   --spacing-32: 12.8rem;
   --spacing-36: 14.4rem;
-  --spacing-40: 16.0rem;
+  --spacing-40: 16rem;
   --spacing-48: 19.2rem;
   --spacing-56: 22.4rem;
   --spacing-64: 25.6rem;
   --spacing-72: 28.8rem;
-  --spacing-80: 32.0rem;
+  --spacing-80: 32rem;
   --spacing-96: 38.8rem;
   --spacing-128: 51.2rem;
-}
 
+  --text-heading: 3.2rem;
+  --text-heading-small: 2.4rem;
+  --text-base: 1.6rem;
+  --text-label: 1.6rem;
+  --text-label-small: 1.2rem;
+}
 
 @layer base {
   html {
@@ -69,8 +90,16 @@
     overscroll-behavior: contain;
   }
 
-  /* ::-webkit-scrollbar {
-    @apply w-[0.25rem] sm:w-[0.5rem];
+  h1 {
+    @apply text-label font-bold;
+  }
+
+  a {
+    @apply text-accent-yellow;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-1;
   }
 
   ::-webkit-scrollbar-track {
@@ -78,6 +107,6 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-on-surface;
-  } */
+    @apply rounded-full bg-on-surface-dim;
+  }
 }

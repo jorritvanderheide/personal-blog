@@ -1,3 +1,27 @@
+baseURL = 'http://localhost'
+languageCode = 'en-us'
+title = 'Personal blog'
+
+[[menus.main]]
+name = 'Home'
+pageRef = '/'
+weight = 10
+
+[[menus.main]]
+name = 'Bits'
+pageRef = '/bits'
+weight = 20
+
+[[menus.main]]
+name = 'MOCs'
+pageRef = '/moc'
+weight = 20
+
+[[menus.main]]
+name = 'Tags'
+pageRef = '/tags'
+weight = 30
+
 [build]
   [build.buildStats]
     enable = true
@@ -12,28 +36,3 @@
     disableWatch = true
     source = 'hugo_stats.json'
     target = 'assets/notwatching/hugo_stats.json'
-
-baseURL = 'http://localhost'
-languageCode = 'en-us'
-title = 'Personal blog'
-theme = 'personal-blog-theme'
-
-[[menus.main]]
-name = 'Home'
-pageRef = '/'
-weight = 10
-
-[[menus.main]]
-name = 'Articles'
-pageRef = '/articles'
-weight = 20
-
-[[menus.main]]
-name = 'Posts'
-pageRef = '/posts'
-weight = 20
-
-[[menus.main]]
-name = 'Tags'
-pageRef = '/tags'
-weight = 30

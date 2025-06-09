@@ -6,5 +6,5 @@ Serves Hugo for development
 
 ~~~sh
 echo "Serving project..."
-hugo serve --noHTTPCache
+hugo serve --noHTTPCache --disableFastRender
 ~~~

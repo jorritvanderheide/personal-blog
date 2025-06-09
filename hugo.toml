@@ -9,8 +9,8 @@ pageRef = '/bits'
 weight = 10
 
 [[menus.main]]
-identifier = 'mocs'
-name = 'mocs'
+identifier = 'moc'
+name = 'moc'
 pageRef = '/moc'
 weight = 20
 
@@ -34,3 +34,21 @@ target = 'assets'
 disableWatch = true
 source = 'hugo_stats.json'
 target = 'assets/notwatching/hugo_stats.json'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.parser]
+      wrapStandAloneImageWithinParagraph = false
+      [markup.goldmark.parser.attribute]
+        block = true
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = false
+    lineAnchors = ''
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    style = 'gruvbox'
+    tabWidth = 4

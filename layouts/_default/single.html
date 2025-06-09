@@ -1,13 +1,13 @@
 {{ define "main" }}
 <article class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6">
   <div
-    class="h-fit pb-16 pt-24 border-b-[1px] border-on-surface-dim sm:col-span-4 lg:col-span-6 flex flex-col gap-16"
+    class="h-fit pb-12 sm:pb-16 pt-16 sm:pt-24 border-b-[1px] border-on-surface-dim sm:col-span-4 lg:col-span-6 flex flex-col gap-12 sm:gap-16"
   >
-    <div class="px-8 flex flex-col gap-12">
+    <div class="px-4 sm:px-8 flex flex-col gap-6 sm:gap-12">
       <div>tags</div>
-      <h1 class="text-8xl leading-[120%] uppercase text-balance">{{ .Title }}</h1>
+      <h1 class="text-4xl sm:text-7xl lg:text-8xl leading-[120%] uppercase text-balance">{{ .Title }}</h1>
       {{ with .Params.Subtitle }}
-      <h2 class="text-6xl leading-[120%] text-balance">{{ . }}</h1>
+      <h2 class="text-3xl sm:text-5xl lg:text-6xl leading-[120%] text-balance">{{ . }}</h1>
       {{ end }}
     </div>
     <div class="w-full grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6">
@@ -16,9 +16,9 @@
       <time datetime="{{ $dateMachine }}" class="hidden lg:block self-end px-8">
         {{ $dateHuman }}
       </time>
-      <div class="sm:col-span-4 lg:col-start-3 lg:col-span-3 px-8">
+      <div class="sm:col-span-4 lg:col-start-3 lg:col-span-3 px-4 sm:px-8">
         {{ with .Params.Lead }}
-        <p class="text-xl leading-[180%] font-bold">{{ . }}</p>
+        <p class="text-lg sm:text-xl leading-[180%] font-bold">{{ . }}</p>
         {{ end }}
       </div>
     </div>
@@ -28,6 +28,6 @@
   <div class="hidden lg:flex flex-col gap-4 py-16 px-8 uppercase">{{ . }}</div>
   {{ end }}
 
-  <div class="lg:col-start-3 sm:col-span-4 lg:col-span-3 py-16 px-8 leading-[180%] markdown">{{ .Content }}</div>
+  <div class="lg:col-start-3 sm:col-span-4 lg:col-span-3 py-12 sm:py-16 px-4 sm:px-8 leading-[180%] markdown">{{ .Content }}</div>
 </article>
 {{ end }}

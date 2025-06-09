@@ -2,6 +2,7 @@
 <html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
   <head>
     {{ partialCached "css.html" . }} {{ partial "head.html" . }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   </head>
   <body class="h-[100svh] w-screen flex flex-col">
     {{ partial "grid.html" . }} {{ partial "header.html" . }}

@@ -1,20 +1,15 @@
 <!DOCTYPE html>
-<html
-  lang="{{ site.Language.LanguageCode }}"
-  dir="{{ or site.Language.LanguageDirection `ltr` }}"
->
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
   <head>
     {{ partialCached "css.html" . }} {{ partial "head.html" . }}
   </head>
   <body class="h-[100svh] w-screen flex flex-col">
-    <header class="flex justify-between items-center h-header shrink-0 bg-surface">
-      {{ partial "header.html" . }}
-    </header>
+    {{ partial "grid.html" . }} {{ partial "header.html" . }}
     <div
-      class="min-h-[calc(100svh_-_var(--header))] h-full flex flex-col overflow-y-auto"
+      class="min-h-[calc(100svh_-_var(--spacing-16))] lg:min-h-[calc(100svh_-_var(--spacing-20))] 2xl:min-h-[calc(100svh_-_var(--spacing-24))] h-full flex flex-col overflow-y-auto scroll-smooth"
     >
-      <main class="grow-1 max-w-[90ch] mx-auto">{{ block "main" . }}{{ end }}</main>
-      <footer class="bg-surface">{{ partial "footer.html" . }}</footer>
+      <main class="grow-1 h-fit mx-2 2xl:mx-unit">{{ block "main" . }}{{ end }}</main>
+      {{ partial "footer.html" . }}
     </div>
   </body>
 </html>

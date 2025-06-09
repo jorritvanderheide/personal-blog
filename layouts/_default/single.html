@@ -1,10 +1,33 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
+<article class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6">
+  <div
+    class="h-fit pb-16 pt-24 border-b-[1px] border-on-surface-dim sm:col-span-4 lg:col-span-6 flex flex-col gap-16"
+  >
+    <div class="px-8 flex flex-col gap-12">
+      <div>tags</div>
+      <h1 class="text-8xl leading-[120%] uppercase text-balance">{{ .Title }}</h1>
+      {{ with .Params.Subtitle }}
+      <h2 class="text-6xl leading-[120%] text-balance">{{ . }}</h1>
+      {{ end }}
+    </div>
+    <div class="w-full grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6">
+      {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }} {{ $dateHuman := .Date |
+      time.Format ":date_long" }}
+      <time datetime="{{ $dateMachine }}" class="hidden lg:block self-end px-8">
+        {{ $dateHuman }}
+      </time>
+      <div class="sm:col-span-4 lg:col-start-3 lg:col-span-3 px-8">
+        {{ with .Params.Lead }}
+        <p class="text-xl leading-[180%] font-bold">{{ . }}</p>
+        {{ end }}
+      </div>
+    </div>
+  </div>
 
-  {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
-  {{ $dateHuman := .Date | time.Format ":date_long" }}
-  <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+  {{ with .TableOfContents }}
+  <div class="hidden lg:flex flex-col gap-4 py-16 px-8 uppercase">{{ . }}</div>
+  {{ end }}
 
-  {{ .Content }}
-  {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+  <div class="lg:col-start-3 sm:col-span-4 lg:col-span-3 py-16 px-8 leading-[180%] markdown">{{ .Content }}</div>
+</article>
 {{ end }}

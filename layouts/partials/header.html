@@ -1,44 +1,48 @@
 <header
   class="w-full h-16 lg:h-20 2xl:h-24 shrink-0 px-2 2xl:px-24 border-b-[1px] border-on-surface-dim"
 >
-  <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 h-full w-full">
+  <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8 h-full w-full">
     <a
       href="{{ .Site.Home.RelPermalink }}"
-      class="grid-item col-span-1 sm:col-span-2 flex gap-[1em] px-4 sm:px-8 items-center sm:border-x-[1px] border-on-surface-dim bg-background font-bold text-2xl"
+      class="grid-item col-span-1 sm:col-span-2 flex gap-[1em] px-4 sm:px-8 items-center sm:border-x-[1px] border-on-surface-dim bg-background font-bold text-2xl 3xl:col-start-2"
     >
       jorrit
     </a>
 
     {{/* Mobile */}}
     <div
-      class="hidden grid-item sm:flex px-4 sm:px-8 items-center lg:hidden border-r-[1px] border-on-surface-dim"
+      class="hidden grid-item sm:flex px-8 items-center lg:hidden border-r-[1px] border-on-surface-dim"
     ></div>
     <div
       id="menuToggle"
       aria-label="Toggle menu"
-      class="lg:hidden grid-item flex px-4 sm:px-8 justify-end items-center hover:cursor-pointer"
+      class="lg:hidden grid-item flex px-8 justify-end items-center hover:cursor-pointer"
     >
     <span id="menuText">menu</span>
     </div>
  
-    {{/* Desktop */}} {{ range .Site.Menus.main }} {{- $id := .Identifier -}} {{- if eq $id "bits"}}
+    {{/* Desktop */}}
+    <div
+      class="hidden grid-item 2xl:flex px-8 items-center border-r-[1px] border-on-surface-dim"
+    ></div>
+    {{ range .Site.Menus.main }} {{- $id := .Identifier -}} {{- if eq $id "bits"}}
     <a
       href="{{ .URL }}"
-      class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-4"
+      class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-4 3xl:col-start-5"
     >
       {{ .Name }}
     </a>
     {{else if eq $id "moc" }}
     <a
       href="{{ .URL }}"
-      class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-5"
+      class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-5 3xl:col-start-6"
     >
       {{ .Name }}
     </a>
     {{ else if eq $id "about" }}
     <a
       href="{{ .URL }}"
-      class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-6"
+      class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-6 3xl:col-start-7"
     >
       {{ .Name }}
     </a>

@@ -77,6 +77,8 @@
   --spacing-72: 18rem; /* 288px */
   --spacing-80: 20rem; /* 320px */
   --spacing-unit: var(--spacing-24);
+
+  --breakpoint-3xl: 144rem; /* 1920px */
 }
 
 @layer base {
@@ -107,6 +109,10 @@
     @apply font-bold text-2xl pb-8 pt-12;
   }
 
+  article .markdown p {
+    @apply font-semibold;
+  }
+
   article .markdown p:has(+ p) {
     @apply mb-6;
   }
@@ -120,7 +126,7 @@
   }
 
   article figure figcaption {
-    @apply absolute mt-2 mx-8 text-base;
+    @apply absolute mt-2 mx-8 text-base italic;
   }
 
   article .image {
@@ -132,11 +138,15 @@
   }
 
   article .highlight {
-    @apply bg-surface text-on-surface-variant !font-antilag;
+    @apply bg-surface text-on-surface-variant;
   }
 
   article .highlight pre {
     @apply p-6 sm:p-8;
+  }
+
+  article .highlight code {
+    @apply !font-antilag;
   }
 
   /* Other */

@@ -1,6 +1,26 @@
-<figure class="image">
-  <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" />
-  {{ with .Title }}
-  <figcaption>{{ . }}</figcaption>
-  {{ end }}
-</figure>
+{{ $src := .Destination | strings.TrimPrefix "/" }}
+{{ $img := .Page.Resources.GetMatch $src }}
+
+{{ if $img }}
+  {{ $opts := dict
+    "colors" (slice "222" "808080" "ddd")
+    "method" "ClusteredDotSpiral5x5"
+    "strength" 0.33
+  }}
+
+  {{ $filters := slice
+    (images.Process "resize 600x")
+    (images.Grayscale)
+    (images.Dither $opts)
+    (images.Process "png")
+  }}
+
+  <figure class="image">
+    {{ with images.Filter $filters $img }}
+      <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="{{ $.Text }}" />
+    {{ end }}
+    {{ with .Title }}
+      <figcaption>{{ . }}</figcaption>
+    {{ end }}
+  </figure>
+{{ end }}

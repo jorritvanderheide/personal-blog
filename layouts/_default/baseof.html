@@ -2,15 +2,16 @@
 <html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
   <head>
     {{ partialCached "css.html" . }} {{ partial "head.html" . }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   </head>
   <body class="h-[100svh] w-screen flex flex-col">
-    {{ partial "grid.html" . }} {{ partial "header.html" . }}
+    {{ partial "grid.html" . }}
+    {{ partial "header.html" . }}
     <div
       class="min-h-[calc(100svh_-_var(--spacing-16))] lg:min-h-[calc(100svh_-_var(--spacing-20))] 2xl:min-h-[calc(100svh_-_var(--spacing-24))] h-full flex flex-col overflow-y-auto scroll-smooth"
     >
       <main class="grow-1 h-fit mx-2 2xl:mx-unit">{{ block "main" . }}{{ end }}</main>
       {{ partial "footer.html" . }}
     </div>
+    {{ partial "scripts.html" . }}
   </body>
 </html>

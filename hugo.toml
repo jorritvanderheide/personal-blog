@@ -3,15 +3,15 @@ languageCode = 'en-us'
 title = 'Personal blog'
 
 [[menus.main]]
-identifier = 'bits'
-name = 'bits'
-pageRef = '/bits'
+identifier = 'moc'
+name = 'moc'
+url = '/moc'
 weight = 10
 
 [[menus.main]]
-identifier = 'moc'
-name = 'moc'
-pageRef = '/moc'
+identifier = 'bits'
+name = 'bits'
+url = '/bits'
 weight = 20
 
 [[menus.main]]

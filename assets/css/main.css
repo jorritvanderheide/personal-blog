@@ -1,6 +1,41 @@
 @import "tailwindcss";
 @source "hugo_stats.json";
 
+@font-face {
+  font-family: "Antilag";
+  src: url("/fonts/antilag-regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Equity Text A";
+  src: url("/fonts/equity-text-a-regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Equity Text A";
+  src: url("/fonts/equity-text-a-italic.woff2") format("woff2");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Equity Text A";
+  src: url("/fonts/equity-text-a-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Equity Text A";
+  src: url("/fonts/equity-text-a-bold-italic.woff2") format("woff2");
+  font-weight: bold;
+  font-style: italic;
+}
+
 :root {
   --background: #1d2021;
   --surface: #282828;
@@ -13,6 +48,10 @@
   --on-accent-yellow: #fbf1c7;
   --on-accent-green: #fbf1c7;
   --on-accent-aqua: #fbf1c7;
+
+  --font-antilag: 'Antilag', sans-serif;
+
+  --text-base: 24;
 }
 
 @media (prefers-color-scheme: light) {
@@ -28,12 +67,6 @@
   }
 }
 
-@font-face {
-	font-family: 'Antilag';
-	src: url('/fonts/antilag-regular.woff2') format('woff2');
-	font-weight: normal;
-	font-style: normal;
-}
 
 @theme {
   --color-background: var(--background);
@@ -48,7 +81,8 @@
   --color-accent-aqua: var(--accent-aqua);
   --color-on-accent-aqua: var(--on-accent-aqua);
 
-  --font-antilag: "Antilag", "monospace";
+  --font-antilag: var(--font-antilag);
+  --font-equity: var(--font-equity);
 
   --spacing-0: 0;
   --spacing-1: 0.25rem; /* 4px */
@@ -99,6 +133,10 @@
     @apply bg-on-surface-dim text-on-surface-variant;
   }
 
+  a {
+    @apply hover:text-accent-green;
+  }
+
   /* Layout */
   #TableOfContents ul {
     @apply flex flex-col gap-4;
@@ -109,12 +147,24 @@
     @apply font-bold text-2xl pb-8 pt-12;
   }
 
-  article .markdown p {
-    @apply font-semibold;
+  article .markdown * {
+    @apply font-equity text-2xl/9;
   }
 
   article .markdown p:has(+ p) {
     @apply mb-6;
+  }
+
+  article .markdown ul, article .markdown ol {
+    @apply pl-12 my-8;
+  }
+
+  article .markdown ul {
+    @apply list-disc;
+  }
+
+  article .markdown ol {
+    @apply list-decimal;
   }
 
   article figure {
@@ -130,7 +180,7 @@
   }
 
   article .image {
-    @apply dark:bg-accent-green bg-accent-green;
+    @apply bg-accent-green;
   }
 
   article img {

@@ -19,7 +19,7 @@
           packages = with pkgs; [
             hugo # Static site generator
             mask # Task runner
-            tailwindcss_4 # CSS framework
+            nodejs # Node
           ];
 
           shellHook = ''

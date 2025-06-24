@@ -1,5 +1,14 @@
 # Tasks for my personal blog
 
+## install
+
+Installs dependencies with NPM
+
+~~~sh
+echo "Installing dependencies..."
+npm install
+~~~
+
 ## serve
 
 Serves Hugo for development

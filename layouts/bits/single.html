@@ -1,0 +1,31 @@
+{{ define "main" }}
+<article class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8">
+  <div
+    class="h-fit pb-12 sm:pb-16 pt-8 sm:pt-24 border-b-[1px] border-on-surface-dim sm:col-span-4 lg:col-span-6 flex flex-col gap-12 sm:gap-24 3xl:col-start-2"
+  >
+    <div class="px-4 sm:px-8 flex flex-col gap-6 sm:gap-12">
+      <a href="{{ .CurrentSection.RelPermalink }}" class="text-lg sm:text-2xl lowercase">‹ {{ .CurrentSection.Title }}</a>
+      <h1 class="text-4xl sm:text-7xl lg:text-8xl leading-[120%] uppercase text-balance lg:w-5/6 3xl:w-2/3">{{ .Title }}</h1>
+      {{ with .Params.Subtitle }}
+      <h2 class="text-3xl sm:text-5xl lg:text-6xl leading-[120%] text-balance lg:w-5/6 3xl:w-2/3">{{ . }}</h1>
+      {{ end }}
+    </div>
+    <div class="w-full grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6">
+      <time datetime="{{ .Date | time.Format "2006-01-02" }}" class="hidden lg:block self-end px-8">
+        {{ .Date | time.Format "2006-01-02" }}
+      </time>
+      <div class="sm:col-span-4 lg:col-start-3 lg:col-span-3 px-4 sm:px-8">
+        {{ with .Params.Lead }}
+        <p class="text-lg sm:text-xl leading-[180%] font-bold">{{ . }}</p>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+
+  {{ with .TableOfContents }}
+  <div class="hidden lg:block py-16 px-8 uppercase col-span-2 sm:col-span-1 3xl:col-start-2">{{ . }}</div>
+  {{ end }}
+
+  <div class="lg:col-start-3 3xl:col-start-4 sm:col-span-4 lg:col-span-3 py-12 sm:py-16 px-4 sm:px-8 markdown">{{ .Content }}</div>
+</article>
+{{ end }}

@@ -25,14 +25,14 @@
     <div
       class="hidden grid-item 2xl:flex px-8 items-center border-r-[1px] border-on-surface-dim"
     ></div>
-    {{ range .Site.Menus.main }} {{- $id := .Identifier -}} {{- if eq $id "bits"}}
+    {{ range .Site.Menus.main }} {{- $id := .Identifier -}} {{- if eq $id "moc"}}
     <a
       href="{{ .URL }}"
       class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-4 3xl:col-start-5"
     >
       {{ .Name }}
     </a>
-    {{else if eq $id "moc" }}
+    {{else if eq $id "bits" }}
     <a
       href="{{ .URL }}"
       class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-5 3xl:col-start-6"
@@ -79,5 +79,3 @@
     </nav>
   </div>
 </header>
-
-<script src="{{ "js/menu-toggle.js" | relURL }}"></script>

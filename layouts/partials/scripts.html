@@ -1,0 +1,4 @@
+{{ $app := resources.Get "js/copy-code.js" | js.Build (dict "target" "es2017") }}
+{{ $app := resources.Get "js/menu-toggle.js" | js.Build (dict "target" "es2017") }}
+{{ $app := resources.Get "js/node-graph.js" | js.Build (dict "target" "es2017") }}
+<script type="module" src="{{ $app.RelPermalink }}"></script>

@@ -1,4 +1,5 @@
 ---
-title: "home"
-layout: "home"
+title: "Home"
 ---
+
+Hi!

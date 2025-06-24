@@ -1,3 +1,5 @@
+import gsap from "gsap";
+
 document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('menuToggle');
     const mobileMenu = document.getElementById('mobileMenu');

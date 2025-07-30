@@ -3,7 +3,7 @@ title = 'NixOS is not for beginners!'
 subtitle = 'I often hear people say that NixOS is not a good choice for beginners. Are they right?'
 date = 2023-01-15T09:00:00-07:00
 lead = ''
-draft = true
+draft = false
 +++
 
 I often hear people say that NixOS is great, but that if you're a beginner you might better turn to another, more traditional distro. I think this is untrue.

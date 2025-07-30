@@ -3,9 +3,9 @@ languageCode = 'en-us'
 title = 'Personal blog'
 
 [[menus.main]]
-identifier = 'moc'
-name = 'moc'
-url = '/moc'
+identifier = 'threads'
+name = 'threads'
+url = '/threads'
 weight = 10
 
 [[menus.main]]

@@ -1,16 +1,11 @@
 {{ define "main" }}
-<div class="flex flex-col h-full">
-  <div class="p-8 border-b-[1px] border-on-surface-dim sm:col-span-4 2xl:col-span-6">
-    <p>bread / crumbs</p>
-    <h1 class="text-6xl">Hi! Welcome on my website</h1>
-    <div class="w-full grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6  3xl:grid-cols-8">
-      <p class="col-start-1">Author</p>
-      <p class="col-start-3">Summary text</p>
+<article class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8">
+  <div
+    class="h-fit pb-12 sm:pb-16 pt-8 sm:pt-24 border-b-[1px] border-on-surface-dim sm:col-span-4 lg:col-span-6 flex flex-col gap-12 sm:gap-24 3xl:col-start-2">
+    <div class="px-4 sm:px-8">
+      <h1 class="text-4xl sm:text-7xl lg:text-8xl leading-[120%] uppercase text-balance">{{ .Title }}</h1>
+      <p class="textf-lg sm:text-2xl">{{ .Content }}</p>
     </div>
-  
-    {{ .Content }}
-    
   </div>
-  <div id="node-graph" class="h-full border-x-[1px] border-on-surface-dim sm:col-span-4 2xl:col-span-6 bg-background"></div>
-</div>
+</article>
 {{ end }}

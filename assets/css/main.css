@@ -50,8 +50,7 @@
   --on-accent-aqua: #fbf1c7;
 
   --font-antilag: 'Antilag', sans-serif;
-
-  --text-base: 24;
+  --font-equity: 'Equity Text A', sans-serif;
 }
 
 @media (prefers-color-scheme: light) {
@@ -85,37 +84,64 @@
   --font-equity: var(--font-equity);
 
   --spacing-0: 0;
-  --spacing-1: 0.25rem; /* 4px */
-  --spacing-2: 0.5rem; /* 8px */
-  --spacing-3: 0.75rem; /* 12px */
-  --spacing-4: 1rem; /* 16px */
-  --spacing-5: 1.25rem; /* 20px */
-  --spacing-6: 1.5rem; /* 24px */
-  --spacing-7: 1.75rem; /* 28px */
-  --spacing-8: 2rem; /* 32px */
-  --spacing-9: 2.25rem; /* 36px */
-  --spacing-10: 2.5rem; /* 40px */
-  --spacing-12: 3rem; /* 48px */
-  --spacing-14: 3.5rem; /* 56px */
-  --spacing-16: 4rem; /* 64px */
-  --spacing-18: 4.5rem; /* 72px */
-  --spacing-20: 5rem; /* 80px */
-  --spacing-24: 6rem; /* 96px */
-  --spacing-28: 7rem; /* 112px */
-  --spacing-32: 8rem; /* 128px */
-  --spacing-36: 9rem; /* 144px */
-  --spacing-40: 10rem; /* 160px */
-  --spacing-48: 12rem; /* 192px */
-  --spacing-56: 14rem; /* 224px */
-  --spacing-64: 16rem; /* 256px */
-  --spacing-72: 18rem; /* 288px */
-  --spacing-80: 20rem; /* 320px */
+  --spacing-1: 0.25rem;
+  /* 4px */
+  --spacing-2: 0.5rem;
+  /* 8px */
+  --spacing-3: 0.75rem;
+  /* 12px */
+  --spacing-4: 1rem;
+  /* 16px */
+  --spacing-5: 1.25rem;
+  /* 20px */
+  --spacing-6: 1.5rem;
+  /* 24px */
+  --spacing-7: 1.75rem;
+  /* 28px */
+  --spacing-8: 2rem;
+  /* 32px */
+  --spacing-9: 2.25rem;
+  /* 36px */
+  --spacing-10: 2.5rem;
+  /* 40px */
+  --spacing-12: 3rem;
+  /* 48px */
+  --spacing-14: 3.5rem;
+  /* 56px */
+  --spacing-16: 4rem;
+  /* 64px */
+  --spacing-18: 4.5rem;
+  /* 72px */
+  --spacing-20: 5rem;
+  /* 80px */
+  --spacing-24: 6rem;
+  /* 96px */
+  --spacing-28: 7rem;
+  /* 112px */
+  --spacing-32: 8rem;
+  /* 128px */
+  --spacing-36: 9rem;
+  /* 144px */
+  --spacing-40: 10rem;
+  /* 160px */
+  --spacing-48: 12rem;
+  /* 192px */
+  --spacing-56: 14rem;
+  /* 224px */
+  --spacing-64: 16rem;
+  /* 256px */
+  --spacing-72: 18rem;
+  /* 288px */
+  --spacing-80: 20rem;
+  /* 320px */
   --spacing-unit: var(--spacing-24);
 
-  --breakpoint-3xl: 144rem; /* 1920px */
+  --breakpoint-3xl: 144rem;
+  /* 1920px */
 }
 
 @layer base {
+
   /* General */
   html {
     font-kerning: normal;
@@ -126,7 +152,7 @@
   }
 
   body {
-    @apply bg-background text-on-surface overscroll-contain box-border font-antilag sm:text-lg;
+    @apply bg-background text-on-surface overscroll-contain box-border font-equity text-base/6 sm:text-2xl/9;
   }
 
   body *::selection {
@@ -142,20 +168,22 @@
     @apply flex flex-col gap-4;
   }
 
-  /* Markdown blocks */
-  article .markdown h3 {
-    @apply font-bold text-2xl pb-8 pt-12;
+  /* Article  */
+  article h1 {
+    @apply font-antilag font-bold text-2xl pb-8 pt-12;
   }
 
-  article .markdown * {
-    @apply font-equity text-2xl/9;
+  /* Markdown blocks */
+  article .markdown h3 {
+    @apply font-antilag font-bold text-2xl pb-8 pt-12;
   }
 
   article .markdown p:has(+ p) {
     @apply mb-6;
   }
 
-  article .markdown ul, article .markdown ol {
+  article .markdown ul,
+  article .markdown ol {
     @apply pl-12 my-8;
   }
 
@@ -176,7 +204,7 @@
   }
 
   article figure figcaption {
-    @apply absolute mt-2 mx-8 text-base italic;
+    @apply absolute mt-2 mx-8 italic;
   }
 
   article .image {

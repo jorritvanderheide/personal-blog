@@ -4,16 +4,16 @@
 
 Installs dependencies with NPM
 
-~~~sh
+```sh
 echo "Installing dependencies..."
 npm install
-~~~
+```
 
 ## serve
 
 Serves Hugo for development
 
-~~~sh
+```sh
 echo "Serving project..."
 hugo serve --noHTTPCache --disableFastRender
-~~~
+```

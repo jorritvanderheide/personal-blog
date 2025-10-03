@@ -3,15 +3,9 @@ languageCode = 'en-us'
 title = 'Personal blog'
 
 [[menus.main]]
-identifier = 'threads'
-name = 'threads'
-url = '/threads'
-weight = 10
-
-[[menus.main]]
-identifier = 'bits'
-name = 'bits'
-url = '/bits'
+identifier = 'articles'
+name = 'articles'
+url = '/articles'
 weight = 20
 
 [[menus.main]]

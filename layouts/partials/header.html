@@ -18,21 +18,14 @@
       aria-label="Toggle menu"
       class="lg:hidden grid-item flex px-8 justify-end items-center hover:cursor-pointer"
     >
-    <span id="menuText">menu</span>
+      <span id="menuText">menu</span>
     </div>
- 
+
     {{/* Desktop */}}
     <div
       class="hidden grid-item 2xl:flex px-8 items-center border-r-[1px] border-on-surface-dim"
     ></div>
-    {{ range .Site.Menus.main }} {{- $id := .Identifier -}} {{- if eq $id "threads"}}
-    <a
-      href="{{ .URL }}"
-      class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-4 3xl:col-start-5"
-    >
-      {{ .Name }}
-    </a>
-    {{else if eq $id "bits" }}
+    {{ range .Site.Menus.main }} {{- $id := .Identifier -}} {{if eq $id "articles" }}
     <a
       href="{{ .URL }}"
       class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-5 3xl:col-start-6"
@@ -46,18 +39,19 @@
     >
       {{ .Name }}
     </a>
-    {{ end }}
-    {{ end }}
+    {{ end }} {{ end }}
   </div>
 
-  {{/*  Mobile menu  */}}
+  {{/* Mobile menu */}}
   <div
     id="mobileMenu"
     class="lg:hidden absolute top-16 left-0 h-[calc(100svh_-_var(--spacing-16))] w-full bg-background z-10 overflow-hidden flex flex-col"
-    style="display: none;"
+    style="display: none"
   >
-    {{/*  Grid  */}}
-    <div class="hidden sm:grid absolute w-screen h-full z-20 border-x-[1px] border-on-surface-dim px-2 grid-cols-1 sm:grid-cols-4">
+    {{/* Grid */}}
+    <div
+      class="hidden sm:grid absolute w-screen h-full z-20 border-x-[1px] border-on-surface-dim px-2 grid-cols-1 sm:grid-cols-4"
+    >
       <div class="border-x-[1px] border-on-surface-dim h-full"></div>
       <div class="border-r-[1px] border-on-surface-dim h-full"></div>
       <div class="border-r-[1px] border-on-surface-dim h-full"></div>

@@ -1,11 +1,30 @@
 {{ define "main" }}
 <article class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8">
+  <!-- Page header -->
   <div
-    class="h-fit pb-12 sm:pb-16 pt-8 sm:pt-24 border-b-[1px] border-on-surface-dim sm:col-span-4 lg:col-span-6 flex flex-col gap-12 sm:gap-24 3xl:col-start-2">
+    class="h-fit pb-12 sm:pb-16 pt-8 sm:pt-24 border-b-[1px] border-on-surface-dim sm:col-span-4 lg:col-span-6 flex flex-col gap-12 sm:gap-24 3xl:col-start-2"
+  >
     <div class="px-4 sm:px-8">
-      <h1 class="text-4xl sm:text-7xl lg:text-8xl leading-[120%] uppercase text-balance">{{ .Title }}</h1>
-      <p class="textf-lg sm:text-2xl">{{ .Content }}</p>
+      <h1 class="text-4xl sm:text-7xl lg:text-8xl leading-[120%] uppercase text-balance">
+        {{ .Title }}
+      </h1>
+      <p class="text-lg sm:text-2xl">{{ .Content }}</p>
     </div>
   </div>
+
+  <!-- Paginated articles -->
+  {{ $articles := .Site.GetPage "section" "articles" }} {{ $paginator := .Paginate $articles.Pages 6
+  }} {{ range $index, $article := $paginator.Pages }} {{ if eq $index 0 }}
+  <div class="col-span-full">
+    {{ partial "article-card.html" (dict "Title" $article.Title "Params" (merge $article.Params
+    (dict "large" true)) "Date" $article.Date "Content" $article.Summary "RelPermalink"
+    $article.RelPermalink) }}
+  </div>
+  {{ else }}
+  <div class="mt-16 col-span-2">
+    {{ partial "article-card.html" (dict "Title" $article.Title "Params" $article.Params "Date"
+    $article.Date "Content" $article.Summary "RelPermalink" $article.RelPermalink) }}
+  </div>
+  {{ end }} {{ end }}
 </article>
 {{ end }}

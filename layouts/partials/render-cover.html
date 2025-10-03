@@ -1,12 +1,18 @@
-{{ $img := .Image }} {{ $opts := dict "colors" (slice "222" "808080" "ddd") "method"
-"ClusteredDotSpiral5x5" "strength" 0.33 }} {{ $filters := slice (images.Process "resize 600x")
-(images.Grayscale) (images.Dither $opts) (images.Process "png") }} {{ with images.Filter $filters
-$img }}
-<div class="bg-accent-green w-1/2 h-auto relative overflow-hidden">
-  <img
-    src="{{ .RelPermalink }}"
-    class="mix-blend-multiply object-cover w-full h-full"
-    alt="{{ $.Alt }}"
-  />
-</div>
+{{ $img := .Image }}
+{{ $opts := dict "colors" (slice "222" "808080" "ddd") "method"
+  "ClusteredDotSpiral5x5" "strength" 0.33
+}}
+{{ $filters := slice (images.Process "resize 600x")
+  (images.Grayscale) (images.Dither $opts) (images.Process "png")
+}}
+{{ with images.Filter $filters
+  $img
+}}
+  <div class="bg-accent-green w-1/2 h-auto relative overflow-hidden">
+    <img
+      src="{{ .RelPermalink }}"
+      class="mix-blend-multiply object-cover w-full h-full"
+      alt="{{ $.Alt }}"
+    />
+  </div>
 {{ end }}

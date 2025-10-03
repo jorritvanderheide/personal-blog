@@ -49,8 +49,8 @@
   --on-accent-green: #fbf1c7;
   --on-accent-aqua: #fbf1c7;
 
-  --font-antilag: 'Antilag', sans-serif;
-  --font-equity: 'Equity Text A', sans-serif;
+  --font-antilag: "Antilag", sans-serif;
+  --font-equity: "Equity Text A", sans-serif;
 }
 
 @media (prefers-color-scheme: light) {
@@ -65,7 +65,6 @@
     --accent-aqua: #4c7a5d;
   }
 }
-
 
 @theme {
   --color-background: var(--background);
@@ -141,7 +140,6 @@
 }
 
 @layer base {
-
   /* General */
   html {
     font-kerning: normal;

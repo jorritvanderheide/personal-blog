@@ -15,9 +15,15 @@
     (images.Process "png")
   }}
 
+
   <figure class="image">
     {{ with images.Filter $filters $img }}
-      <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="{{ $.Text }}" />
+      <img
+        src="{{ .RelPermalink }}"
+        width="{{ .Width }}"
+        height="{{ .Height }}"
+        alt="{{ $.Text }}"
+      />
     {{ end }}
     {{ with .Title }}
       <figcaption>{{ . }}</figcaption>

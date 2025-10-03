@@ -1,9 +1,13 @@
 {{ $result := transform.HighlightCodeBlock . }}
 <figure class="highlight" role="figure">
-  <button class="copy-button hidden sm:block absolute top-4 right-4 hover:cursor-pointer">copy</button>
+  <button
+    class="copy-button hidden sm:block absolute top-4 right-4 hover:cursor-pointer"
+  >
+    copy
+  </button>
   {{ $result.Wrapped | safeHTML }}
   {{- with .Attributes.title -}}
-  <figcaption>{{ . }}</figcaption>
+    <figcaption>{{ . }}</figcaption>
   {{ end }}
 </figure>
 

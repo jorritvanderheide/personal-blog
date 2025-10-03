@@ -8,7 +8,8 @@
   "htmlWhitespaceSensitivity": "ignore",
   "proseWrap": "always",
   "embeddedLanguageFormatting": "auto",
-  "plugins": ["prettier-plugin-go-template"],
+  "plugins": ["prettier-plugin-go-template", "prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./assets/css/main.css",
   "overrides": [
     {
       "files": ["*.html"],

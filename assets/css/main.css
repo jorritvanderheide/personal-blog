@@ -150,7 +150,7 @@
   }
 
   body {
-    @apply bg-background text-on-surface overscroll-contain box-border font-equity text-base/6 sm:text-2xl/9;
+    @apply box-border overscroll-contain bg-background font-equity text-base/6 text-on-surface sm:text-2xl/9;
   }
 
   body *::selection {
@@ -168,12 +168,12 @@
 
   /* Article  */
   article h1 {
-    @apply font-antilag font-bold text-2xl pb-8 pt-12;
+    @apply pt-12 pb-8 font-antilag text-2xl font-bold;
   }
 
   /* Markdown blocks */
   article .markdown h3 {
-    @apply font-antilag font-bold text-2xl pb-8 pt-12;
+    @apply pt-12 pb-8 font-antilag text-2xl font-bold;
   }
 
   article .markdown p:has(+ p) {
@@ -182,7 +182,7 @@
 
   article .markdown ul,
   article .markdown ol {
-    @apply pl-12 my-8;
+    @apply my-8 pl-12;
   }
 
   article .markdown ul {
@@ -194,7 +194,7 @@
   }
 
   article figure {
-    @apply relative border-y-[1px] border-on-surface-dim -mx-6 sm:-mx-8 my-8 sm:my-16;
+    @apply relative -mx-6 my-8 border-y-[1px] border-on-surface-dim sm:-mx-8 sm:my-16;
   }
 
   article figure:has(figcaption) {
@@ -202,7 +202,7 @@
   }
 
   article figure figcaption {
-    @apply absolute mt-2 mx-8 italic;
+    @apply absolute mx-8 mt-2 italic;
   }
 
   article .image {
@@ -210,7 +210,7 @@
   }
 
   article img {
-    @apply mix-blend-overlay dark:mix-blend-multiply object-cover w-full;
+    @apply w-full object-cover mix-blend-overlay dark:mix-blend-multiply;
   }
 
   article .highlight {

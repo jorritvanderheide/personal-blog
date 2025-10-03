@@ -1,45 +1,45 @@
 <header
-  class="w-full h-16 lg:h-20 2xl:h-24 shrink-0 px-2 2xl:px-24 border-b-[1px] border-on-surface-dim font-antilag"
+  class="h-16 w-full shrink-0 border-b-[1px] border-on-surface-dim px-2 font-antilag lg:h-20 2xl:h-24 2xl:px-24"
 >
   <div
-    class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8 h-full w-full"
+    class="grid h-full w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8"
   >
     <a
       href="{{ .Site.Home.RelPermalink }}"
-      class="grid-item col-span-1 sm:col-span-2 flex gap-[1em] px-4 sm:px-8 items-center sm:border-x-[1px] border-on-surface-dim hover:bg-on-surface-dim bg-background font-bold text-2xl 3xl:col-start-2"
+      class="grid-item col-span-1 flex items-center gap-[1em] border-on-surface-dim bg-background px-4 text-2xl font-bold hover:bg-on-surface-dim sm:col-span-2 sm:border-x-[1px] sm:px-8 3xl:col-start-2"
     >
       ☀️ BW20
     </a>
 
     {{/* Mobile */}}
     <div
-      class="hidden grid-item sm:flex px-8 items-center lg:hidden border-r-[1px] border-on-surface-dim"
+      class="grid-item hidden items-center border-r-[1px] border-on-surface-dim px-8 sm:flex lg:hidden"
     ></div>
     <div
       id="menuToggle"
       aria-label="Toggle menu"
-      class="lg:hidden grid-item flex px-8 justify-end items-center hover:cursor-pointer"
+      class="grid-item flex items-center justify-end px-8 hover:cursor-pointer hover:bg-on-surface-dim lg:hidden"
     >
       <span id="menuText">menu</span>
     </div>
 
     {{/* Desktop */}}
     <div
-      class="hidden grid-item 2xl:flex px-8 items-center border-r-[1px] border-on-surface-dim"
+      class="grid-item hidden items-center border-r-[1px] border-on-surface-dim px-8 2xl:flex"
     ></div>
     {{ range .Site.Menus.main }}
       {{- $id := .Identifier -}}
       {{ if eq $id "articles" }}
         <a
           href="{{ .URL }}"
-          class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-5 3xl:col-start-6"
+          class="grid-item col-start-5 hidden items-center border-r-[1px] border-on-surface-dim px-4 hover:bg-on-surface-dim sm:px-8 lg:flex 3xl:col-start-6"
         >
           {{ .Name }}
         </a>
       {{ else if eq $id "about" }}
         <a
           href="{{ .URL }}"
-          class="hidden grid-item lg:flex px-4 sm:px-8 items-center border-r-[1px] border-on-surface-dim hover:bg-on-surface-dim col-start-6 3xl:col-start-7"
+          class="grid-item col-start-6 hidden items-center border-r-[1px] border-on-surface-dim px-4 hover:bg-on-surface-dim sm:px-8 lg:flex 3xl:col-start-7"
         >
           {{ .Name }}
         </a>
@@ -50,28 +50,28 @@
   {{/* Mobile menu */}}
   <div
     id="mobileMenu"
-    class="lg:hidden absolute top-16 left-0 h-[calc(100svh_-_var(--spacing-16))] w-full bg-background z-10 overflow-hidden flex flex-col"
+    class="absolute top-16 left-0 z-10 flex h-[calc(100svh_-_var(--spacing-16))] w-full flex-col overflow-hidden bg-background lg:hidden"
     style="display: none"
   >
     {{/* Grid */}}
     <div
-      class="hidden sm:grid absolute w-screen h-full z-20 border-x-[1px] border-on-surface-dim px-2 grid-cols-1 sm:grid-cols-4"
+      class="absolute z-20 hidden h-full w-screen grid-cols-1 border-x-[1px] border-on-surface-dim px-2 sm:grid sm:grid-cols-4"
     >
-      <div class="border-x-[1px] border-on-surface-dim h-full"></div>
-      <div class="border-r-[1px] border-on-surface-dim h-full"></div>
-      <div class="border-r-[1px] border-on-surface-dim h-full"></div>
-      <div class="border-r-[1px] border-on-surface-dim h-full"></div>
+      <div class="h-full border-x-[1px] border-on-surface-dim"></div>
+      <div class="h-full border-r-[1px] border-on-surface-dim"></div>
+      <div class="h-full border-r-[1px] border-on-surface-dim"></div>
+      <div class="h-full border-r-[1px] border-on-surface-dim"></div>
     </div>
 
     <div class="grow-1"></div>
-    <nav class="grid w-full sm:grid-cols-4 z-30">
+    <nav class="z-30 grid w-full sm:grid-cols-4">
       {{ range site.Menus.main }}
         <div
-          class="hidden sm:block col-span-2 border-t-[1px] border-on-surface-dim"
+          class="col-span-2 hidden border-t-[1px] border-on-surface-dim sm:block"
         ></div>
         <a
           href="{{ .URL | relLangURL }}"
-          class="text-heading-small flex justify-between items-center px-8 h-16 border-t-[1px] bg-background border-on-surface-dim hover:bg-surface sm:col-span-2"
+          class="text-heading-small flex h-16 items-center justify-between border-t-[1px] border-on-surface-dim bg-background px-8 hover:bg-surface sm:col-span-2"
         >
           <span class="font-medium">{{ .Name }}</span>
           <span class="text-heading font-thin">›</span>

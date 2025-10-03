@@ -4,4 +4,5 @@ subtitle = ''
 cover = '/path/to/cover.jpg'
 date = '{{ .Date }}'
 draft = true
+tags = ['article']
 +++

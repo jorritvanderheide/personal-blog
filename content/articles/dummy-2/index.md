@@ -1,13 +1,11 @@
 +++
 title = 'NixOS is not for beginners!'
-subtitle = 'I often hear people say that NixOS is not a good choice for beginners. Are they right?'
-cover = 'testimage'
+summary = 'I often hear people say that NixOS is not a good choice for beginners. Are they right?'
+cover = 'testimage.jpg'
 date = 2023-01-15T09:00:00-07:00
 draft = false
+tags = ['article']
 +++
-
-I often hear people say that NixOS is great, but that if you're a beginner you
-might better turn to another, more traditional distro. I think this is untrue.
 
 ### What is a beginner?
 

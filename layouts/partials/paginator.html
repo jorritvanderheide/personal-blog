@@ -1,0 +1,47 @@
+{{ $paginator := .Paginator }}
+
+
+<nav
+  class="col-span-full mt-12 flex justify-center 3xl:col-span-6"
+  aria-label="Pagination"
+>
+  <ul class="inline-flex items-center space-x-2">
+    {{ if $paginator.HasPrev }}
+      <li>
+        <a
+          href="{{ $paginator.Prev.URL }}"
+          class="rounded bg-gray-100 px-4 py-2 hover:bg-gray-200"
+        >
+          ← Previous
+        </a>
+      </li>
+    {{ end }}
+
+    {{ range $page := $paginator.Pagers }}
+      <li>
+        <a
+          href="{{ $page.URL }}"
+          class="{{ if eq $page $paginator }}
+            bg-gray-300 font-bold
+          {{ else }}
+            bg-gray-100 hover:bg-gray-200
+          {{ end }} rounded px-3 py-1"
+        >
+          {{ $page.PageNumber }}
+        </a>
+      </li>
+    {{ end }}
+
+    {{ if $paginator.HasNext }}
+      <li>
+        <a
+          href="{{ $paginator.Next.URL }}"
+          class="rounded bg-gray-100 px-4 py-2 hover:bg-gray-200"
+        >
+          Next →
+        </a>
+      </li>
+    {{ end }}
+
+  </ul>
+</nav>

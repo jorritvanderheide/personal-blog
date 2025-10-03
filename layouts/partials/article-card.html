@@ -1,40 +1,47 @@
-{{ $large := or .Params.large false }}
-<article
-  class="flex flex-col border-y-[1px] border-on-surface-dim overflow-hidden shadow-sm
-  {{ if $large }}
-    md:flex-row md:h-96
-  {{ else }}
-    md:p-8 h-auto
-  {{ end }}
-  "
->
-  <!-- Image -->
-  <div
-    class="bg-accent-green {{ if $large }}
-      md:w-1/2 md:h-full w-full h-48
-    {{ else }}
-      w-full h-48
-    {{ end }}"
-  >
-    <img
-      src="{{ .Params.cover }}"
-      alt="{{ .Title }}"
-      class="object-cover w-full h-full"
-      loading="lazy"
-    />
-  </div>
+{{ $page := .Page }}
+{{ $large := .Large }}
 
-  <!-- Text -->
-  <div class="p-8 {{ if $large }}md:w-1/2 md:flex md:flex-col{{ end }}">
-    <h3 class="text-xl font-bold">{{ .Title }}</h3>
-    {{ with .Params.subtitle }}
-      <p class="text-gray-600 mt-2">{{ . }}</p>
+
+<article
+  class="{{ if $large }}
+    md:flex-row col-span-full
+  {{ else }}
+    h-auto col-span-full lg:col-span-3
+  {{ end }} mb-unit flex flex-col overflow-hidden"
+>
+  <a
+    href="{{ $page.RelPermalink }}"
+    class="{{ if not $large }}
+      w-full lg:w-2/3 h-120
+    {{ else }}
+      w-full h-160
+    {{ end }} text-accent mt-auto flex flex-col gap-8 border-y-[1px] border-on-surface-dim p-8"
+  >
+    <!-- Image -->
+    {{ with $page.Params.cover }}
+      {{ $cover := $page.Resources.GetMatch . }}
+      {{ if $cover }}
+        {{ partial "render-cover.html" (dict "Image" $cover "Alt" $page.Title) }}
+      {{ end }}
     {{ end }}
+
+
+    <!-- Title -->
+    <h2 class="text-xl font-bold">
+      {{ $page.Title }}
+    </h2>
+
+    <!-- Date -->
     <time
-      datetime="{{ .Date | dateFormat "2006-01-02" }}"
-      class="text-sm text-gray-400 mt-1"
+      datetime="{{ $page.Date | time.Format "2006-01-02" }}"
+      class="mt-1 text-sm text-gray-400"
     >
-      {{ .Date | dateFormat "Jan 2, 2006" }}
+      {{ $page.Date | time.Format "Jan 2, 2006" }}
     </time>
-  </div>
+
+    <!-- Summary -->
+    <p class="mt-4 text-gray-700">
+      {{ $page.Summary }}
+    </p>
+  </a>
 </article>

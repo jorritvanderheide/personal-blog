@@ -1,44 +1,37 @@
 {{ define "main" }}
-  <article
-    class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8"
-  >
-    <div
-      class="h-fit pb-12 sm:pb-16 pt-8 sm:pt-24 border-b-[1px] border-on-surface-dim sm:col-span-4 lg:col-span-6 flex flex-col gap-12 sm:gap-24 3xl:col-start-2"
+  <main class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8">
+    <!-- Header -->
+    <header
+      class="col-span-full px-4 pt-8 pb-12 sm:px-8 sm:pt-24 sm:pb-16 lg:col-span-6 3xl:col-span-6 3xl:col-start-2"
     >
-      <div class="px-4 sm:px-8">
-        <h1
-          class="text-4xl sm:text-7xl lg:text-8xl leading-[120%] uppercase text-balance"
-        >
-          {{ .Title }}
-        </h1>
-        <p class="text-lg sm:text-2xl">{{ .Content }}</p>
-      </div>
-    </div>
+      <h1
+        class="text-4xl leading-[120%] text-balance uppercase sm:text-7xl lg:text-8xl"
+      >
+        {{ .Title }}
+      </h1>
+      <p class="text-lg sm:text-2xl">
+        {{ .Content }}
+      </p>
+    </header>
 
-    <!-- Paginated articles -->
-    {{ $articles := .Site.GetPage "section" "articles" }}
-    {{ $paginator :=
-      .Paginate $articles.Pages 6
-    }}
-    {{ range $index, $article := $paginator.Pages }}
-      {{ if eq $index 0 }}
-        <!-- First article -->
-        <div class="col-span-full">
-          {{ partial "article-card.html" (dict "Title" $article.Title "Params" (merge
-            $article.Params (dict "large" true)) "Date" $article.Date "Content"
-            $article.Summary "RelPermalink" $article.RelPermalink)
-          }}
-        </div>
-      {{ else }}
+    <!-- Combined article list -->
+    <section
+      class="col-span-full grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:col-span-6 3xl:col-start-2"
+    >
+      {{ $all := where .Site.RegularPages "Draft" false }}
+      {{ $all = where $all "Params.tags" "intersect" (slice "article") }}
+      {{ $paginator := .Paginate $all 13 }}
 
-        <!-- Consequent articles -->
-        <div class="mt-16 col-span-2">
-          {{ partial "article-card.html" (dict "Title" $article.Title "Params"
-            $article.Params "Date" $article.Date "Content" $article.Summary
-            "RelPermalink" $article.RelPermalink)
-          }}
-        </div>
+
+      <!-- Article card partial -->
+      {{ range $index, $page := $paginator.Pages }}
+        {{ $isLarge := and (eq $paginator.PageNumber 1) (eq $index 0) }}
+        {{ partial "article-card.html" (dict "Page" $page "Large" $isLarge) }}
       {{ end }}
-    {{ end }}
-  </article>
+
+
+      <!-- Paginator -->
+      {{ partial "paginator.html" (dict "Paginator" $paginator) }}
+    </section>
+  </main>
 {{ end }}

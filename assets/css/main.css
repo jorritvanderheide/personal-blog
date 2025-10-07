@@ -173,7 +173,7 @@
 
   /* Markdown blocks */
   article .markdown h3 {
-    @apply pt-12 pb-8 font-antilag text-2xl font-bold first:pt-0;
+    @apply scroll-mt-12 pt-12 pb-8 font-antilag text-2xl font-bold first:pt-0;
   }
 
   article .markdown p:has(+ p) {

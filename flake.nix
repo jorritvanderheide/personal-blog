@@ -20,12 +20,48 @@
             default =
               let
                 pkgs = import nixpkgs { inherit system; };
+
+                pythonWithPackages = pkgs.python313.withPackages (
+                  ps: with ps; [
+                    pillow
+                    numpy
+
+                    (ps.buildPythonPackage rec {
+                      pname = "hitherdither";
+                      version = "0.1.5";
+
+                      src = pkgs.fetchFromGitHub {
+                        owner = "hbldh";
+                        repo = "hitherdither";
+                        rev = "v${version}";
+                        sha256 = "BKbMV3dCbCkHLEpaLrY0YmaWzBFlfnlOnqc7UBs6wjw=";
+                      };
+
+                      pyproject = true;
+
+                      # Build dependencies
+                      buildInputs = [
+                        ps.setuptools
+                        ps.wheel
+                      ];
+
+                      # Runtime dependencies
+                      propagatedBuildInputs = [
+                        ps.pillow
+                        ps.numpy
+                      ];
+
+                      doCheck = false;
+                    })
+                  ]
+                );
               in
               pkgs.mkShell {
                 packages = with pkgs; [
                   hugo # Static site generator
                   mask # Task runner
                   nodejs # Node
+                  pythonWithPackages
                 ];
 
                 shellHook = ''

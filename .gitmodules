@@ -1,3 +1,6 @@
 [submodule "themes/personal-blog-theme"]
 	path = themes/personal-blog-theme
 	url = https://codeberg.org/bw20/personal-blog-theme.git
+[submodule "personal-blog-private"]
+	path = personal-blog-private
+	url = ssh://git@codeberg.org/BW20/personal-blog-private.git

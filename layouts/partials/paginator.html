@@ -2,32 +2,45 @@
 
 
 <nav
-  class="col-span-full mt-12 flex justify-center 3xl:col-span-6"
+  class="col-span-full border-y-[1px] border-on-surface-dim"
   aria-label="Pagination"
 >
-  <ul class="inline-flex items-center space-x-2">
+  <ul class="grid h-unit grid-cols-2 sm:grid-cols-4 lg:grid-cols-6">
     {{ if $paginator.HasPrev }}
-      <li>
+      <li class="hidden sm:block">
         <a
           href="{{ $paginator.Prev.URL }}"
-          class="rounded bg-gray-100 px-4 py-2 hover:bg-gray-200"
+          class="col-span-1 flex h-full w-full items-center justify-center hover:cursor-pointer hover:bg-on-surface-dim sm:col-span-1"
         >
-          ← Previous
+          &#8249; previous
         </a>
       </li>
     {{ end }}
 
     {{ range $page := $paginator.Pagers }}
-      <li>
+      <li
+        class="col-span-full flex items-center justify-center gap-4 border-b-[1px] border-on-surface-dim sm:col-span-2 sm:col-start-2 sm:border-none lg:col-span-4 lg:col-start-2"
+      >
         <a
           href="{{ $page.URL }}"
           class="{{ if eq $page $paginator }}
-            bg-gray-300 font-bold
+            font-bold
           {{ else }}
-            bg-gray-100 hover:bg-gray-200
-          {{ end }} rounded px-3 py-1"
+            text-on-surface-dim
+          {{ end }}"
         >
           {{ $page.PageNumber }}
+        </a>
+      </li>
+    {{ end }}
+
+    {{ if $paginator.HasPrev }}
+      <li class="sm:hidden">
+        <a
+          href="{{ $paginator.Prev.URL }}"
+          class="col-span-1 col-start-1 flex h-full w-full items-center justify-center border-r-[1px] border-on-surface-dim hover:cursor-pointer hover:bg-on-surface-dim"
+        >
+          &#8249; previous
         </a>
       </li>
     {{ end }}
@@ -36,9 +49,9 @@
       <li>
         <a
           href="{{ $paginator.Next.URL }}"
-          class="rounded bg-gray-100 px-4 py-2 hover:bg-gray-200"
+          class="col-span-1 -col-start-1 flex h-full w-full items-center justify-center hover:cursor-pointer hover:bg-on-surface-dim"
         >
-          Next →
+          next &#8250;
         </a>
       </li>
     {{ end }}

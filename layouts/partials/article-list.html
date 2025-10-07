@@ -1,9 +1,0 @@
-{{ $pages := .Pages }}
-{{ $perPage := .PerPage }}
-{{ $paginator := .Paginate $pages $perPage }}
-
-{{ range $index, $page := $paginator.Pages }}
-  {{ partial "article-card.html" (dict "Page" $page "Large" (eq $index 0)) }}
-{{ end }}
-
-{{ template "_internal/pagination.html" $paginator }}

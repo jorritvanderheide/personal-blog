@@ -1,6 +1,15 @@
 {{ $page := .Page }}
 {{ $large := .Large }}
 
+{{ $categoryColor := "" }}
+{{ if in $page.Params.categories "sustainability" }}
+  {{ $categoryColor = "bg-accent-aqua" }}
+{{ else if in $page.Params.categories "tech" }}
+  {{ $categoryColor = "bg-accent-yellow" }}
+{{ else }}
+  {{ $categoryColor = "bg-red-500" }}
+{{ end }}
+
 
 <article
   class="{{ if not $large }}
@@ -18,8 +27,8 @@
     {{ if $cover }}
       <figure
         class="{{ if $large }}
-          w-2/3
-        {{ end }}aspect-2/1 bg-accent-green"
+          lg:w-2/3
+        {{ end }}aspect-2/1 {{ $categoryColor }}"
       >
         {{ partial "render-image.html" (dict "Destination" $cover "Page" .Page "Text" .Page.Title) }}
       </figure>
@@ -28,7 +37,7 @@
 
     <div
       class="{{ if $large }}
-        w-1/3 pl-8
+        lg:w-1/3 lg:pl-8
       {{ else }}
         w-full
       {{ end }}flex h-full flex-col justify-between gap-4"

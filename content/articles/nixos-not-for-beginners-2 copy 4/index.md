@@ -1,10 +1,11 @@
 +++
 title = 'NixOS is not for beginners!'
-summary = 'I often hear people say that NixOS is not a good choice for beginners. Are they right?'
-cover = 'testimage.jpg'
 date = 2023-01-15T09:00:00-07:00
-draft = false
+cover = 'testimage.jpg'
+summary = 'I often hear people say that NixOS is not a good choice for beginners. Are they right? I dont think so I think they are stupid!! My option'
+categories = ['tech']
 tags = ['article']
+draft = false
 +++
 
 ### What is a beginner in the context of world domination?

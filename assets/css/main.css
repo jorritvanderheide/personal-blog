@@ -161,14 +161,13 @@
     @apply hover:text-accent-green;
   }
 
+  h1 {
+    @apply pt-12 pb-8 font-antilag text-2xl font-bold;
+  }
+
   /* Layout */
   #TableOfContents ul {
     @apply flex flex-col gap-4;
-  }
-
-  /* Article  */
-  article h1 {
-    @apply pt-12 pb-8 font-antilag text-2xl font-bold;
   }
 
   /* Markdown blocks */

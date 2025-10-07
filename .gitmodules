@@ -4,3 +4,6 @@
 [submodule "personal-blog-private"]
 	path = personal-blog-private
 	url = ssh://git@codeberg.org/BW20/personal-blog-private.git
+[submodule "static"]
+	path = static
+	url = ssh://git@codeberg.org/BW20/personal-blog-private.git

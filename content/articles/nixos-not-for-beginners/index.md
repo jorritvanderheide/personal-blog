@@ -34,3 +34,5 @@ Analogy where these things become clear:
   installs that just broke and I had to repeat the installation process but
   couldn't see what I diwrong, so then I came to a point where I was like 'Oh
   wait what did I do again to fix this'.
+
+![alt text](image.png)

@@ -3,45 +3,55 @@
 
 
 <article
-  class="{{ if $large }}
-    md:flex-row col-span-full
-  {{ else }}
-    h-auto col-span-full lg:col-span-3
-  {{ end }} mb-unit flex flex-col overflow-hidden"
+  class="{{ if not $large }}
+    lg:col-span-2
+  {{ end }}col-span-full mb-unit"
 >
   <a
     href="{{ $page.RelPermalink }}"
-    class="{{ if not $large }}
-      w-full lg:w-2/3 h-120
-    {{ else }}
-      w-full h-160
-    {{ end }} text-accent mt-auto flex flex-col gap-8 border-y-[1px] border-on-surface-dim p-8"
+    class="{{ if $large }}
+      w-full lg:flex-row
+    {{ end }}flex group h-full flex-col gap-8 border-y-[1px] border-on-surface-dim p-8"
   >
     <!-- Image -->
-    {{ with $page.Params.cover }}
-      {{ $cover := $page.Resources.GetMatch . }}
-      {{ if $cover }}
-        {{ partial "render-cover.html" (dict "Image" $cover "Alt" $page.Title) }}
-      {{ end }}
+    {{ $cover := .Page.Params.cover }}
+    {{ if $cover }}
+      <figure
+        class="{{ if $large }}
+          w-2/3
+        {{ end }}aspect-2/1 bg-accent-green"
+      >
+        {{ partial "render-image.html" (dict "Destination" $cover "Page" .Page "Text" .Page.Title) }}
+      </figure>
     {{ end }}
 
 
-    <!-- Title -->
-    <h2 class="text-xl font-bold">
-      {{ $page.Title }}
-    </h2>
-
-    <!-- Date -->
-    <time
-      datetime="{{ $page.Date | time.Format "2006-01-02" }}"
-      class="mt-1 text-sm text-gray-400"
+    <div
+      class="{{ if $large }}
+        w-1/3 pl-8
+      {{ else }}
+        w-full
+      {{ end }}flex h-full flex-col justify-between gap-4"
     >
-      {{ $page.Date | time.Format "Jan 2, 2006" }}
-    </time>
+      <div class="flex flex-col gap-4">
+        <!-- Title -->
+        <h3 class="text-2xl font-bold group-hover:text-accent-green">
+          {{ $page.Title }}
+        </h3>
 
-    <!-- Summary -->
-    <p class="mt-4 text-gray-700">
-      {{ $page.Summary }}
-    </p>
+        <!-- Summary -->
+        <p class="group-hover:text-accent-green">
+          {{ $page.Summary }}
+        </p>
+      </div>
+
+      <!-- Date -->
+      <time
+        datetime="{{ $page.Date | time.Format "2006-01-02" }}"
+        class="mt-1 text-sm text-on-surface-dim"
+      >
+        {{ $page.Date | time.Format "Jan 2, 2006" }}
+      </time>
+    </div>
   </a>
 </article>

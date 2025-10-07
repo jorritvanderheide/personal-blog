@@ -1,0 +1,18 @@
+{{ $dest := .Destination | strings.TrimPrefix "/" }}
+{{ $base := $dest | strings.TrimSuffix ".jpg" | strings.TrimSuffix ".jpeg" | strings.TrimSuffix ".png" | strings.TrimSuffix ".webp" }}
+{{ $dithered := printf "%s.dithered.webp" $base }}
+
+{{ $img := .Page.Resources.GetMatch $dithered }}
+{{ if not $img }}
+  {{ $img = .Page.Resources.GetMatch $dest }}
+{{ end }}
+
+{{ if $img }}
+  <img
+    class="h-full w-full object-cover mix-blend-multiply"
+    src="{{ $img.RelPermalink }}"
+    width="{{ $img.Width }}"
+    height="{{ $img.Height }}"
+    alt="{{ or .Text "" }}"
+  />
+{{ end }}

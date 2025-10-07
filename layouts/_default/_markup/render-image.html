@@ -1,22 +1,10 @@
-{{ $src := .Destination | strings.TrimPrefix "/" }}
-{{ $base := $src | strings.TrimSuffix ".jpg" | strings.TrimSuffix ".jpeg" | strings.TrimSuffix ".png" | strings.TrimSuffix ".webp" }}
-{{ $dithered := printf "%s.dithered.webp" $base }}
-
-{{ $img := .Page.Resources.GetMatch $dithered }}
-{{ if not $img }}
-  {{ $img = .Page.Resources.GetMatch $src }}
-{{ end }}
-
-{{ if $img }}
-  <figure class="image">
-    <img
-      src="{{ $img.RelPermalink }}"
-      width="{{ $img.Width }}"
-      height="{{ $img.Height }}"
-      alt="{{ $.Text }}"
-    />
-    {{ with .Title }}
-      <figcaption>{{ . }}</figcaption>
-    {{ end }}
-  </figure>
-{{ end }}
+<figure
+  class="{{ with .Title }}
+    mb-12 sm:mb-24
+  {{ end }} relative -mx-6 my-8 border-y-[1px] border-on-surface-dim bg-accent-green sm:-mx-8 sm:my-16"
+>
+  {{ partial "render-image.html" (dict "Destination" .Destination "Page" .Page "Text" .Text "Title" .Title) }}
+  {{ with .Title }}
+    <figcaption class="absolute mx-8 mt-2 italic">{{ . }}</figcaption>
+  {{ end }}
+</figure>

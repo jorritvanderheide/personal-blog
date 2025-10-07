@@ -173,7 +173,7 @@
 
   /* Markdown blocks */
   article .markdown h3 {
-    @apply pt-12 pb-8 font-antilag text-2xl font-bold;
+    @apply pt-12 pb-8 font-antilag text-2xl font-bold first:pt-0;
   }
 
   article .markdown p:has(+ p) {
@@ -191,26 +191,6 @@
 
   article .markdown ol {
     @apply list-decimal;
-  }
-
-  article figure {
-    @apply relative -mx-6 my-8 border-y-[1px] border-on-surface-dim sm:-mx-8 sm:my-16;
-  }
-
-  article figure:has(figcaption) {
-    @apply mb-12 sm:mb-24;
-  }
-
-  article figure figcaption {
-    @apply absolute mx-8 mt-2 italic;
-  }
-
-  article .image {
-    @apply bg-accent-green;
-  }
-
-  article img {
-    @apply w-full object-cover mix-blend-overlay dark:mix-blend-multiply;
   }
 
   article .highlight {

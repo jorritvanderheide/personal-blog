@@ -23,3 +23,5 @@ hugo.linux
 ## Direnv folder
 .direnv/
 .envrc
+# Code
+.vscode/

@@ -1,6 +1,23 @@
-baseURL = 'http://localhost'
+baseURL = 'https://bw20.nl'  # TODO: Update with your actual domain
 languageCode = 'en-us'
 title = 'Personal blog'
+
+# Site parameters
+[params]
+  description = "A personal blog about data portability, NixOS, and technology"
+  author = "Jorrit van der Heide"  # TODO: Update with your name
+
+# Enable sitemap and robots.txt
+enableRobotsTXT = true
+
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.5
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
 
 [[menus.main]]
 identifier = 'articles'

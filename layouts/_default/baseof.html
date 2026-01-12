@@ -8,9 +8,13 @@
     {{ partial "head.html" . }}
   </head>
   <body class="flex h-[100svh] w-screen flex-col">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-background focus:p-4 focus:text-on-surface">
+      Skip to main content
+    </a>
     {{ partial "grid.html" . }}
     {{ partial "header.html" . }}
     <div
+      id="main-content"
       class="flex h-full min-h-[calc(100svh_-_var(--spacing-16))] flex-col overflow-y-auto scroll-smooth lg:min-h-[calc(100svh_-_var(--spacing-20))] 2xl:min-h-[calc(100svh_-_var(--spacing-24))]"
     >
       <div class="mx-2 h-fit grow-1 2xl:mx-unit">

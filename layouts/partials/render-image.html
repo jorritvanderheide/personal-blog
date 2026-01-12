@@ -14,5 +14,14 @@
     width="{{ $img.Width }}"
     height="{{ $img.Height }}"
     alt="{{ or .Text "" }}"
+    loading="lazy"
+    decoding="async"
   />
+{{ else }}
+  {{/* Show warning in development mode when image is not found */}}
+  {{ if hugo.IsDevelopment }}
+    <div class="flex h-full w-full items-center justify-center bg-on-surface-dim p-4 text-on-surface text-sm">
+      Image not found: {{ $dest }}
+    </div>
+  {{ end }}
 {{ end }}

@@ -22,8 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isOpen = false
 
-  toggleBtn.addEventListener("click", () => {
+  const toggleMenu = () => {
     isOpen = !isOpen
+
+    // Update ARIA attributes
+    toggleBtn.setAttribute("aria-expanded", isOpen)
+    mobileMenu.setAttribute("aria-hidden", !isOpen)
 
     if (isOpen) {
       menuTimeline.play()
@@ -31,6 +35,17 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       menuTimeline.reverse()
       menuText.textContent = "menu"
+    }
+  }
+
+  // Click event
+  toggleBtn.addEventListener("click", toggleMenu)
+
+  // Keyboard support (Enter and Space)
+  toggleBtn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault()
+      toggleMenu()
     }
   })
 })

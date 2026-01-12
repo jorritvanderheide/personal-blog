@@ -1,11 +1,15 @@
 +++
 title = 'NixOS is not for beginners!'
-date = 2023-01-15T09:00:00-07:00
-cover = 'testimage.jpg'
 summary = 'I often hear people say that NixOS is not a good choice for beginners. Are they right? I dont think so I think they are stupid!! My option'
+date = 2023-01-15T09:00:00-07:00
+lastmod = 2023-01-15T09:00:00-07:00
+draft = false
+cover = 'testimage.jpg'
 categories = ['sustainability']
 tags = ['article']
-draft = false
+
+[author]
+  name = 'Jorrit van der Heide'
 +++
 
 ### What is a beginner in the context of world domination?
@@ -15,6 +19,9 @@ wants to use a Linux system as they do a Windows or MacOS one. Although I think
 this kind of technical knowledge is quite essential in everyday life, and it
 would be great if more people got this, most people will still be wanting to
 transition to Linux without the tech knowledge, and stay 'beginners' forever.
+
+<!--more-->
+
 NixOS is indeed not for end-users who just want their system to work and install
 apps from a store. Instead, it is more for people who like to tinker with their
 system, such as hobbyists, power users or developers. But these people can also

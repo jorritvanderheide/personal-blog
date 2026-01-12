@@ -1,8 +1,15 @@
 +++
 title = '{{ replace .File.ContentBaseName "-" " " | title }}'
-subtitle = ''
-cover = '/path/to/cover.jpg'
+summary = ''
 date = '{{ .Date }}'
+lastmod = '{{ .Date }}'
 draft = true
+cover = 'cover.jpg'
+categories = []
 tags = ['article']
+
+[author]
+  name = '{{ site.Params.author | default "Author" }}'
 +++
+
+<!--more-->

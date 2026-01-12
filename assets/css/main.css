@@ -10,6 +10,22 @@
 }
 
 @font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMonoNerdFont-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMonoNerdFont-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Equity Text A";
   src: url("/fonts/equity-text-a-regular.woff2") format("woff2");
   font-weight: normal;
@@ -56,6 +72,7 @@
 
   --font-antilag: "Antilag", sans-serif;
   --font-equity: "Equity Text A", sans-serif;
+  --font-jetbrains: "JetBrains Mono", "Courier New", monospace;
 }
 
 @media (prefers-color-scheme: light) {
@@ -86,6 +103,7 @@
 
   --font-antilag: var(--font-antilag);
   --font-equity: var(--font-equity);
+  --font-jetbrains: var(--font-jetbrains);
 
   --spacing-0: 0;
   --spacing-1: 0.25rem;
@@ -198,15 +216,92 @@
   }
 
   article .highlight {
-    @apply bg-surface text-on-surface-variant;
+    @apply relative my-6 bg-surface text-on-surface-variant;
   }
 
   article .highlight pre {
-    @apply p-6 sm:p-8;
+    @apply overflow-x-auto p-6 sm:p-8;
+  }
+
+  article .highlight > div {
+    @apply overflow-x-auto;
+  }
+
+  article .highlight pre {
+    @apply !text-sm !leading-normal;
   }
 
   article .highlight code {
-    @apply !font-antilag;
+    @apply !text-sm !leading-normal;
+    font-family: var(--font-jetbrains);
+    font-feature-settings: "liga" 1, "calt" 1;
+    font-variant-ligatures: normal;
+  }
+
+  article .highlight table {
+    @apply !leading-normal border-spacing-0;
+  }
+
+  article .highlight td {
+    @apply !leading-normal p-0;
+  }
+
+  article .highlight td:first-child {
+    @apply pr-4 text-right;
+  }
+
+  article .highlight td:first-child pre {
+    @apply !m-0 !p-0;
+  }
+
+  article .highlight td:first-child span {
+    @apply !ml-0 !mr-0 !pl-0 !pr-0;
+  }
+
+  article .highlight td:last-child {
+    @apply pl-0;
+  }
+
+  article .highlight td:last-child pre {
+    @apply !pl-0;
+  }
+
+  article .highlight span {
+    @apply !text-sm !leading-normal;
+  }
+
+  @media (min-width: 640px) {
+    article .highlight pre {
+      @apply text-[0.9375rem];
+    }
+
+    article .highlight code {
+      @apply !text-[0.9375rem];
+    }
+
+    article .highlight span {
+      @apply text-[0.9375rem];
+    }
+  }
+
+  article .copy-button {
+    @apply absolute z-10 rounded bg-on-surface-dim px-3 py-1 text-sm text-on-surface transition-colors hover:cursor-pointer hover:bg-accent-green hover:text-on-accent-green focus:outline-none focus:ring-2 focus:ring-accent-green focus:ring-offset-2 focus:ring-offset-surface;
+  }
+
+  /* Code block horizontal scrollbar */
+  article .highlight::-webkit-scrollbar,
+  article .highlight pre::-webkit-scrollbar {
+    @apply h-2;
+  }
+
+  article .highlight::-webkit-scrollbar-track,
+  article .highlight pre::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  article .highlight::-webkit-scrollbar-thumb,
+  article .highlight pre::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-on-surface-dim;
   }
 
   /* Other */

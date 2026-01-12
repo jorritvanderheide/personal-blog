@@ -58,6 +58,6 @@ target = 'assets/notwatching/hugo_stats.json'
     guessSyntax = false
     lineNos = true
     lineNumbersInTable = true
-    noClasses = false
+    noClasses = true
     style = 'gruvbox'
     tabWidth = 4

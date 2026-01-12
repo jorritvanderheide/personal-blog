@@ -1,10 +1,14 @@
 {{ $result := transform.HighlightCodeBlock . }}
 <figure class="highlight" role="figure">
   <button
-    class="copy-button absolute top-4 right-4 hidden hover:cursor-pointer sm:block"
+    type="button"
+    class="copy-button absolute top-4 right-4"
+    aria-label="Copy code to clipboard"
+    title="Copy code to clipboard"
   >
     copy
   </button>
+  <div class="sr-only" aria-live="polite" aria-atomic="true"></div>
   {{ $result.Wrapped | safeHTML }}
   {{- with .Attributes.title -}}
     <figcaption>{{ . }}</figcaption>

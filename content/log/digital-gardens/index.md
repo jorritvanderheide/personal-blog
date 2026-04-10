@@ -2,10 +2,11 @@
 title = 'Gardens over feeds'
 summary = 'Why tending a digital garden feels different from maintaining a blog.'
 date = 2026-03-28T14:00:00Z
+expiryDate = 2031-03-28T14:00:00Z
 lastmod = 2026-03-28T14:00:00Z
 draft = false
 cover = ''
-categories = ['tech']
+threads = ['tech']
 +++
 
 A blog is a stream. New posts push old posts down. The most recent thing is always the most visible. A digital garden is the opposite: pages grow and change over time, and the most developed ones are the most visible.

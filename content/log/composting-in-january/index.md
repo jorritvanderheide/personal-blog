@@ -2,10 +2,11 @@
 title = 'Composting does not stop in winter'
 summary = 'A short note on keeping the pile alive when it is cold.'
 date = 2026-01-25T08:00:00Z
+expiryDate = 2031-01-25T08:00:00Z
 lastmod = 2026-01-25T08:00:00Z
 draft = false
 cover = ''
-categories = ['sustainability']
+threads = ['sustainability']
 +++
 
 People assume composting is a summer activity. The pile slows down in winter but it does not stop.

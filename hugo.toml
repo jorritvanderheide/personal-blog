@@ -10,7 +10,7 @@ disableHugoGeneratorInject = true
   pageBudgetKB = 16
 
 [taxonomies]
-  category = 'categories'
+  thread = 'threads'
 
 enableRobotsTXT = true
 
@@ -24,14 +24,6 @@ enableRobotsTXT = true
   section = ["HTML", "RSS"]
 
 [[menus.main]]
-  identifier = 'now'
-  name = 'now'
-  url = '/now'
-  weight = 10
-  [menus.main.params]
-    description = 'what i am doing'
-
-[[menus.main]]
   identifier = 'log'
   name = 'log'
   url = '/log'
@@ -42,7 +34,7 @@ enableRobotsTXT = true
 [[menus.main]]
   identifier = 'threads'
   name = 'threads'
-  url = '/categories'
+  url = '/threads'
   weight = 22
   [menus.main.params]
     description = 'ongoing conversations'
@@ -53,7 +45,7 @@ enableRobotsTXT = true
   url = '/library'
   weight = 25
   [menus.main.params]
-    description = 'links worth keeping'
+    description = 'things worth finding'
 
 [[menus.main]]
   identifier = 'about'

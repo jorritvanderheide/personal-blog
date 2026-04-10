@@ -2,10 +2,11 @@
 title = 'Permacomputing is not about old computers'
 summary = 'The principles behind permacomputing and why they matter more than the hardware.'
 date = 2026-04-02T09:00:00Z
+expiryDate = 2031-04-02T09:00:00Z
 lastmod = 2026-04-02T09:00:00Z
 draft = false
 cover = ''
-categories = ['sustainability']
+threads = ['sustainability']
 +++
 
 When people first encounter permacomputing, they often think it means using old hardware. Running a 486 as a web server. Squeezing every cycle. That is part of it, but it misses the point.

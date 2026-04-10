@@ -1,5 +1,9 @@
 <header class="border-b border-fg-dim/20 px-4 py-3">
-  <nav aria-label="Breadcrumb" class="max-w-2xl mx-auto text-sm text-fg-dim">
-    {{ partial "breadcrumb.html" . }}
-  </nav>
+    <div class="max-w-2xl mx-auto">
+        <a
+            href="{{ site.Home.RelPermalink }}"
+            class="font-mono font-bold no-underline"
+            >{{ site.Title }}</a
+        >
+    </div>
 </header>

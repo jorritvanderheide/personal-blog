@@ -11,9 +11,16 @@ digital rights and privacy, NixOS and declarative infrastructure, self-hosting,
 permacomputing, community networks, and the small web. Sometimes I write about
 gardening.
 
-The site itself is part of the project. It is built with Hugo, styled with
-Tailwind CSS (via Nix, not npm), and designed to run on a solar-powered
-Raspberry Pi. Every design decision — from dithered images to seasonal
-timestamps to the 1MB capacity budget — reflects the values in the writing.
-
 You can reach me through the channels listed on my Codeberg profile.
+
+### Now
+
+- Building this site — a solar-server-ready static blog with Hugo and Nix
+- Learning more about permacomputing and what it means for everyday practice
+- Experimenting with Reticulum for local-first networking over LoRa
+- Reading Ink & Switch papers on local-first software and CRDTs
+- Thinking about whether "low-tech" is the right framing or if it should be
+  "appropriate tech"
+- Planning the spring garden beds
+
+*Last updated: early spring 2026*

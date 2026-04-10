@@ -1,57 +1,33 @@
 {{ define "main" }}
+  <nav aria-label="Breadcrumb" class="text-sm text-fg-dim mb-6">
+    {{ partial "breadcrumb.html" . }}
+  </nav>
+
   <h1 class="mb-2">{{ .Title }}</h1>
-  <div class="text-fg-dim mb-6">{{ .Content }}</div>
+  {{ $entries := hugo.Data.library.entries }}
+  <div class="text-fg-dim mb-6">{{ .Content }} {{ len $entries }} entries.</div>
 
-  {{ $pages := .RegularPages.ByDate.Reverse }}
-
-  {{ range site.Taxonomies.categories }}
-    {{ $name := .Page.Title }}
-    {{ $filtered := where $pages "Params.categories" "intersect" (slice (.Page.Name)) }}
-    {{ with $filtered }}
-      <section class="mb-8">
-        <h2 class="mb-3 text-accent">{{ $name }}</h2>
-        <ul class="space-y-3">
-          {{ range . }}
-            {{ $title := .Title }}
-            {{ $link := .Params.link }}
-            <li>
-              {{ with $link }}
-                <a href="{{ . }}" rel="noopener">{{ $title }}</a>
-                <span class="text-fg-dim text-xs font-mono ml-1">{{ (urls.Parse .).Hostname }}</span>
-              {{ else }}
-                <a href="{{ .RelPermalink }}">{{ $title }}</a>
-              {{ end }}
-              {{ with .Params.description }}
-                <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
-              {{ end }}
-            </li>
-          {{ end }}
-        </ul>
-      </section>
-    {{ end }}
-  {{ end }}
-
-  {{ $uncategorized := where $pages "Params.categories" "eq" nil }}
-  {{ with $uncategorized }}
-    <section class="mb-8">
-      <h2 class="mb-3 text-accent">Uncategorized</h2>
-      <ul class="space-y-3">
-        {{ range . }}
-          {{ $title := .Title }}
-          {{ $link := .Params.link }}
-          <li>
-            {{ with $link }}
-              <a href="{{ . }}" rel="noopener">{{ $title }}</a>
-              <span class="text-fg-dim text-xs font-mono ml-1">{{ (urls.Parse .).Hostname }}</span>
-            {{ else }}
-              <a href="{{ .RelPermalink }}">{{ $title }}</a>
-            {{ end }}
-            {{ with .Params.description }}
-              <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
-            {{ end }}
-          </li>
+  <ul class="space-y-4">
+    {{ range $entries }}
+      <li>
+        <div>
+          <a href="{{ .link }}" rel="noopener">{{ .title }}</a>
+          <span class="text-fg-dim text-xs font-mono ml-1">{{ (urls.Parse .link).Hostname }}</span>
+        </div>
+        {{ with .description }}
+          <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
         {{ end }}
-      </ul>
-    </section>
-  {{ end }}
+        <div class="text-xs text-fg-dim mt-1 font-mono">
+          {{ range $i, $t := .threads }}
+            {{- if $i }} · {{ end -}}
+            {{ $t }}
+          {{- end }}
+        </div>
+      </li>
+    {{ end }}
+  </ul>
+
+  <nav aria-label="Breadcrumb" class="text-sm text-fg-dim mt-8">
+    {{ partial "breadcrumb.html" . }}
+  </nav>
 {{ end }}

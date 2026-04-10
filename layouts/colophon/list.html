@@ -1,4 +1,8 @@
 {{ define "main" }}
+  <nav aria-label="Breadcrumb" class="text-sm text-fg-dim mb-6">
+    {{ partial "breadcrumb.html" . }}
+  </nav>
+
   <article>
     <h1 class="mb-2">{{ .Title }}</h1>
     <div class="text-fg-dim mb-8">{{ .Content }}</div>
@@ -37,4 +41,8 @@
       </dl>
     </section>
   </article>
+
+  <nav aria-label="Breadcrumb" class="text-sm text-fg-dim mt-8">
+    {{ partial "breadcrumb.html" . }}
+  </nav>
 {{ end }}

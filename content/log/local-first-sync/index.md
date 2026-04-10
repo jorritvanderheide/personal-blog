@@ -2,10 +2,15 @@
 title = 'What if your data never left your device?'
 summary = 'Local-first software and the case against cloud dependency.'
 date = 2026-01-08T11:00:00Z
+expiryDate = 2031-01-08T11:00:00Z
 lastmod = 2026-01-08T11:00:00Z
 draft = false
 cover = ''
-categories = ['tech']
+threads = ['tech']
+
+[[references]]
+  title = 'Local-first software'
+  link = 'https://www.inkandswitch.com/local-first/'
 +++
 
 Every note-taking app, every task manager, every document editor — they all assume a cloud backend. Your data lives on someone else's computer. Local-first software asks: what if it did not?

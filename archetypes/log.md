@@ -3,7 +3,12 @@ title = '{{ replace .File.ContentBaseName "-" " " | title }}'
 summary = ''
 date = '{{ .Date }}'
 lastmod = '{{ .Date }}'
+expiryDate = '{{ .Date.AddDate 5 0 0 }}'
 draft = true
 cover = ''
-categories = []
+threads = []
+
+# [[references]]
+#   title = ''
+#   link = ''
 +++

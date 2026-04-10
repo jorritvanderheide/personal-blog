@@ -1,15 +1,5 @@
 {{ $result := transform.HighlightCodeBlock . }}
 <figure>
-  <button
-    type="button"
-    class="copy-button"
-    hidden
-    aria-label="Copy code to clipboard"
-    title="Copy code to clipboard"
-  >
-    copy
-  </button>
-  <div style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)" aria-live="polite" aria-atomic="true"></div>
   {{ $result.Wrapped | safeHTML }}
   {{ with .Attributes.title }}
     <figcaption>{{ . }}</figcaption>

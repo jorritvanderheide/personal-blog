@@ -26,7 +26,7 @@
 
     <div class="flex items-baseline gap-3 mt-1 text-xs text-fg-dim">
       {{ partial "seasonal-time.html" $page.Date }}
-      {{ with $page.Params.categories }}
+      {{ with $page.Params.threads }}
         {{ range . }}
           <span class="font-mono">{{ . }}</span>
         {{ end }}

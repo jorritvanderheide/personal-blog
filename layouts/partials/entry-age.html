@@ -3,9 +3,9 @@
 {{- $diff := $now.Sub $date -}}
 {{- $days := div (int $diff) 86400000000000 -}}
 {{- $freshness := "fresh" -}}
-{{- if gt $days 365 -}}
+{{- if gt $days 1095 -}}
   {{- $freshness = "faded" -}}
-{{- else if gt $days 180 -}}
+{{- else if gt $days 365 -}}
   {{- $freshness = "aging" -}}
 {{- end -}}
 {{- $freshness -}}

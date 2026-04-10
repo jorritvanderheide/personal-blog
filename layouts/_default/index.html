@@ -1,30 +1,33 @@
 {{ define "main" }}
   <header class="mb-8">
-    <h1 class="text-3xl text-accent mb-2">{{ site.Title }}</h1>
+    <h1 class="text-3xl mb-1">{{ site.Title }}</h1>
     <div class="text-fg-dim">{{ .Content }}</div>
   </header>
 
   <nav aria-label="Site directory" class="mb-8">
     <ul class="space-y-2">
-      {{ range site.Menus.main }}
-        <li class="flex items-baseline">
-          <a href="{{ .URL | relLangURL }}" class="font-mono w-24 shrink-0">{{ .Name }}</a>
-          {{ with .Params.description }}
-            <span class="text-fg-dim text-sm">{{ . }}</span>
-          {{ end }}
-        </li>
-      {{ end }}
+      <li class="flex items-baseline">
+        <a href="/log/" class="font-mono w-24 shrink-0">log</a>
+        <span class="text-fg-dim text-sm">field notes and essays</span>
+      </li>
+      <li class="flex items-baseline">
+        <a href="/library/" class="font-mono w-24 shrink-0">library</a>
+        <span class="text-fg-dim text-sm">things worth finding</span>
+      </li>
     </ul>
+    <p class="mt-4 text-sm font-mono">
+      <a href="/about/">about</a> · <a href="/colophon/">colophon</a>
+    </p>
   </nav>
 
-  {{ $totalBytes := 0 }}
-  {{ range site.RegularPages }}
-    {{ $totalBytes = add $totalBytes (len .Content) }}
-  {{ end }}
-  {{ range site.Sections }}
-    {{ $totalBytes = add $totalBytes (len .Content) }}
-  {{ end }}
-  {{ $totalKB := div $totalBytes 1024 }}
-  {{ $capacityKB := site.Params.siteCapacityKB | default 1024 }}
+  {{- $totalBytes := 0 -}}
+  {{- range site.RegularPages -}}
+    {{- $totalBytes = add $totalBytes (len .Content) -}}
+  {{- end -}}
+  {{- range site.Sections -}}
+    {{- $totalBytes = add $totalBytes (len .Content) -}}
+  {{- end -}}
+  {{- $totalKB := div $totalBytes 1024 -}}
+  {{- $capacityKB := site.Params.siteCapacityKB | default 1024 }}
   <p class="text-xs text-fg-dim font-mono">{{ $totalKB }}KB / {{ $capacityKB }}KB</p>
 {{ end }}

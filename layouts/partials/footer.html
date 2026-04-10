@@ -1,14 +1,6 @@
 <footer class="border-t border-fg-dim/20 px-4 py-4 mt-auto">
-  <div class="max-w-2xl mx-auto text-sm text-fg-dim flex justify-between">
-    <p>
-      {{ if not .IsHome }}
-        <nav aria-label="Breadcrumb" class="inline">
-          {{ partial "breadcrumb.html" . }}
-        </nav>
-        &middot;
-      {{ end }}
-      &copy; {{ now.Year }} {{ site.Params.author | default site.Title }}
-    </p>
-    <p>{{ partial "page-weight.html" . }}</p>
-  </div>
+  <p class="text-sm text-fg-dim text-center">&copy; {{ now.Year }} {{ site.Params.author | default site.Title }}</p>
 </footer>
+<div class="page-weight" aria-label="Approximate page weight">
+  {{ partial "page-weight.html" . }}
+</div>

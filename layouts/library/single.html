@@ -1,10 +1,23 @@
 {{ define "main" }}
   <article>
     <h1>{{ .Title }}</h1>
-    {{ with .Params.link }}
-      <p class="mt-2"><a href="{{ . }}" rel="noopener">Visit resource &rarr;</a></p>
+    {{ with .Params.description }}
+      <p class="text-fg-dim mt-2">{{ . }}</p>
     {{ end }}
-    <div class="mt-4">{{ .Content }}</div>
-    <span class="text-sm text-fg-dim">{{ partial "seasonal-time.html" .Date }}</span>
+    {{ with .Params.link }}
+      <p class="mt-2"><a href="{{ . }}" rel="noopener">Visit resource &rarr;</a>
+      <span class="text-fg-dim text-xs font-mono ml-1">{{ (urls.Parse .).Hostname }}</span></p>
+    {{ end }}
+    {{ with .Content }}
+      <div class="mt-4 prose">{{ . }}</div>
+    {{ end }}
+    <div class="mt-4 text-sm text-fg-dim">
+      {{ partial "seasonal-time.html" .Date }}
+      {{ with .Params.categories }}
+        {{ range . }}
+          &middot; <a href="{{ printf "/categories/%s/" . | relLangURL }}" class="font-mono text-fg-dim">{{ . }}</a>
+        {{ end }}
+      {{ end }}
+    </div>
   </article>
 {{ end }}

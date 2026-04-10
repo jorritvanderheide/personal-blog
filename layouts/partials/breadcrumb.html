@@ -1,0 +1,11 @@
+<a href="{{ site.Home.RelPermalink }}" class="text-fg no-underline font-bold font-mono text-accent">{{ site.Title }}</a>
+{{- if not .IsHome -}}
+  {{- if .IsPage -}}
+    {{- with .CurrentSection -}}
+      {{- if not .IsHome }} / <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end -}}
+    {{- end }} / <span class="text-fg">{{ .Title }}</span>
+  {{- else if eq .Kind "term" -}}
+    {{- with .Parent }} / <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }} / <span class="text-fg">{{ .Title }}</span>
+  {{- else }} / <span class="text-fg">{{ .Title }}</span>
+  {{- end -}}
+{{- end -}}

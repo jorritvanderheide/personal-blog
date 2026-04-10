@@ -10,12 +10,14 @@
     {{ with $filtered }}
       <section class="mb-8">
         <h2 class="mb-3 text-accent">{{ $name }}</h2>
-        <ul class="space-y-4">
+        <ul class="space-y-3">
           {{ range . }}
             {{ $title := .Title }}
+            {{ $link := .Params.link }}
             <li>
-              {{ with .Params.link }}
+              {{ with $link }}
                 <a href="{{ . }}" rel="noopener">{{ $title }}</a>
+                <span class="text-fg-dim text-xs font-mono ml-1">{{ (urls.Parse .).Hostname }}</span>
               {{ else }}
                 <a href="{{ .RelPermalink }}">{{ $title }}</a>
               {{ end }}
@@ -33,12 +35,14 @@
   {{ with $uncategorized }}
     <section class="mb-8">
       <h2 class="mb-3 text-accent">Uncategorized</h2>
-      <ul class="space-y-4">
+      <ul class="space-y-3">
         {{ range . }}
           {{ $title := .Title }}
+          {{ $link := .Params.link }}
           <li>
-            {{ with .Params.link }}
+            {{ with $link }}
               <a href="{{ . }}" rel="noopener">{{ $title }}</a>
+              <span class="text-fg-dim text-xs font-mono ml-1">{{ (urls.Parse .).Hostname }}</span>
             {{ else }}
               <a href="{{ .RelPermalink }}">{{ $title }}</a>
             {{ end }}

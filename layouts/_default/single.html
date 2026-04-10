@@ -2,24 +2,39 @@
   {{ $freshness := partial "entry-age.html" .Date }}
   <article data-freshness="{{ $freshness }}">
     <header class="mb-8">
-      {{ with .CurrentSection }}
-        <a href="{{ .RelPermalink }}" class="text-sm text-fg-dim">&lsaquo; {{ .Title }}</a>
-      {{ end }}
       <h1 class="mt-2">{{ .Title }}</h1>
       {{ with .Params.Summary }}
         <p class="text-fg-dim text-lg mt-2">{{ . }}</p>
       {{ end }}
-      <span class="text-sm text-fg-dim">{{ partial "seasonal-time.html" .Date }}</span>
+      <div class="flex items-baseline gap-3 mt-2 text-sm text-fg-dim">
+        {{ partial "seasonal-time.html" .Date }}
+        {{ with .Params.categories }}
+          {{ range . }}
+            <a href="{{ printf "/categories/%s/" . | relLangURL }}" class="font-mono text-fg-dim">{{ . }}</a>
+          {{ end }}
+        {{ end }}
+      </div>
     </header>
 
     {{ with .TableOfContents }}
-      <nav aria-label="Table of contents" class="mb-8 p-4 rounded bg-bg-soft text-sm">
+      <div class="mb-8 p-4 rounded bg-bg-soft text-sm" role="navigation" aria-label="Table of contents">
         {{ . }}
-      </nav>
+      </div>
     {{ end }}
 
     <div class="prose">
       {{ .Content }}
     </div>
+
+    <nav class="mt-12 pt-6 border-t border-fg-dim/10 flex justify-between text-sm" aria-label="Adjacent entries">
+      {{ with .PrevInSection }}
+        <a href="{{ .RelPermalink }}" class="text-fg-dim">&larr; {{ .Title }}</a>
+      {{ else }}
+        <span></span>
+      {{ end }}
+      {{ with .NextInSection }}
+        <a href="{{ .RelPermalink }}" class="text-fg-dim text-right">{{ .Title }} &rarr;</a>
+      {{ end }}
+    </nav>
   </article>
 {{ end }}

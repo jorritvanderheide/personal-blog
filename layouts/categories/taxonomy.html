@@ -5,11 +5,13 @@
   <ul class="space-y-4">
     {{ range .Pages }}
       <li>
-        <a href="{{ .RelPermalink }}" class="text-lg">{{ .Title }}</a>
+        <div class="flex items-baseline gap-3">
+          <a href="{{ .RelPermalink }}" class="text-lg font-mono shrink-0">{{ .Title }}</a>
+          <span class="text-fg-dim text-xs font-mono">{{ len .Pages }} {{ if eq (len .Pages) 1 }}entry{{ else }}entries{{ end }}</span>
+        </div>
         {{ with .Params.description }}
           <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
         {{ end }}
-        <span class="text-fg-dim text-xs">{{ len .Pages }} {{ if eq (len .Pages) 1 }}entry{{ else }}entries{{ end }}</span>
       </li>
     {{ end }}
   </ul>

@@ -1,17 +1,5 @@
 <header class="border-b border-fg-dim/20 px-4 py-3">
   <nav aria-label="Breadcrumb" class="max-w-2xl mx-auto text-sm text-fg-dim">
-    <a href="{{ site.Home.RelPermalink }}" class="text-fg no-underline font-bold">{{ site.Title }}</a>
-    {{ if not .IsHome }}
-      {{ if .IsPage }}
-        {{ with .CurrentSection }}
-          {{ if not .IsHome }}
-            / <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-          {{ end }}
-        {{ end }}
-        / <span class="text-fg">{{ .Title }}</span>
-      {{ else }}
-        / <span class="text-fg">{{ .Title }}</span>
-      {{ end }}
-    {{ end }}
+    {{ partial "breadcrumb.html" . }}
   </nav>
 </header>

@@ -24,6 +24,13 @@
       <p class="text-fg-dim text-sm mt-1">{{ . | plainify | truncate 160 }}</p>
     {{ end }}
 
-    <span class="text-fg-dim text-xs">{{ partial "seasonal-time.html" $page.Date }}</span>
+    <div class="flex items-baseline gap-3 mt-1 text-xs text-fg-dim">
+      {{ partial "seasonal-time.html" $page.Date }}
+      {{ with $page.Params.categories }}
+        {{ range . }}
+          <span class="font-mono">{{ . }}</span>
+        {{ end }}
+      {{ end }}
+    </div>
   </a>
 </article>

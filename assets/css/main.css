@@ -48,6 +48,7 @@
 
   h1, h2, h3 {
     @apply font-bold leading-tight;
+    font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
   }
 
   h1 { @apply text-2xl; }
@@ -107,6 +108,12 @@
   /* Table of contents */
   #TableOfContents ul { @apply space-y-1; }
   #TableOfContents a { @apply text-fg-dim text-sm; }
+
+  /* Seasonal accents — the site shifts with the time of year */
+  .season-spring { --accent: #b8bb26; } /* gruvbox green */
+  .season-summer { --accent: #fabd2f; } /* gruvbox yellow */
+  .season-autumn { --accent: #d65d0e; } /* gruvbox orange */
+  .season-winter { --accent: #83a598; } /* gruvbox blue-green */
 
   /* Definition lists (colophon) */
   dt {

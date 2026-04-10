@@ -3,8 +3,10 @@
     {{ partial "breadcrumb.html" . }}
   </nav>
 
+  {{ $desc := partial "thread-description.html" (.Title | lower) }}
+
   <h1 class="mb-2">{{ .Title }}</h1>
-  {{ with .Params.description }}
+  {{ with $desc }}
     <p class="text-fg-dim mb-4">{{ . }}</p>
   {{ end }}
   <div class="mb-4">{{ .Content }}</div>

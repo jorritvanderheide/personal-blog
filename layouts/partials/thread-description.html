@@ -1,0 +1,6 @@
+{{- $name := . -}}
+{{- range hugo.Data.threads.threads -}}
+  {{- if eq .name $name -}}
+    {{- .description -}}
+  {{- end -}}
+{{- end -}}

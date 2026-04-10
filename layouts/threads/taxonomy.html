@@ -9,6 +9,7 @@
   <ul class="space-y-4">
     {{ range .Pages }}
       {{ $logCount := len (where .Pages "Section" "log") }}
+      {{ $desc := partial "thread-description.html" (.Title | lower) }}
       <li>
         <div class="flex items-baseline gap-3">
           <a href="{{ .RelPermalink }}" class="text-lg font-mono shrink-0">{{ .Title }}</a>
@@ -16,7 +17,7 @@
             {{- $logCount }} {{ if eq $logCount 1 }}entry{{ else }}entries{{ end -}}
           </span>
         </div>
-        {{ with .Params.description }}
+        {{ with $desc }}
           <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
         {{ end }}
       </li>

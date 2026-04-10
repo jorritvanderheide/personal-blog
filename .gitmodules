@@ -1,3 +1,0 @@
-[submodule "static"]
-	path = static
-	url = ssh://git@codeberg.org/BW20/personal-blog-private.git

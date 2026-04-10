@@ -14,6 +14,10 @@ disableHugoGeneratorInject = true
 
 enableRobotsTXT = true
 
+[permalinks]
+  [permalinks.term]
+    threads = '/log/:slug/'
+
 [sitemap]
   changefreq = "weekly"
   filename = "sitemap.xml"
@@ -30,14 +34,6 @@ enableRobotsTXT = true
   weight = 20
   [menus.main.params]
     description = 'field notes and essays'
-
-[[menus.main]]
-  identifier = 'threads'
-  name = 'threads'
-  url = '/threads'
-  weight = 22
-  [menus.main.params]
-    description = 'ongoing conversations'
 
 [[menus.main]]
   identifier = 'library'

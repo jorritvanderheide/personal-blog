@@ -1,0 +1,24 @@
+{{ define "main" }}
+  <nav aria-label="Breadcrumb" class="text-sm text-fg-dim mb-6">
+    {{ partial "breadcrumb.html" . }}
+  </nav>
+
+  <h1 class="mb-2">{{ .Title }}</h1>
+  <div class="text-fg-dim mb-4">{{ .Content }}</div>
+
+  <p class="text-sm font-mono mb-6">
+    <span class="text-fg-dim">threads:</span>
+    {{- range $i, $e := site.Taxonomies.threads.Alphabetical -}}
+      {{- if $i }} · {{ end -}}
+      <a href="/log/{{ .Name }}/">{{ .Name }}</a>
+    {{- end -}}
+  </p>
+
+  {{ range .RegularPages.ByDate.Reverse }}
+    {{ partial "article-card.html" (dict "Page" .) }}
+  {{ end }}
+
+  <nav aria-label="Breadcrumb" class="text-sm text-fg-dim mt-8">
+    {{ partial "breadcrumb.html" . }}
+  </nav>
+{{ end }}

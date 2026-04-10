@@ -1,0 +1,7 @@
+[[threads]]
+name = "sustainability"
+description = "Questioning the cloud-everything paradigm. Low-tech, permacomputing, local-first."
+
+[[threads]]
+name = "tech"
+description = "Notes on NixOS, infrastructure, DevOps, and open source tooling."

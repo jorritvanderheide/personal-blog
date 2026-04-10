@@ -20,14 +20,5 @@
     </p>
   </nav>
 
-  {{- $totalBytes := 0 -}}
-  {{- range site.RegularPages -}}
-    {{- $totalBytes = add $totalBytes (len .Content) -}}
-  {{- end -}}
-  {{- range site.Sections -}}
-    {{- $totalBytes = add $totalBytes (len .Content) -}}
-  {{- end -}}
-  {{- $totalKB := div $totalBytes 1024 -}}
-  {{- $capacityKB := site.Params.siteCapacityKB | default 1024 }}
-  <p class="text-xs text-fg-dim font-mono">{{ $totalKB }}KB / {{ $capacityKB }}KB</p>
+  {{ partial "capacity.html" . }}
 {{ end }}

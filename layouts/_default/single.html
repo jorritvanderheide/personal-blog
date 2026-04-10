@@ -14,7 +14,7 @@
         {{ partial "seasonal-time.html" .Date }}
         {{ with .Params.threads }}
           {{ range . }}
-            <a href="{{ printf "/threads/%s/" . | relLangURL }}" class="font-mono text-fg-dim">{{ . }}</a>
+            <a href="{{ printf "/log/%s/" . | relLangURL }}" class="font-mono text-fg-dim">{{ . }}</a>
           {{ end }}
         {{ end }}
       </div>

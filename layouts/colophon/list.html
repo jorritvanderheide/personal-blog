@@ -23,19 +23,9 @@
 
     <section class="mb-8">
       <h2 class="mb-3">Site capacity</h2>
-      {{ $totalBytes := 0 }}
-      {{ range site.RegularPages }}
-        {{ $totalBytes = add $totalBytes (len .Content) }}
-      {{ end }}
-      {{ range site.Sections }}
-        {{ $totalBytes = add $totalBytes (len .Content) }}
-      {{ end }}
-      {{ $totalKB := div $totalBytes 1024 }}
-      {{ $capacityKB := site.Params.siteCapacityKB | default 1024 }}
-      {{ $pct := div (mul $totalKB 100) $capacityKB }}
       <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
-        <dt>Content used</dt>
-        <dd>{{ $totalKB }}KB / {{ $capacityKB }}KB ({{ $pct }}%)</dd>
+        <dt>Used</dt>
+        <dd>{{ partial "capacity.html" . }}</dd>
         <dt>Page budget</dt>
         <dd>{{ site.Params.pageBudgetKB | default 16 }}KB per page</dd>
       </dl>

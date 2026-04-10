@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "syntax.css";
 @source "hugo_stats.json";
 
 @font-face {
@@ -219,31 +220,27 @@
     @apply relative my-6 bg-surface text-on-surface-variant;
   }
 
-  article .highlight pre {
-    @apply overflow-x-auto p-6 sm:p-8;
-  }
-
   article .highlight > div {
     @apply overflow-x-auto;
   }
 
   article .highlight pre {
-    @apply !text-sm !leading-normal;
+    @apply overflow-x-auto p-6 text-sm leading-normal sm:p-8;
   }
 
   article .highlight code {
-    @apply !text-sm !leading-normal;
+    @apply text-sm leading-normal;
     font-family: var(--font-jetbrains);
     font-feature-settings: "liga" 1, "calt" 1;
     font-variant-ligatures: normal;
   }
 
   article .highlight table {
-    @apply !leading-normal border-spacing-0;
+    @apply leading-normal border-spacing-0;
   }
 
   article .highlight td {
-    @apply !leading-normal p-0;
+    @apply leading-normal p-0;
   }
 
   article .highlight td:first-child {
@@ -251,11 +248,11 @@
   }
 
   article .highlight td:first-child pre {
-    @apply !m-0 !p-0;
+    @apply m-0 p-0;
   }
 
   article .highlight td:first-child span {
-    @apply !ml-0 !mr-0 !pl-0 !pr-0;
+    @apply ml-0 mr-0 pl-0 pr-0;
   }
 
   article .highlight td:last-child {
@@ -263,11 +260,11 @@
   }
 
   article .highlight td:last-child pre {
-    @apply !pl-0;
+    @apply pl-0;
   }
 
   article .highlight span {
-    @apply !text-sm !leading-normal;
+    @apply text-sm leading-normal;
   }
 
   @media (min-width: 640px) {
@@ -276,7 +273,7 @@
     }
 
     article .highlight code {
-      @apply !text-[0.9375rem];
+      @apply text-[0.9375rem];
     }
 
     article .highlight span {
@@ -302,6 +299,25 @@
   article .highlight::-webkit-scrollbar-thumb,
   article .highlight pre::-webkit-scrollbar-thumb {
     @apply rounded-full bg-on-surface-dim;
+  }
+
+  /* Mobile menu */
+  #mobileMenu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-2rem);
+    pointer-events: none;
+    transition:
+      opacity 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+      visibility 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+      transform 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  #mobileMenu.menu-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   /* Other */

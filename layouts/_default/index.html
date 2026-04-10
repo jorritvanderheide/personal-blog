@@ -18,8 +18,7 @@
     <section
       class="col-span-full grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:col-span-6 3xl:col-start-2"
     >
-      {{ $all := where .Site.RegularPages "Draft" false }}
-      {{ $all = where $all "Params.tags" "intersect" (slice "article") }}
+      {{ $all := where site.RegularPages "Section" "articles" }}
       {{ $paginator := .Paginate $all 13 }}
 
 

@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@tailwindcss/cli": "^4.1.10",
-    "gsap": "^3.13.0",
     "tailwindcss": "^4.1.10"
   },
   "devDependencies": {

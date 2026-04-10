@@ -11,7 +11,7 @@
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-background focus:p-4 focus:text-on-surface">
       Skip to main content
     </a>
-    {{ partial "grid.html" . }}
+    {{ if hugo.IsDevelopment }}{{ partial "grid.html" . }}{{ end }}
     {{ partial "header.html" . }}
     <div
       id="main-content"

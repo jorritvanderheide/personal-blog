@@ -2,9 +2,9 @@
   <article>
     <h1>{{ .Title }}</h1>
     {{ with .Params.link }}
-      <p><a href="{{ . }}" rel="noopener">Visit resource &rarr;</a></p>
+      <p class="mt-2"><a href="{{ . }}" rel="noopener">Visit resource &rarr;</a></p>
     {{ end }}
-    {{ .Content }}
-    {{ partial "seasonal-time.html" .Date }}
+    <div class="mt-4">{{ .Content }}</div>
+    <span class="text-sm text-fg-dim">{{ partial "seasonal-time.html" .Date }}</span>
   </article>
 {{ end }}

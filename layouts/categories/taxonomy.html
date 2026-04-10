@@ -1,15 +1,15 @@
 {{ define "main" }}
-  <h1>Threads</h1>
+  <h1 class="mb-6">Threads</h1>
   {{ .Content }}
 
-  <ul>
+  <ul class="space-y-4">
     {{ range .Pages }}
       <li>
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <a href="{{ .RelPermalink }}" class="text-lg">{{ .Title }}</a>
         {{ with .Params.description }}
-          <p>{{ . }}</p>
+          <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
         {{ end }}
-        <span>{{ len .Pages }} {{ if eq (len .Pages) 1 }}entry{{ else }}entries{{ end }}</span>
+        <span class="text-fg-dim text-xs">{{ len .Pages }} {{ if eq (len .Pages) 1 }}entry{{ else }}entries{{ end }}</span>
       </li>
     {{ end }}
   </ul>

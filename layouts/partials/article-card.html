@@ -1,8 +1,8 @@
 {{ $page := .Page }}
 {{ $freshness := partial "entry-age.html" $page.Date }}
 
-<article data-freshness="{{ $freshness }}">
-  <a href="{{ $page.RelPermalink }}">
+<article data-freshness="{{ $freshness }}" class="py-4 border-b border-fg-dim/10">
+  <a href="{{ $page.RelPermalink }}" class="no-underline block group">
     {{ with $page.Params.cover }}
       {{ $img := $page.Resources.GetMatch . }}
       {{ if $img }}
@@ -13,16 +13,17 @@
           alt="{{ $page.Title }}"
           loading="lazy"
           decoding="async"
+          class="mb-2"
         />
       {{ end }}
     {{ end }}
 
-    <h2>{{ $page.Title }}</h2>
+    <h2 class="text-lg group-hover:text-accent">{{ $page.Title }}</h2>
 
     {{ with $page.Summary }}
-      <p>{{ . | plainify | truncate 160 }}</p>
+      <p class="text-fg-dim text-sm mt-1">{{ . | plainify | truncate 160 }}</p>
     {{ end }}
 
-    {{ partial "seasonal-time.html" $page.Date }}
+    <span class="text-fg-dim text-xs">{{ partial "seasonal-time.html" $page.Date }}</span>
   </a>
 </article>

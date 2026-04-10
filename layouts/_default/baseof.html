@@ -16,10 +16,10 @@
   {{- else if and (ge $month 9) (le $month 11) -}}
     {{- $season = "autumn" -}}
   {{- end -}}
-  <body class="season-{{ $season }}" style="--season: '{{ $season }}'">
-    <a href="#main-content">Skip to main content</a>
+  <body class="season-{{ $season }} min-h-screen flex flex-col" style="--season: '{{ $season }}'">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-bg focus:p-2 focus:text-fg">Skip to main content</a>
     {{ partial "header.html" . }}
-    <main id="main-content">
+    <main id="main-content" class="max-w-2xl mx-auto w-full px-4 py-8 flex-1">
       {{ block "main" . }}{{ end }}
     </main>
     {{ partial "footer.html" . }}

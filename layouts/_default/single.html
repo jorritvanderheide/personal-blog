@@ -1,24 +1,24 @@
 {{ define "main" }}
   {{ $freshness := partial "entry-age.html" .Date }}
   <article data-freshness="{{ $freshness }}">
-    <header>
+    <header class="mb-8">
       {{ with .CurrentSection }}
-        <a href="{{ .RelPermalink }}">&lsaquo; {{ .Title }}</a>
+        <a href="{{ .RelPermalink }}" class="text-sm text-fg-dim">&lsaquo; {{ .Title }}</a>
       {{ end }}
-      <h1>{{ .Title }}</h1>
+      <h1 class="mt-2">{{ .Title }}</h1>
       {{ with .Params.Summary }}
-        <p>{{ . }}</p>
+        <p class="text-fg-dim text-lg mt-2">{{ . }}</p>
       {{ end }}
-      {{ partial "seasonal-time.html" .Date }}
+      <span class="text-sm text-fg-dim">{{ partial "seasonal-time.html" .Date }}</span>
     </header>
 
     {{ with .TableOfContents }}
-      <nav aria-label="Table of contents">
+      <nav aria-label="Table of contents" class="mb-8 p-4 rounded bg-bg-soft text-sm">
         {{ . }}
       </nav>
     {{ end }}
 
-    <div>
+    <div class="prose">
       {{ .Content }}
     </div>
   </article>

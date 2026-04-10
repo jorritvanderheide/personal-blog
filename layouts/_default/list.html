@@ -1,6 +1,6 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
+  <h1 class="mb-2">{{ .Title }}</h1>
+  <div class="text-fg-dim mb-6">{{ .Content }}</div>
 
   {{ range .RegularPages.ByDate.Reverse }}
     {{ partial "article-card.html" (dict "Page" .) }}

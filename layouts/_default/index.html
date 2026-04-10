@@ -1,14 +1,14 @@
 {{ define "main" }}
-  <h1>{{ site.Title }}</h1>
-  {{ .Content }}
+  <h1 class="mb-2">{{ site.Title }}</h1>
+  <div class="text-fg-dim mb-8">{{ .Content }}</div>
 
-  <nav aria-label="Site directory">
-    <ul>
+  <nav aria-label="Site directory" class="mb-8">
+    <ul class="space-y-3">
       {{ range site.Menus.main }}
-        <li>
-          <a href="{{ .URL | relLangURL }}">{{ .Name }}</a>
+        <li class="flex gap-2">
+          <a href="{{ .URL | relLangURL }}" class="shrink-0">{{ .Name }}</a>
           {{ with .Params.description }}
-            <span>{{ . }}</span>
+            <span class="text-fg-dim">{{ . }}</span>
           {{ end }}
         </li>
       {{ end }}
@@ -24,5 +24,5 @@
   {{ end }}
   {{ $totalKB := div $totalBytes 1024 }}
   {{ $capacityKB := site.Params.siteCapacityKB | default 1024 }}
-  <p>{{ $totalKB }}KB / {{ $capacityKB }}KB</p>
+  <p class="text-sm text-fg-dim">{{ $totalKB }}KB / {{ $capacityKB }}KB</p>
 {{ end }}

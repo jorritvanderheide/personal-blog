@@ -1,6 +1,6 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
+  <h1 class="mb-2">{{ .Title }}</h1>
+  <div class="text-fg-dim mb-6">{{ .Content }}</div>
 
   {{ $pages := .RegularPages.ByDate.Reverse }}
 
@@ -8,9 +8,9 @@
     {{ $name := .Page.Title }}
     {{ $filtered := where $pages "Params.categories" "intersect" (slice (.Page.Name)) }}
     {{ with $filtered }}
-      <section>
-        <h2>{{ $name }}</h2>
-        <ul>
+      <section class="mb-8">
+        <h2 class="mb-3 text-accent">{{ $name }}</h2>
+        <ul class="space-y-4">
           {{ range . }}
             {{ $title := .Title }}
             <li>
@@ -20,7 +20,7 @@
                 <a href="{{ .RelPermalink }}">{{ $title }}</a>
               {{ end }}
               {{ with .Params.description }}
-                <p>{{ . }}</p>
+                <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
               {{ end }}
             </li>
           {{ end }}
@@ -31,9 +31,9 @@
 
   {{ $uncategorized := where $pages "Params.categories" "eq" nil }}
   {{ with $uncategorized }}
-    <section>
-      <h2>Uncategorized</h2>
-      <ul>
+    <section class="mb-8">
+      <h2 class="mb-3 text-accent">Uncategorized</h2>
+      <ul class="space-y-4">
         {{ range . }}
           {{ $title := .Title }}
           <li>
@@ -43,7 +43,7 @@
               <a href="{{ .RelPermalink }}">{{ $title }}</a>
             {{ end }}
             {{ with .Params.description }}
-              <p>{{ . }}</p>
+              <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
             {{ end }}
           </li>
         {{ end }}

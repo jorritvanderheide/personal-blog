@@ -1,6 +1,6 @@
-<header>
-  <nav aria-label="Breadcrumb">
-    <a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
+<header class="border-b border-fg-dim/20 px-4 py-3">
+  <nav aria-label="Breadcrumb" class="max-w-2xl mx-auto text-sm text-fg-dim">
+    <a href="{{ site.Home.RelPermalink }}" class="text-fg no-underline font-bold">{{ site.Title }}</a>
     {{ if not .IsHome }}
       {{ if .IsPage }}
         {{ with .CurrentSection }}
@@ -8,9 +8,9 @@
             / <a href="{{ .RelPermalink }}">{{ .Title }}</a>
           {{ end }}
         {{ end }}
-        / <span>{{ .Title }}</span>
+        / <span class="text-fg">{{ .Title }}</span>
       {{ else }}
-        / <span>{{ .Title }}</span>
+        / <span class="text-fg">{{ .Title }}</span>
       {{ end }}
     {{ end }}
   </nav>

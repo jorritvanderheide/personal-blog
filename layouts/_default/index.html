@@ -1,16 +1,28 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
+  <h1>{{ site.Title }}</h1>
   {{ .Content }}
 
-  <section>
-    <h2>Recent log entries</h2>
-    {{ $all := where site.RegularPages "Section" "log" }}
-    {{ $paginator := .Paginate $all 13 }}
+  <nav aria-label="Site directory">
+    <ul>
+      {{ range site.Menus.main }}
+        <li>
+          <a href="{{ .URL | relLangURL }}">{{ .Name }}</a>
+          {{ with .Params.description }}
+            <span>{{ . }}</span>
+          {{ end }}
+        </li>
+      {{ end }}
+    </ul>
+  </nav>
 
-    {{ range $paginator.Pages }}
-      {{ partial "article-card.html" (dict "Page" .) }}
-    {{ end }}
-
-    {{ partial "paginator.html" (dict "Paginator" $paginator) }}
-  </section>
+  {{ $totalBytes := 0 }}
+  {{ range site.RegularPages }}
+    {{ $totalBytes = add $totalBytes (len .Content) }}
+  {{ end }}
+  {{ range site.Sections }}
+    {{ $totalBytes = add $totalBytes (len .Content) }}
+  {{ end }}
+  {{ $totalKB := div $totalBytes 1024 }}
+  {{ $capacityKB := site.Params.siteCapacityKB | default 1024 }}
+  <p>{{ $totalKB }}KB / {{ $capacityKB }}KB</p>
 {{ end }}

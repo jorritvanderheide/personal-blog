@@ -1,16 +1,17 @@
 <header>
-  <nav aria-label="Main navigation">
+  <nav aria-label="Breadcrumb">
     <a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
-
-    <details>
-      <summary>menu</summary>
-      <ul>
-        {{ range site.Menus.main }}
-          <li>
-            <a href="{{ .URL | relLangURL }}">{{ .Name }}</a>
-          </li>
+    {{ if not .IsHome }}
+      {{ if .IsPage }}
+        {{ with .CurrentSection }}
+          {{ if not .IsHome }}
+            / <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          {{ end }}
         {{ end }}
-      </ul>
-    </details>
+        / <span>{{ .Title }}</span>
+      {{ else }}
+        / <span>{{ .Title }}</span>
+      {{ end }}
+    {{ end }}
   </nav>
 </header>

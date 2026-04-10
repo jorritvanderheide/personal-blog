@@ -12,11 +12,12 @@
         <h2>{{ $name }}</h2>
         <ul>
           {{ range . }}
+            {{ $title := .Title }}
             <li>
-              {{ with .Params.url }}
-                <a href="{{ . }}" rel="noopener">{{ $.Title }}</a>
+              {{ with .Params.link }}
+                <a href="{{ . }}" rel="noopener">{{ $title }}</a>
               {{ else }}
-                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                <a href="{{ .RelPermalink }}">{{ $title }}</a>
               {{ end }}
               {{ with .Params.description }}
                 <p>{{ . }}</p>
@@ -34,11 +35,12 @@
       <h2>Uncategorized</h2>
       <ul>
         {{ range . }}
+          {{ $title := .Title }}
           <li>
-            {{ with .Params.url }}
-              <a href="{{ . }}" rel="noopener">{{ $.Title }}</a>
+            {{ with .Params.link }}
+              <a href="{{ . }}" rel="noopener">{{ $title }}</a>
             {{ else }}
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              <a href="{{ .RelPermalink }}">{{ $title }}</a>
             {{ end }}
             {{ with .Params.description }}
               <p>{{ . }}</p>

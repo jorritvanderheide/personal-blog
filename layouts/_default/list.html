@@ -2,11 +2,7 @@
   <h1>{{ .Title }}</h1>
   {{ .Content }}
 
-  {{ $paginator := .Paginate .RegularPages 12 }}
-
-  {{ range $paginator.Pages }}
+  {{ range .RegularPages.ByDate.Reverse }}
     {{ partial "article-card.html" (dict "Page" .) }}
   {{ end }}
-
-  {{ partial "paginator.html" (dict "Paginator" $paginator) }}
 {{ end }}

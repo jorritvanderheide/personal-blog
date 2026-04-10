@@ -27,36 +27,48 @@ enableRobotsTXT = true
   name = 'now'
   url = '/now'
   weight = 10
+  [menus.main.params]
+    description = 'what i am doing'
 
 [[menus.main]]
   identifier = 'log'
   name = 'log'
   url = '/log'
   weight = 20
+  [menus.main.params]
+    description = 'field notes and essays'
 
 [[menus.main]]
   identifier = 'threads'
   name = 'threads'
   url = '/categories'
   weight = 22
+  [menus.main.params]
+    description = 'ongoing conversations'
 
 [[menus.main]]
   identifier = 'library'
   name = 'library'
   url = '/library'
   weight = 25
+  [menus.main.params]
+    description = 'links worth keeping'
 
 [[menus.main]]
   identifier = 'about'
   name = 'about'
   url = '/about'
   weight = 30
+  [menus.main.params]
+    description = 'who, why'
 
 [[menus.main]]
   identifier = 'colophon'
   name = 'colophon'
   url = '/colophon'
   weight = 40
+  [menus.main.params]
+    description = 'how this runs'
 
 [build]
   [build.buildStats]

@@ -1,6 +1,6 @@
 +++
 title = '{{ replace .File.ContentBaseName "-" " " | title }}'
-url = ''
+link = ''
 description = ''
 date = '{{ .Date }}'
 draft = true

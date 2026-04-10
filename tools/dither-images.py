@@ -22,16 +22,17 @@ def dither_image(source, dest):
     except Exception as e:
         print(f"Failed to convert {source}: {e}")
 
-for root, _, files in os.walk(CONTENT_DIR):
-    for fname in files:
-        if fname.lower().endswith(IMAGE_EXT):
-            if ".dithered" in fname:
-                continue
+if __name__ == "__main__":
+    for root, _, files in os.walk(CONTENT_DIR):
+        for fname in files:
+            if fname.lower().endswith(IMAGE_EXT):
+                if ".dithered" in fname:
+                    continue
 
-            src = os.path.join(root, fname)
-            name, _ = os.path.splitext(fname)
-            dest = os.path.join(root, f"{name}.dithered.webp")
-            if not os.path.exists(dest):
-                dither_image(src, dest)
-            else:
-                print(f"Skipped (already exists): {dest}")
+                src = os.path.join(root, fname)
+                name, _ = os.path.splitext(fname)
+                dest = os.path.join(root, f"{name}.dithered.webp")
+                if not os.path.exists(dest):
+                    dither_image(src, dest)
+                else:
+                    print(f"Skipped (already exists): {dest}")

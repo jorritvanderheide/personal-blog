@@ -1,10 +1,5 @@
-{{ $scripts := slice
-    (resources.Get "js/copy-code.js")
-    (resources.Get "js/menu-toggle.js")
-  | resources.Concat "js/bundle.js"
-  | js.Build (dict "target" "es2017")
-}}
+{{ $js := resources.Get "js/copy-code.js" }}
 {{ if not hugo.IsDevelopment }}
-  {{ $scripts = $scripts | minify | fingerprint }}
+  {{ $js = $js | minify | fingerprint }}
 {{ end }}
-<script type="module" src="{{ $scripts.RelPermalink }}"{{ with $scripts.Data.Integrity }} integrity="{{ . }}" crossorigin="anonymous"{{ end }}></script>
+<script src="{{ $js.RelPermalink }}" defer></script>

@@ -1,26 +1,16 @@
-# Git
-node_modules/
-
-# Hugo
-
-## Generated files by hugo
+# Hugo generated
 /public/
 /resources/_gen/
-/assets/jsconfig.json
+/.hugo_build.lock
 hugo_stats.json
 
-## Executable may be added to repository
+# Hugo executables
 hugo.exe
 hugo.darwin
 hugo.linux
 
-## Temporary lock file while building
-/.hugo_build.lock
-
 # Nix
-
-## Direnv folder
 .direnv/
-.envrc
-# Code
+
+# Editor
 .vscode/

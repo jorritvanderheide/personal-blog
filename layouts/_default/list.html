@@ -1,32 +1,12 @@
 {{ define "main" }}
-  <main class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8">
-    <!-- Section header -->
-    <header
-      class="col-span-full pt-8 pb-12 not-first:px-4 sm:px-8 sm:pt-24 sm:pb-16 lg:col-span-6 3xl:col-span-6 3xl:col-start-2"
-    >
-      <h1
-        class="text-4xl leading-[120%] text-balance uppercase sm:text-7xl lg:text-8xl"
-      >
-        {{ .Title }}
-      </h1>
-      <p class="text-lg sm:text-2xl">{{ .Content }}</p>
-    </header>
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
 
-    <!-- Article list -->
-    <section
-      class="col-span-full grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:col-span-6 3xl:col-start-2"
-    >
-      {{ $paginator := .Paginate .RegularPages 12 }}
+  {{ $paginator := .Paginate .RegularPages 12 }}
 
+  {{ range $paginator.Pages }}
+    {{ partial "article-card.html" (dict "Page" .) }}
+  {{ end }}
 
-      <!-- Article card partial -->
-      {{ range $index, $page := $paginator.Pages }}
-        {{ partial "article-card.html" (dict "Page" $page "Large" false) }}
-      {{ end }}
-
-
-      <!-- Paginator -->
-      {{ partial "paginator.html" (dict "Paginator" $paginator) }}
-    </section>
-  </main>
+  {{ partial "paginator.html" (dict "Paginator" $paginator) }}
 {{ end }}

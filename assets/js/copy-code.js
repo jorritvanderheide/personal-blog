@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const copyButtons = document.querySelectorAll(".copy-button")
 
   copyButtons.forEach(button => {
+    button.removeAttribute("hidden")
     button.addEventListener("click", async () => {
       // Find the code element within the figure
       const figure = button.closest("figure")

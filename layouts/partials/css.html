@@ -9,12 +9,7 @@
         <link rel="stylesheet" href="{{ .RelPermalink }}" />
       {{ else }}
         {{ with . | fingerprint }}
-          <link
-            rel="stylesheet"
-            href="{{ .RelPermalink }}"
-            integrity="{{ .Data.Integrity }}"
-            crossorigin="anonymous"
-          />
+          <link rel="stylesheet" href="{{ .RelPermalink }}" />
         {{ end }}
       {{ end }}
     {{ end }}

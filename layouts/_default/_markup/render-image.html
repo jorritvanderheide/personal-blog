@@ -1,10 +1,6 @@
-<figure
-  class="{{ with .Title }}
-    mb-12 sm:mb-24
-  {{ end }} relative -mx-6 my-8 border-y-[1px] border-on-surface-dim bg-accent-green sm:-mx-8 sm:my-16"
->
-  {{ partial "render-image.html" (dict "Destination" .Destination "Page" .Page "Text" .Text "Title" .Title) }}
+<figure>
+  {{ partial "image.html" (dict "Destination" .Destination "Page" .Page "Text" .Text) }}
   {{ with .Title }}
-    <figcaption class="absolute mx-8 mt-2 italic">{{ . }}</figcaption>
+    <figcaption>{{ . }}</figcaption>
   {{ end }}
 </figure>

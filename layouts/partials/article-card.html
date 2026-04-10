@@ -1,66 +1,29 @@
 {{ $page := .Page }}
-{{ $large := .Large }}
 
-{{ $categoryColor := "" }}
-{{ if in $page.Params.categories "sustainability" }}
-  {{ $categoryColor = "bg-accent-aqua" }}
-{{ else if in $page.Params.categories "tech" }}
-  {{ $categoryColor = "bg-accent-yellow" }}
-{{ else }}
-  {{ $categoryColor = "bg-red-500" }}
-{{ end }}
-
-
-<article
-  class="{{ if not $large }}
-    lg:col-span-2
-  {{ end }}col-span-full mb-unit"
->
-  <a
-    href="{{ $page.RelPermalink }}"
-    class="{{ if $large }}
-      w-full lg:flex-row
-    {{ end }}flex group h-full flex-col gap-8 border-y-[1px] border-on-surface-dim p-8"
-  >
-    <!-- Image -->
-    {{ $cover := .Page.Params.cover }}
-    {{ if $cover }}
-      <figure
-        class="{{ if $large }}
-          lg:w-2/3
-        {{ end }}aspect-2/1 {{ $categoryColor }}"
-      >
-        {{ partial "render-image.html" (dict "Destination" $cover "Page" .Page "Text" .Page.Title) }}
-      </figure>
+<article>
+  <a href="{{ $page.RelPermalink }}">
+    {{ with $page.Params.cover }}
+      {{ $img := $page.Resources.GetMatch . }}
+      {{ if $img }}
+        <img
+          src="{{ $img.RelPermalink }}"
+          width="{{ $img.Width }}"
+          height="{{ $img.Height }}"
+          alt="{{ $page.Title }}"
+          loading="lazy"
+          decoding="async"
+        />
+      {{ end }}
     {{ end }}
 
+    <h2>{{ $page.Title }}</h2>
 
-    <div
-      class="{{ if $large }}
-        lg:w-1/3 lg:pl-8
-      {{ else }}
-        w-full
-      {{ end }}flex h-full flex-col justify-between gap-4"
-    >
-      <div class="flex flex-col gap-4">
-        <!-- Title -->
-        <h3 class="text-2xl font-bold group-hover:text-accent-green">
-          {{ $page.Title }}
-        </h3>
+    {{ with $page.Summary }}
+      <p>{{ . | plainify | truncate 160 }}</p>
+    {{ end }}
 
-        <!-- Summary -->
-        <p class="group-hover:text-accent-green">
-          {{ $page.Summary }}
-        </p>
-      </div>
-
-      <!-- Date -->
-      <time
-        datetime="{{ $page.Date | time.Format "2006-01-02" }}"
-        class="mt-1 text-sm text-on-surface-dim"
-      >
-        {{ $page.Date | time.Format "Jan 2, 2006" }}
-      </time>
-    </div>
+    <time datetime="{{ $page.Date | time.Format "2006-01-02" }}">
+      {{ $page.Date | time.Format "Jan 2, 2006" }}
+    </time>
   </a>
 </article>

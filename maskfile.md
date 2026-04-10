@@ -1,47 +1,25 @@
-# Tasks for my personal blog
+# Tasks
 
-## run
-
-> Development commands
-
-### serve
+## serve
 
 > Serves Hugo for development
 
 ```sh
-echo "Serving project..."
 hugo serve --noHTTPCache --disableFastRender
 ```
 
-## npm
+## dither
 
-> Install commands
-
-### install
-
-> Installs dependencies with NPM
+> Dithers all content images
 
 ```sh
-echo "Installing npm dependencies..."
-npm install
+python3 tools/dither-images.py
 ```
 
-### update
+## update
 
-> Updates dependencies with NPM
-
-```sh
-echo "Updating npm dependencies..."
-npm update
-```
-
-## flake
-
-### update
-
-> Updates dependencies with the Nix flake
+> Updates Nix flake dependencies
 
 ```sh
-echo "Updating Nix flake..."
 nix flake update
 ```

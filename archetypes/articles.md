@@ -4,12 +4,6 @@ summary = ''
 date = '{{ .Date }}'
 lastmod = '{{ .Date }}'
 draft = true
-cover = 'cover.jpg'
+cover = ''
 categories = []
-tags = ['article']
-
-[author]
-  name = '{{ site.Params.author | default "Author" }}'
 +++
-
-<!--more-->

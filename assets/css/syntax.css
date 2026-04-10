@@ -1,4 +1,4 @@
-/* Generated using: hugo gen chromastyles --style=gruvbox */
+/* Generated — do not edit. Regenerate with: hugo gen chromastyles --style=gruvbox > assets/css/syntax.css */
 
 /* Background */ .bg { color:#ebdbb2;background-color:#282828; }
 /* PreWrapper */ .chroma { color:#ebdbb2;background-color:#282828;-webkit-text-size-adjust:none; }

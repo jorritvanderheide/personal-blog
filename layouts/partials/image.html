@@ -1,5 +1,5 @@
 {{ $dest := .Destination | strings.TrimPrefix "/" }}
-{{ $base := $dest | strings.TrimSuffix ".jpg" | strings.TrimSuffix ".jpeg" | strings.TrimSuffix ".png" | strings.TrimSuffix ".webp" }}
+{{ $base := strings.TrimSuffix (path.Ext $dest) $dest }}
 {{ $dithered := printf "%s.dithered.webp" $base }}
 
 {{ $img := .Page.Resources.GetMatch $dithered }}
@@ -9,7 +9,6 @@
 
 {{ if $img }}
   <img
-    class="h-full w-full object-cover mix-blend-multiply"
     src="{{ $img.RelPermalink }}"
     width="{{ $img.Width }}"
     height="{{ $img.Height }}"
@@ -18,10 +17,7 @@
     decoding="async"
   />
 {{ else }}
-  {{/* Show warning in development mode when image is not found */}}
   {{ if hugo.IsDevelopment }}
-    <div class="flex h-full w-full items-center justify-center bg-on-surface-dim p-4 text-on-surface text-sm">
-      Image not found: {{ $dest }}
-    </div>
+    <span>Image not found: {{ $dest }}</span>
   {{ end }}
 {{ end }}

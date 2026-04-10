@@ -1,36 +1,13 @@
 {{ define "main" }}
-  <main class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:grid-cols-8">
-    <!-- Header -->
-    <header
-      class="col-span-full px-4 pt-8 pb-12 sm:px-8 sm:pt-24 sm:pb-16 lg:col-span-6 3xl:col-span-6 3xl:col-start-2"
-    >
-      <h1
-        class="text-4xl leading-[120%] text-balance uppercase sm:text-7xl lg:text-8xl"
-      >
-        {{ .Title }}
-      </h1>
-      <p class="text-lg sm:text-2xl">
-        {{ .Content }}
-      </p>
-    </header>
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
 
-    <!-- Combined article list -->
-    <section
-      class="col-span-full grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 3xl:col-span-6 3xl:col-start-2"
-    >
-      {{ $all := where site.RegularPages "Section" "articles" }}
-      {{ $paginator := .Paginate $all 13 }}
+  {{ $all := where site.RegularPages "Section" "articles" }}
+  {{ $paginator := .Paginate $all 13 }}
 
+  {{ range $paginator.Pages }}
+    {{ partial "article-card.html" (dict "Page" .) }}
+  {{ end }}
 
-      <!-- Article card partial -->
-      {{ range $index, $page := $paginator.Pages }}
-        {{ $isLarge := and (eq $paginator.PageNumber 1) (eq $index 0) }}
-        {{ partial "article-card.html" (dict "Page" $page "Large" $isLarge) }}
-      {{ end }}
-
-
-      <!-- Paginator -->
-      {{ partial "paginator.html" (dict "Paginator" $paginator) }}
-    </section>
-  </main>
+  {{ partial "paginator.html" (dict "Paginator" $paginator) }}
 {{ end }}

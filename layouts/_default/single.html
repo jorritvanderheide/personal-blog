@@ -1,5 +1,6 @@
 {{ define "main" }}
-  <article>
+  {{ $freshness := partial "entry-age.html" .Date }}
+  <article data-freshness="{{ $freshness }}">
     <header>
       {{ with .CurrentSection }}
         <a href="{{ .RelPermalink }}">&lsaquo; {{ .Title }}</a>
@@ -8,9 +9,7 @@
       {{ with .Params.Summary }}
         <p>{{ . }}</p>
       {{ end }}
-      <time datetime="{{ .Date | dateFormat "2006-01-02" }}">
-        {{ .Date | dateFormat "2006-01-02" }}
-      </time>
+      {{ partial "seasonal-time.html" .Date }}
     </header>
 
     {{ with .TableOfContents }}

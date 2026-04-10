@@ -1,0 +1,16 @@
+{{ define "main" }}
+  <h1>Threads</h1>
+  {{ .Content }}
+
+  <ul>
+    {{ range .Pages }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{ with .Params.description }}
+          <p>{{ . }}</p>
+        {{ end }}
+        <span>{{ len .Pages }} {{ if eq (len .Pages) 1 }}entry{{ else }}entries{{ end }}</span>
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

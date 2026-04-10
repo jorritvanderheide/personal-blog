@@ -5,6 +5,8 @@ title = 'BW20'
 [params]
   description = "A personal blog about data portability, NixOS, and technology"
   author = "Jorrit van der Heide"
+  siteCapacityKB = 1024
+  pageBudgetKB = 16
 
 [taxonomies]
   category = 'categories'
@@ -21,16 +23,40 @@ enableRobotsTXT = true
   section = ["HTML", "RSS"]
 
 [[menus.main]]
-  identifier = 'articles'
-  name = 'articles'
-  url = '/articles'
+  identifier = 'now'
+  name = 'now'
+  url = '/now'
+  weight = 10
+
+[[menus.main]]
+  identifier = 'log'
+  name = 'log'
+  url = '/log'
   weight = 20
+
+[[menus.main]]
+  identifier = 'threads'
+  name = 'threads'
+  url = '/categories'
+  weight = 22
+
+[[menus.main]]
+  identifier = 'library'
+  name = 'library'
+  url = '/library'
+  weight = 25
 
 [[menus.main]]
   identifier = 'about'
   name = 'about'
   url = '/about'
   weight = 30
+
+[[menus.main]]
+  identifier = 'colophon'
+  name = 'colophon'
+  url = '/colophon'
+  weight = 40
 
 [build]
   [build.buildStats]

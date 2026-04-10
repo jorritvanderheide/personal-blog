@@ -1,0 +1,31 @@
+{{- $date := . -}}
+{{- $month := $date.Month -}}
+{{- $year := $date.Year -}}
+{{- $season := "" -}}
+{{- $prefix := "" -}}
+{{- if eq $month 12 -}}
+  {{- $season = "winter" -}}{{- $prefix = "early" -}}
+{{- else if eq $month 1 -}}
+  {{- $season = "winter" -}}{{- $prefix = "mid" -}}
+{{- else if eq $month 2 -}}
+  {{- $season = "winter" -}}{{- $prefix = "late" -}}
+{{- else if eq $month 3 -}}
+  {{- $season = "spring" -}}{{- $prefix = "early" -}}
+{{- else if eq $month 4 -}}
+  {{- $season = "spring" -}}{{- $prefix = "mid" -}}
+{{- else if eq $month 5 -}}
+  {{- $season = "spring" -}}{{- $prefix = "late" -}}
+{{- else if eq $month 6 -}}
+  {{- $season = "summer" -}}{{- $prefix = "early" -}}
+{{- else if eq $month 7 -}}
+  {{- $season = "summer" -}}{{- $prefix = "mid" -}}
+{{- else if eq $month 8 -}}
+  {{- $season = "summer" -}}{{- $prefix = "late" -}}
+{{- else if eq $month 9 -}}
+  {{- $season = "autumn" -}}{{- $prefix = "early" -}}
+{{- else if eq $month 10 -}}
+  {{- $season = "autumn" -}}{{- $prefix = "mid" -}}
+{{- else if eq $month 11 -}}
+  {{- $season = "autumn" -}}{{- $prefix = "late" -}}
+{{- end -}}
+<time datetime="{{ $date | time.Format "2006-01-02" }}">{{ $prefix }} {{ $season }} {{ $year }}</time>

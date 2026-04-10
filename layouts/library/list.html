@@ -1,0 +1,51 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  {{ $pages := .RegularPages.ByDate.Reverse }}
+
+  {{ range site.Taxonomies.categories }}
+    {{ $name := .Page.Title }}
+    {{ $filtered := where $pages "Params.categories" "intersect" (slice (.Page.Name)) }}
+    {{ with $filtered }}
+      <section>
+        <h2>{{ $name }}</h2>
+        <ul>
+          {{ range . }}
+            <li>
+              {{ with .Params.url }}
+                <a href="{{ . }}" rel="noopener">{{ $.Title }}</a>
+              {{ else }}
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              {{ end }}
+              {{ with .Params.description }}
+                <p>{{ . }}</p>
+              {{ end }}
+            </li>
+          {{ end }}
+        </ul>
+      </section>
+    {{ end }}
+  {{ end }}
+
+  {{ $uncategorized := where $pages "Params.categories" "eq" nil }}
+  {{ with $uncategorized }}
+    <section>
+      <h2>Uncategorized</h2>
+      <ul>
+        {{ range . }}
+          <li>
+            {{ with .Params.url }}
+              <a href="{{ . }}" rel="noopener">{{ $.Title }}</a>
+            {{ else }}
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            {{ end }}
+            {{ with .Params.description }}
+              <p>{{ . }}</p>
+            {{ end }}
+          </li>
+        {{ end }}
+      </ul>
+    </section>
+  {{ end }}
+{{ end }}

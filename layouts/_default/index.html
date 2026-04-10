@@ -2,12 +2,15 @@
   <h1>{{ .Title }}</h1>
   {{ .Content }}
 
-  {{ $all := where site.RegularPages "Section" "articles" }}
-  {{ $paginator := .Paginate $all 13 }}
+  <section>
+    <h2>Recent log entries</h2>
+    {{ $all := where site.RegularPages "Section" "log" }}
+    {{ $paginator := .Paginate $all 13 }}
 
-  {{ range $paginator.Pages }}
-    {{ partial "article-card.html" (dict "Page" .) }}
-  {{ end }}
+    {{ range $paginator.Pages }}
+      {{ partial "article-card.html" (dict "Page" .) }}
+    {{ end }}
 
-  {{ partial "paginator.html" (dict "Paginator" $paginator) }}
+    {{ partial "paginator.html" (dict "Paginator" $paginator) }}
+  </section>
 {{ end }}

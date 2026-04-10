@@ -1,0 +1,11 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  {{ with .Params.description }}
+    <p>{{ . }}</p>
+  {{ end }}
+  {{ .Content }}
+
+  {{ range .Pages.ByDate.Reverse }}
+    {{ partial "article-card.html" (dict "Page" .) }}
+  {{ end }}
+{{ end }}

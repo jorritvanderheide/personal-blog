@@ -1,0 +1,10 @@
+{{ define "main" }}
+  <article>
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.url }}
+      <p><a href="{{ . }}" rel="noopener">Visit resource &rarr;</a></p>
+    {{ end }}
+    {{ .Content }}
+    {{ partial "seasonal-time.html" .Date }}
+  </article>
+{{ end }}

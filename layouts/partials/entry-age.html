@@ -1,0 +1,11 @@
+{{- $date := . -}}
+{{- $now := now -}}
+{{- $diff := $now.Sub $date -}}
+{{- $days := div (int $diff) 86400000000000 -}}
+{{- $freshness := "fresh" -}}
+{{- if gt $days 365 -}}
+  {{- $freshness = "faded" -}}
+{{- else if gt $days 180 -}}
+  {{- $freshness = "aging" -}}
+{{- end -}}
+{{- $freshness -}}

@@ -44,7 +44,7 @@
 {{ end }}
 
 {{/* Structured Data for Articles */}}
-{{ if and .IsPage (eq .Section "articles") }}
+{{ if and .IsPage (eq .Section "log") }}
   {{ $schema := dict
     "@context" "https://schema.org"
     "@type" "BlogPosting"

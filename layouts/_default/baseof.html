@@ -7,7 +7,16 @@
     {{ partialCached "css.html" . }}
     {{ partial "head.html" . }}
   </head>
-  <body>
+  {{- $month := now.Month -}}
+  {{- $season := "winter" -}}
+  {{- if and (ge $month 3) (le $month 5) -}}
+    {{- $season = "spring" -}}
+  {{- else if and (ge $month 6) (le $month 8) -}}
+    {{- $season = "summer" -}}
+  {{- else if and (ge $month 9) (le $month 11) -}}
+    {{- $season = "autumn" -}}
+  {{- end -}}
+  <body class="season-{{ $season }}" style="--season: '{{ $season }}'">
     <a href="#main-content">Skip to main content</a>
     {{ partial "header.html" . }}
     <main id="main-content">
@@ -15,5 +24,6 @@
     </main>
     {{ partial "footer.html" . }}
     {{ partial "scripts.html" . }}
+    {{ partial "page-budget.html" . }}
   </body>
 </html>

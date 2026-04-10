@@ -1,6 +1,7 @@
 {{ $page := .Page }}
+{{ $freshness := partial "entry-age.html" $page.Date }}
 
-<article>
+<article data-freshness="{{ $freshness }}">
   <a href="{{ $page.RelPermalink }}">
     {{ with $page.Params.cover }}
       {{ $img := $page.Resources.GetMatch . }}
@@ -22,8 +23,6 @@
       <p>{{ . | plainify | truncate 160 }}</p>
     {{ end }}
 
-    <time datetime="{{ $page.Date | time.Format "2006-01-02" }}">
-      {{ $page.Date | time.Format "Jan 2, 2006" }}
-    </time>
+    {{ partial "seasonal-time.html" $page.Date }}
   </a>
 </article>

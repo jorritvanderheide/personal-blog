@@ -2,11 +2,11 @@
 {{- if not .IsHome -}}
   {{- if .IsPage -}}
     {{- with .CurrentSection -}}
-      {{- if not .IsHome }} / <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end -}}
-    {{- end }} / <span class="text-fg">{{ .Title }}</span>
+      {{- if not .IsHome }}<span aria-hidden="true"> / </span><a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end -}}
+    {{- end }}<span aria-hidden="true"> / </span><span class="text-fg" aria-current="page">{{ .Title }}</span>
   {{- else if eq .Kind "term" -}}
-    {{- with site.GetPage "/log" }} / <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }} / <span class="text-fg">{{ .Title }}</span>
+    {{- with site.GetPage "/log" }}<span aria-hidden="true"> / </span><a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}<span aria-hidden="true"> / </span><span class="text-fg" aria-current="page">{{ .Title }}</span>
   {{- else -}}
-    / <span class="text-fg">{{ .Title }}</span>
+    <span aria-hidden="true"> / </span><span class="text-fg" aria-current="page">{{ .Title }}</span>
   {{- end -}}
 {{- end -}}

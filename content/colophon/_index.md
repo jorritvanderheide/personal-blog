@@ -11,13 +11,24 @@ that pins every dependency. Images are dithered with a Python script using
 ordered Bayer dithering to reduce file size while keeping the low-tech
 aesthetic.
 
-The site is designed to fit within a 1MB total capacity budget. Individual
-pages are budgeted at 16KB. Dates are displayed as seasons rather than exact
-dates. Log entries fade as they age — slightly after one year, more after three.
-After five years, entries expire from the build entirely. The content files
-remain in the repository but Hugo stops rendering them.
+### Capacity
+
+The site has a 1MB budget that measures HTML content only — the words and
+markup you're reading. CSS is a fixed infrastructure cost cached by the
+browser after the first page load, so it's excluded from the budget. A
+post-build script measures the actual output and fails the build if the
+budget is exceeded. Individual pages are capped at 16KB.
+
+### Time
+
+Dates are displayed as seasons rather than exact dates. Log entries fade as
+they age — slightly after one year, more after three. After five years,
+entries expire from the build entirely. The content files remain in the
+repository but Hugo stops rendering them.
 
 The accent color shifts with the season: green in spring, yellow in summer,
 orange in autumn, blue-green in winter.
+
+### License
 
 Source code is licensed under [EUPL-1.2](https://eupl.eu/).

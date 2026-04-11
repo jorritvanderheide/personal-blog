@@ -18,6 +18,7 @@
   {{- end -}}
   <body class="season-{{ $season }} min-h-screen flex flex-col" style="--season: '{{ $season }}'">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-bg focus:p-2 focus:text-fg">Skip to main content</a>
+    <div class="bg-accent text-bg text-center text-xs py-1 font-mono">work in progress</div>
     {{ partial "header.html" . }}
     <main id="main-content" class="max-w-2xl mx-auto w-full px-4 py-8 flex-1">
       {{ block "main" . }}{{ end }}

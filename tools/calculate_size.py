@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Post-build script that measures total HTML content size and injects it
-into the site capacity meter. Also enforces page budget.
+Post-build script that measures total HTML content size, increments
+the build counter, and injects both into the rendered HTML.
 
 Run after hugo build:
     python3 tools/calculate_size.py --directory public/
@@ -14,6 +14,17 @@ from pathlib import Path
 
 PAGE_BUDGET_KB = 16
 SITE_CAPACITY_KB = 1024
+BUILD_COUNT_FILE = Path(__file__).parent.parent / ".buildcount"
+
+
+def increment_build_count():
+    """Increment and return the build count."""
+    count = 0
+    if BUILD_COUNT_FILE.exists():
+        count = int(BUILD_COUNT_FILE.read_text().strip())
+    count += 1
+    BUILD_COUNT_FILE.write_text(str(count))
+    return count
 
 
 def calculate(public_dir):
@@ -32,18 +43,27 @@ def calculate(public_dir):
             violations.append(f"  {path.relative_to(public)}: {size_kb}KB")
 
     total_kb = total_bytes // 1024
+    build_count = increment_build_count()
 
-    # Inject site total into HTML placeholders
+    # Inject values into HTML placeholders
     for path in html_files:
         content = path.read_text(encoding="utf-8")
-        for pattern in [
-            r'<span class=["\']?site-size["\']?>[^<]*</span>',
-        ]:
+        changed = False
+
+        for pattern in [r'<span class=["\']?site-size["\']?>[^<]*</span>']:
             if re.search(pattern, content):
                 content = re.sub(pattern, f"{total_kb}KB", content)
-                path.write_text(content, encoding="utf-8")
+                changed = True
 
-    return total_kb, violations
+        for pattern in [r'<span class=["\']?build-count["\']?>[^<]*</span>']:
+            if re.search(pattern, content):
+                content = re.sub(pattern, str(build_count), content)
+                changed = True
+
+        if changed:
+            path.write_text(content, encoding="utf-8")
+
+    return total_kb, violations, build_count
 
 
 if __name__ == "__main__":
@@ -56,8 +76,8 @@ if __name__ == "__main__":
         print(f"Not found: {public}")
         sys.exit(1)
 
-    total_kb, violations = calculate(args.directory)
-    print(f"Site: {total_kb}KB / {SITE_CAPACITY_KB}KB (HTML only)")
+    total_kb, violations, build_count = calculate(args.directory)
+    print(f"Site: {total_kb}KB / {SITE_CAPACITY_KB}KB · build #{build_count}")
 
     if violations:
         print(f"\nPage budget exceeded ({PAGE_BUDGET_KB}KB):")

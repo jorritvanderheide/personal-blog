@@ -14,10 +14,10 @@
         <dd>Hugo {{ hugo.Version }}</dd>
         <dt>Built</dt>
         <dd>{{ partial "seasonal-time.html" now }}</dd>
-        <dt>Total pages</dt>
+        <dt>Build</dt>
+        <dd>#<span class="build-count"></span></dd>
+        <dt>Pages</dt>
         <dd>{{ len site.RegularPages }}</dd>
-        <dt>Sections</dt>
-        <dd>{{ len site.Sections }}</dd>
       </dl>
     </section>
 

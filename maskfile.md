@@ -8,6 +8,15 @@
 hugo serve --noHTTPCache --disableFastRender
 ```
 
+## build
+
+> Builds the site for production
+
+```sh
+hugo --gc --minify
+python3 tools/calculate_size.py --directory public/
+```
+
 ## dither
 
 > Dithers all content images

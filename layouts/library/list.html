@@ -5,27 +5,59 @@
 
   <h1 class="mb-2">{{ .Title }}</h1>
   {{ $entries := hugo.Data.library.entries }}
-  <div class="text-fg-dim mb-6">{{ .Content }} {{ len $entries }} entries.</div>
+  <div class="text-fg-dim mb-4">{{ .Content }} {{ len $entries }} entries.</div>
 
-  <ul class="space-y-4">
-    {{ range $entries }}
-      <li>
-        <div>
-          <a href="{{ .link }}" rel="noopener">{{ .title }}</a>
-          <span class="text-fg-dim text-xs font-mono ml-1">{{ (urls.Parse .link).Hostname }}</span>
-        </div>
-        {{ with .description }}
-          <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
-        {{ end }}
-        <div class="text-xs text-fg-dim mt-1 font-mono">
-          {{ range $i, $t := .threads }}
-            {{- if $i }} · {{ end -}}
-            {{ $t }}
-          {{- end }}
-        </div>
-      </li>
+  {{/* Collect unique threads in order of first appearance */}}
+  {{ $threads := slice }}
+  {{ range $entries }}
+    {{ $first := index .threads 0 }}
+    {{ if not (in $threads $first) }}
+      {{ $threads = $threads | append $first }}
     {{ end }}
-  </ul>
+  {{ end }}
+
+  <nav aria-label="Library sections" class="text-sm font-mono mb-6">
+    {{- range $i, $t := $threads -}}
+      {{- if $i }} · {{ end -}}
+      <a href="#{{ $t }}">{{ $t }}</a>
+    {{- end -}}
+  </nav>
+
+  {{ range $thread := $threads }}
+    {{ $group := slice }}
+    {{ range $entries }}
+      {{ if eq (index .threads 0) $thread }}
+        {{ $group = $group | append . }}
+      {{ end }}
+    {{ end }}
+
+    {{ with $group }}
+      <section class="mb-8 scroll-mt-4" id="{{ $thread }}">
+        <h2 class="mb-3 text-accent">{{ $thread }}</h2>
+        <ul class="space-y-3">
+          {{ range . }}
+            <li>
+              <div>
+                <a href="{{ .link }}" rel="noopener">{{ .title }}</a>
+                <span class="text-fg-dim text-xs font-mono ml-1">{{ (urls.Parse .link).Hostname }}</span>
+              </div>
+              {{ with .description }}
+                <p class="text-fg-dim text-sm mt-1">{{ . }}</p>
+              {{ end }}
+              {{ if gt (len .threads) 1 }}
+                <div class="text-xs text-fg-dim mt-1 font-mono">
+                  {{ range $i, $t := .threads }}
+                    {{- if $i }} · {{ end -}}
+                    {{ $t }}
+                  {{- end }}
+                </div>
+              {{ end }}
+            </li>
+          {{ end }}
+        </ul>
+      </section>
+    {{ end }}
+  {{ end }}
 
   <nav aria-label="Breadcrumb" class="text-sm text-fg-dim mt-8">
     {{ partial "breadcrumb.html" . }}

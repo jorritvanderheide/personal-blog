@@ -28,6 +28,10 @@
 }
 
 @layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
     body {
         @apply bg-bg text-fg;
         font-family:

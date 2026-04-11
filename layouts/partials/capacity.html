@@ -1,2 +1,12 @@
+{{- $contentBytes := 0 -}}
+{{- range site.RegularPages -}}
+  {{- $contentBytes = add $contentBytes (len .Content) -}}
+{{- end -}}
+{{- range site.Sections -}}
+  {{- $contentBytes = add $contentBytes (len .Content) -}}
+{{- end -}}
+{{- $pages := add (len site.RegularPages) (len site.Sections) -}}
+{{- $totalBytes := add $contentBytes (mul $pages 1024) -}}
+{{- $totalKB := div $totalBytes 1024 -}}
 {{- $capacityKB := site.Params.siteCapacityKB | default 1024 -}}
-<span class="text-xs text-fg-dim font-mono"><span class="site-size"></span> / {{ $capacityKB }}KB</span>
+<span class="text-xs text-fg-dim font-mono"><span class="site-size">~{{ $totalKB }}KB</span> / {{ $capacityKB }}KB</span>

@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
 """
 Post-build script that measures actual page sizes and injects them into
-the rendered HTML. Also calculates total site size for the capacity meter.
+the rendered HTML. Also checks page budget and site capacity.
 
 Run after hugo build:
     python3 tools/calculate_size.py --directory public/
 
-Replaces:
-    <span class="page-size"></span>  → actual page size in KB
-    <span class="site-size"></span>  → total site size in KB
+Replaces Hugo estimates with real measured bytes:
+    <span class="page-size">~2KB</span>  → 17KB
+    <span class="site-size">~27KB</span> → 123KB
 """
 
 import argparse
 import os
+import re
+import sys
 from pathlib import Path
+
+PAGE_BUDGET_KB = 24
+SITE_CAPACITY_KB = 1024
 
 
 def get_file_size(path):
@@ -25,7 +30,6 @@ def get_page_size(html_path, public_dir):
     """Calculate total size of an HTML page including its linked CSS."""
     size = get_file_size(html_path)
 
-    # Add shared CSS (counted once per page as it's what the browser loads)
     css_dir = public_dir / "css"
     if css_dir.exists():
         for css_file in css_dir.glob("*.css"):
@@ -44,32 +48,41 @@ def get_site_size(public_dir):
 
 
 def inject_sizes(public_dir):
-    """Walk all HTML files and inject page/site sizes."""
+    """Walk all HTML files, inject sizes, and enforce budgets."""
     public_path = Path(public_dir)
     site_size_kb = get_site_size(public_path) // 1024
+    violations = []
 
     html_files = list(public_path.rglob("*.html"))
 
     for html_path in html_files:
         content = html_path.read_text(encoding="utf-8")
         changed = False
+        page_kb = get_page_size(html_path, public_path) // 1024
 
-        # Handle both quoted and unquoted class attributes (Hugo minifier)
-        for page_placeholder in ['<span class="page-size"></span>', '<span class=page-size></span>']:
-            if page_placeholder in content:
-                page_kb = get_page_size(html_path, public_path) // 1024
-                content = content.replace(page_placeholder, f'{page_kb}KB')
-                changed = True
+        # Replace page-size span (may contain Hugo estimate like ~2KB)
+        page_pattern = r'<span class=["\']?page-size["\']?>[^<]*</span>'
+        if re.search(page_pattern, content):
+            content = re.sub(page_pattern, f'{page_kb}KB', content)
+            changed = True
 
-        for site_placeholder in ['<span class="site-size"></span>', '<span class=site-size></span>']:
-            if site_placeholder in content:
-                content = content.replace(site_placeholder, f'{site_size_kb}KB')
-                changed = True
+        # Replace site-size span (may contain Hugo estimate like ~27KB)
+        site_pattern = r'<span class=["\']?site-size["\']?>[^<]*</span>'
+        if re.search(site_pattern, content):
+            content = re.sub(site_pattern, f'{site_size_kb}KB', content)
             changed = True
 
         if changed:
             html_path.write_text(content, encoding="utf-8")
-            print(f"  {html_path.relative_to(public_path)}: {get_page_size(html_path, public_path) // 1024}KB")
+            rel = html_path.relative_to(public_path)
+            print(f"  {rel}: {page_kb}KB")
+
+        # Check page budget
+        if page_kb > PAGE_BUDGET_KB:
+            rel = html_path.relative_to(public_path)
+            violations.append(f"  {rel}: {page_kb}KB (budget: {PAGE_BUDGET_KB}KB)")
+
+    return violations, site_size_kb
 
 
 if __name__ == "__main__":
@@ -80,8 +93,21 @@ if __name__ == "__main__":
     public = Path(args.directory)
     if not public.exists():
         print(f"Directory not found: {public}")
-        exit(1)
+        sys.exit(1)
 
-    print(f"Site total: {get_site_size(public) // 1024}KB")
-    inject_sizes(public)
+    site_kb = get_site_size(public) // 1024
+    print(f"Site total: {site_kb}KB / {SITE_CAPACITY_KB}KB")
+
+    violations, _ = inject_sizes(public)
+
+    if violations:
+        print(f"\nPage budget exceeded ({PAGE_BUDGET_KB}KB):")
+        for v in violations:
+            print(v)
+        sys.exit(1)
+
+    if site_kb > SITE_CAPACITY_KB:
+        print(f"\nSite capacity exceeded: {site_kb}KB / {SITE_CAPACITY_KB}KB")
+        sys.exit(1)
+
     print("Done.")

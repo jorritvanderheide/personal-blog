@@ -1,7 +1,0 @@
-{{- $budgetKB := site.Params.pageBudgetKB | default 16 -}}
-{{- $budgetBytes := mul $budgetKB 1024 -}}
-{{- $contentLen := len .Content -}}
-{{- if gt $contentLen $budgetBytes -}}
-  {{- $contentKB := div $contentLen 1024 -}}
-  {{- warnf "Page budget exceeded: %s is %dKB (budget: %dKB)" .RelPermalink $contentKB $budgetKB -}}
-{{- end -}}

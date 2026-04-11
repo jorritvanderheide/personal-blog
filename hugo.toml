@@ -7,7 +7,7 @@ disableHugoGeneratorInject = true
   description = "A personal blog about data portability, NixOS, and technology"
   author = "Jorrit van der Heide"
   siteCapacityKB = 1024
-  pageBudgetKB = 16
+  pageBudgetKB = 24
 
 [taxonomies]
   thread = 'threads'

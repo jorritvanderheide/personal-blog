@@ -1,1 +1,10 @@
-<span class="page-size"></span>
+{{- $contentLen := len (.Content | plainify) -}}
+{{- if not .IsPage -}}
+  {{- $contentLen = 0 -}}
+  {{- range .RegularPages -}}
+    {{- $contentLen = add $contentLen (len (.Summary | plainify)) -}}
+  {{- end -}}
+{{- end -}}
+{{- $estimatedBytes := add $contentLen 2048 -}}
+{{- $estimatedKB := div $estimatedBytes 1024 -}}
+<span class="page-size">~{{ $estimatedKB }}KB</span>

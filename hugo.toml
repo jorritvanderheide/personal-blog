@@ -2,6 +2,7 @@ baseURL = 'https://bw20.nl'
 languageCode = 'en-US'
 title = 'BW20'
 disableHugoGeneratorInject = true
+enableRobotsTXT = true
 
 [params]
   description = "A personal blog about data portability, NixOS, and technology"
@@ -11,8 +12,6 @@ disableHugoGeneratorInject = true
 
 [taxonomies]
   thread = 'threads'
-
-enableRobotsTXT = true
 
 [permalinks]
   [permalinks.term]

@@ -74,6 +74,14 @@
         };
       });
 
+      # services.bw20-blog, see nix/module.nix.
+      nixosModules.default = import ./nix/module.nix self;
+
+      checks.x86_64-linux = {
+        package = self.packages.x86_64-linux.default;
+        vm = import ./nix/test.nix self { pkgs = nixpkgs.legacyPackages.x86_64-linux; };
+      };
+
       devShells = forEachSystem (pkgs: {
         default = pkgs.mkShell {
           packages = [

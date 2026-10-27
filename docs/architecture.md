@@ -37,10 +37,15 @@ an `fs.FS` they are given, so every decision is tested on an in-memory site.
 ```
 content/
   log/<slug>/index.md     a post, with its images next to it
-  pages/<name>.md         about, colophon: pages outside the log
+  pages/<name>.md         about, colophon, library: pages outside the log
   works/<key>.toml        a work a post cites, formatted once
   threads.toml            each thread's name and description
+  site.toml               the site's name, address, author, line and menu
 ```
+
+Nothing else belongs in `content/`: anything else there fails the build, so
+a file in the wrong place is found rather than left out. A slug, a page's
+name and a thread's name are lowercase letters, digits and hyphens.
 
 The directory name is the post's slug, and **a slug never changes**: people
 cite the URL. A post that must move lists its old slugs under `aliases`, and
@@ -178,8 +183,8 @@ flake's `lastModified`). Everything that depends on time uses it:
 - **Fading.** A post more than a year older than now is *aging*, more than
   three years *faded*, as on the old site. Posts no longer expire: a citation
   has to keep working.
-- **The build number** in the colophon is the commit count (`revCount`), so
-  there is no counter file to commit.
+- **The build number** at the foot of every page is the commit count
+  (`revCount`), so there is no counter file to commit.
 
 A post fades when the site is next published, not on the day itself. That is
 the price of a reproducible build, and on a blog it is a small one.
@@ -291,7 +296,3 @@ arrive as a commit.
 - **New:** citations and references from the plugin, publishing over
   Micropub, works pages, backlinks, citation tags, `cite.bib`, a full-text
   feed, withdrawn posts, and slugs that never change.
-
-## Not decided yet
-
-- **The library**, the old site's list of links: carried over, or not.

@@ -1,0 +1,25 @@
+# What the site says about itself: its name and address, the author every
+# post is by, the line on the home page, and the menu.
+title = 'BW20'
+url = 'https://bw20.nl'
+description = 'A small, finite website that practices what it writes about. Essays and field notes on technology, society, and sustainable practice.'
+
+[author]
+given = 'Jorrit'
+family = 'van der Heide'
+
+[[menu]]
+name = 'log'
+link = '/log/'
+
+[[menu]]
+name = 'library'
+link = '/library/'
+
+[[menu]]
+name = 'about'
+link = '/about/'
+
+[[menu]]
+name = 'colophon'
+link = '/colophon/'

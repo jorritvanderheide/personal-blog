@@ -13,7 +13,7 @@ gardening.
 
 You can reach me through the channels listed on my Codeberg profile.
 
-### Now
+## Now
 
 - Building this site — a solar-server-ready static blog with Hugo and Nix
 - Learning more about permacomputing and what it means for everyday practice

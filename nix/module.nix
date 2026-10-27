@@ -30,8 +30,8 @@ let
   '';
 
   # Run as root after a deploy that built something: nginx reads the build's
-  # includes again, and the receiver runs the program just built, so it checks
-  # posts by the same rules as the build. The socket is started again in case
+  # includes again, the units in deploy.onSuccess start, and the receiver runs
+  # the program just built, so it checks posts by the same rules as the build. The socket is started again in case
   # it gave up before the first deploy, when there was no program to start.
   apply = pkgs.writeShellScript "personal-blog-apply" (
     ''
@@ -39,6 +39,9 @@ let
       rm ${stateDir}/apply
       systemctl=${config.systemd.package}/bin/systemctl
       $systemctl reload nginx.service
+    ''
+    + lib.optionalString (cfg.deploy.onSuccess != [ ]) ''
+      $systemctl start --no-block ${lib.escapeShellArgs cfg.deploy.onSuccess}
     ''
     + lib.optionalString cfg.receiver.enable ''
       $systemctl reset-failed personal-blog-receiver.socket personal-blog-receiver.service || true
@@ -134,6 +137,16 @@ in
           a notification. Each commit fails once: the deploy doesn't try it
           again, so this isn't started every minute. The site that was
           there stays.
+        '';
+      };
+
+      onSuccess = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "report-deploy@success.service" ];
+        description = ''
+          Units to start when a deploy has published a new commit, such as
+          one that tells a status page. Not when there was nothing new.
         '';
       };
     };

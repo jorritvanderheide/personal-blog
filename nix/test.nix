@@ -51,11 +51,17 @@ pkgs.testers.runNixOSTest {
       script = "touch /tmp/deploy-failed";
     };
 
+    systemd.services.deploy-published = {
+      serviceConfig.Type = "oneshot";
+      script = "touch /tmp/deploy-published";
+    };
+
     services.personal-blog = {
       enable = true;
       domain = "bw20.test";
       repository = "file:///srv/blog.git";
       deploy.onFailure = [ "deploy-failed.service" ];
+      deploy.onSuccess = [ "deploy-published.service" ];
 
       receiver = {
         enable = true;
@@ -123,6 +129,7 @@ pkgs.testers.runNixOSTest {
         commit("first")
         deploy.succeed("systemctl start personal-blog-deploy.service")
         assert "first" in get(deploy, "/")
+        deploy.wait_for_file("/tmp/deploy-published")
 
     with subtest("the receiver's link"):
         assert 'rel="micropub"' in get(deploy, "/", "-D -", "-o /dev/null")
@@ -139,8 +146,10 @@ pkgs.testers.runNixOSTest {
             assert want in got, f"{args}: {got}, want {want}"
 
     with subtest("a deploy with nothing new does nothing"):
+        deploy.succeed("rm /tmp/deploy-published")
         deploy.succeed("systemctl start personal-blog-deploy.service")
         assert "first" in get(deploy, "/")
+        deploy.fail("test -e /tmp/deploy-published")
 
     with subtest("a commit that doesn't build changes nothing, and fails once"):
         commit("fail")

@@ -253,6 +253,8 @@ is part of, so a commit that doesn't build changes nothing.
 - **A broken commit never goes live.** The site already there stays, and the
   units in `deploy.onFailure` are started, once: the deploy doesn't try that
   commit again. To try it anyway, remove `/var/lib/personal-blog/failed`.
+  One that publishes starts those in `deploy.onSuccess`, such as a report
+  to a status page.
 - **A forge that doesn't answer** is asked again at the next look, without a
   failure.
 - **The host's configuration only changes with the module.** Posts,

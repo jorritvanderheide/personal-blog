@@ -2,16 +2,10 @@
 title = 'Composting does not stop in winter'
 summary = 'A short note on keeping the pile alive when it is cold.'
 date = 2026-01-25T08:00:00Z
-expiryDate = 2031-01-25T08:00:00Z
-lastmod = 2026-01-25T08:00:00Z
-draft = false
-cover = ''
 threads = ['sustainability']
 +++
 
 People assume composting is a summer activity. The pile slows down in winter but it does not stop.
-
-<!--more-->
 
 The microbial activity that breaks down organic matter drops as temperatures fall, but it never reaches zero. A well-insulated pile — straw bales around the sides, a tarp on top — maintains enough internal heat to keep decomposing through a Dutch winter.
 

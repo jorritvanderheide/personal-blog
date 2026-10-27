@@ -2,16 +2,10 @@
 title = 'The NixOS module system is a quiet revolution'
 summary = 'Why declarative configuration changes how we think about infrastructure.'
 date = 2026-03-15T10:00:00Z
-expiryDate = 2031-03-15T10:00:00Z
-lastmod = 2026-03-15T10:00:00Z
-draft = false
-cover = ''
 threads = ['tech']
 +++
 
 Most people encounter NixOS and immediately get lost in the syntax. Fair enough. But the module system underneath is where the real shift happens.
-
-<!--more-->
 
 ### What makes it different
 

@@ -2,16 +2,10 @@
 title = 'Repair is a political act'
 summary = 'The right to repair is about more than broken phones.'
 date = 2025-11-05T09:00:00Z
-expiryDate = 2030-11-05T09:00:00Z
-lastmod = 2025-11-05T09:00:00Z
-draft = false
-cover = ''
 threads = ['sustainability']
 +++
 
 When your phone screen cracks and the manufacturer says replacing it voids your warranty, that is not a technical limitation. It is a business decision. The right to repair movement is pushing back.
-
-<!--more-->
 
 ### The surface argument
 

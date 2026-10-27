@@ -2,16 +2,10 @@
 title = 'Running a website on sunlight'
 summary = 'Notes on setting up a solar-powered Raspberry Pi web server.'
 date = 2026-02-20T14:00:00Z
-expiryDate = 2031-02-20T14:00:00Z
-lastmod = 2026-02-20T14:00:00Z
-draft = false
-cover = ''
 threads = ['sustainability']
 +++
 
 This site runs on a Raspberry Pi powered by a small solar panel. Here is what that actually involves.
-
-<!--more-->
 
 ### The hardware
 

@@ -2,16 +2,10 @@
 title = 'What if your neighborhood had its own network?'
 summary = 'Community networks as infrastructure that belongs to the people who use it.'
 date = 2025-12-18T10:00:00Z
-expiryDate = 2030-12-18T10:00:00Z
-lastmod = 2025-12-18T10:00:00Z
-draft = false
-cover = ''
 threads = ['tech', 'sustainability']
 +++
 
 In Barcelona, Guifi.net operates one of the largest community networks in the world. Over 35,000 nodes, built and maintained by the people who use them. No ISP. No monthly bill. Just rooftop antennas and fiber runs organized by neighbors.
-
-<!--more-->
 
 ### How it works
 

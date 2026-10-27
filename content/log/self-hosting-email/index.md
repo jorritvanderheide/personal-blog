@@ -2,16 +2,10 @@
 title = 'I stopped self-hosting email and that is fine'
 summary = 'Not everything needs to be self-hosted. Knowing where to draw the line matters.'
 date = 2025-09-12T16:00:00Z
-expiryDate = 2030-09-12T16:00:00Z
-lastmod = 2025-09-12T16:00:00Z
-draft = false
-cover = ''
 threads = ['tech']
 +++
 
 For three years I ran my own mail server. Postfix, Dovecot, rspamd, the whole stack. It worked. It also consumed an unreasonable amount of my attention.
-
-<!--more-->
 
 ### What I learned
 

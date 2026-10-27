@@ -101,6 +101,9 @@ var (
 	keyPattern = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
 )
 
+// IsName says whether s can be a slug, a page's name or a thread's name.
+func IsName(s string) bool { return namePattern.MatchString(s) }
+
 // Images a post may have next to it, by extension.
 var imageExts = []string{".png", ".jpg", ".jpeg"}
 

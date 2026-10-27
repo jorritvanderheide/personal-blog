@@ -85,6 +85,10 @@ func feed(s *site.Site, text func(*site.Post) (string, error)) ([]byte, error) {
 			Content: atomContent{Type: "html", Base: url, Text: html},
 		})
 	}
+	// No post yet: the epoch, which the first post replaces.
+	if newest.IsZero() {
+		newest = time.Unix(0, 0).UTC()
+	}
 	f.Updated = newest.Format(stamp)
 	return marshal(f)
 }

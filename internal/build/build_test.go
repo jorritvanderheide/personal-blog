@@ -237,3 +237,24 @@ func TestWrite(t *testing.T) {
 		t.Fatal("wrote over a site")
 	}
 }
+
+// A site with no posts yet builds, and says so.
+func TestNoPosts(t *testing.T) {
+	c := &content.Site{
+		Config:  content.Config{Title: "BW20", URL: "https://bw20.nl", Description: "A site.", Author: content.Author{Given: "J", Family: "H"}},
+		Threads: []content.Thread{{Name: "tech", Description: "Tech."}},
+	}
+	s, err := site.New(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	files, err := Site(s, web.Files, Options{Now: now})
+	if err != nil {
+		t.Fatal(err)
+	}
+	contains(t, files, "index.html", "No posts yet.")
+	contains(t, files, "log/index.html", "No posts yet.")
+	contains(t, files, "threads/tech/index.html", "No posts in this thread yet.")
+	contains(t, files, "feed.xml", "<updated>1970-01-01T00:00:00Z</updated>")
+	lacks(t, files, "index.html", "Newest")
+}

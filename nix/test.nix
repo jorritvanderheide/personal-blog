@@ -189,14 +189,13 @@ pkgs.testers.runNixOSTest {
     with subtest("the real site's pages"):
         home = get(site, "/")
         assert "A small, finite website" in home, home
-        post = get(site, "/log/digital-gardens/")
-        assert "Gardens over feeds" in post and "Cite this post" in post, post
-        assert "@online{digital-gardens," in get(site, "/log/digital-gardens/cite.bib")
+        about = get(site, "/about/")
+        assert "<h1>About</h1>" in about, about
+        assert "No posts yet." in get(site, "/log/")
         assert "<feed" in get(site, "/feed.xml")
-        assert "200" in status(site, "/about/")
 
     with subtest("the real site's headers"):
-        headers = get(site, "/log/digital-gardens/", "-D -", "-o /dev/null")
+        headers = get(site, "/about/", "-D -", "-o /dev/null")
         assert "default-src 'none'" in headers, headers
         assert "X-Content-Type-Options: nosniff" in headers, headers
         assert "Cache-Control: no-cache" in headers, headers
@@ -205,7 +204,7 @@ pkgs.testers.runNixOSTest {
         assert "max-age=31536000" in get(site, css, "-D -", "-o /dev/null")
 
     with subtest("the real site's crawlers, 404 and includes"):
-        assert "403" in status(site, "/log/digital-gardens/", "-A GPTBot")
+        assert "403" in status(site, "/about/", "-A GPTBot")
         assert "200" in status(site, "/robots.txt", "-A GPTBot")
         assert "404" in status(site, "/nope/")
         assert "Not here" in get(site, "/nope/")

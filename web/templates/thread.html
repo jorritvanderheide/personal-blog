@@ -1,5 +1,6 @@
 {{define "main"}}
 <h1>{{.Thread.Name}}</h1>
 <p class="lead">{{.Thread.Description}}</p>
-{{template "posts" .Posts}}
+{{if .Posts}}{{template "posts" .Posts}}{{else}}<p>No posts in this thread yet.</p>
+{{end}}
 {{end}}

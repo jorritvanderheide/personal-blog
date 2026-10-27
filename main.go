@@ -1,6 +1,8 @@
 // Command personal-blog makes the BW20 personal blog from content/: it
 // writes the site to a folder (-out), as the Nix build does, or serves it
-// while you write (-serve), built again on every request.
+// while you write (-serve), built again on every request. With -receive it
+// is the receiver, which takes posts over Micropub and commits them
+// (receive.go).
 //
 // Reading content/ is in internal/content, putting it together and checking
 // it in internal/site, Markdown in internal/render, the files in
@@ -28,7 +30,7 @@ import (
 func main() {
 	fl := flag.NewFlagSet("personal-blog", flag.ExitOnError)
 	fl.Usage = func() {
-		fmt.Fprint(fl.Output(), "Usage: personal-blog -out <folder> | -serve <host:port> [flags]\n\nFlags:\n")
+		fmt.Fprint(fl.Output(), "Usage: personal-blog -out <folder> | -serve <host:port> | -receive [flags]\n\nFlags:\n")
 		fl.PrintDefaults()
 	}
 	var (
@@ -38,11 +40,20 @@ func main() {
 		devAssets  = fl.String("dev-assets", "", "read the templates and stylesheet from web/ in this folder instead of the program, so edits show at once (development)")
 		now        = fl.Int64("now", 0, "the time to build the site for, in seconds since 1970, which fading depends on: the last commit's in the Nix build; the clock's when 0")
 		buildNum   = fl.Int("build", 0, "the build number at the foot of every page, the commit count; left out when 0")
+		receive    = fl.Bool("receive", false, "be the receiver: take posts over Micropub, and commit them (the -listen, -base-url, -push-url, -branch, -author, -token-file, -ssh-key-file, -known-hosts and -state flags)")
+		r          = receiverFlags(fl)
 	)
 	fl.Parse(os.Args[1:])
 	// A wrong invocation exits with 2, as a wrong flag does.
+	if *receive {
+		if err := r.run(); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(2)
+		}
+		return
+	}
 	if (*out == "") == (*serve == "") {
-		fmt.Fprintln(os.Stderr, "give either -out or -serve")
+		fmt.Fprintln(os.Stderr, "give one of -out, -serve and -receive")
 		fl.Usage()
 		os.Exit(2)
 	}

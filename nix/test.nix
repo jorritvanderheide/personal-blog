@@ -5,11 +5,14 @@
 # is a stand-in (test/) that writes what the real build does: a first deploy,
 # a commit that doesn't build, and one that does again.
 #
-# site: the real site, built here, as nginx serves it to a reader.
+# site: the real site, built here, as nginx serves it to a reader, and the
+# real receiver, which commits a post it takes to a repository on the VM.
 {
   pkgs,
   module,
   site,
+  personal-blog,
+  content,
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) system;
@@ -77,17 +80,30 @@ pkgs.testers.runNixOSTest {
   nodes.site = {
     imports = [ module ];
 
-    # Where the deploy would have put it. The deploy finds no repository
-    # here, and leaves it.
+    # Where the deploy would have put them. The deploy finds no repository
+    # here, and leaves them.
     systemd.tmpfiles.rules = [
       "d /var/lib/personal-blog 0755 personal-blog personal-blog -"
       "L+ /var/lib/personal-blog/site - - - - ${site}"
+      "L+ /var/lib/personal-blog/program - - - - ${personal-blog}"
     ];
+    environment.systemPackages = [ pkgs.git ];
 
     services.personal-blog = {
       enable = true;
       domain = "bw20.test";
       repository = "file:///srv/none";
+
+      receiver = {
+        enable = true;
+        tokenFile = "${pkgs.writeText "token" "secret"}";
+        # The sandbox lets it write only to its state directory, so the
+        # repository it pushes to is there too: on a host, it pushes over SSH.
+        pushUrl = "file:///var/lib/personal-blog-receiver/remote.git";
+        sshKeyFile = "${pkgs.writeText "ssh-key" "not a key"}";
+        knownHosts = "forge.test ssh-ed25519 AAAAtest";
+        author = "Receiver <receiver@bw20.test>";
+      };
     };
   };
 
@@ -194,5 +210,42 @@ pkgs.testers.runNixOSTest {
         assert "404" in status(site, "/nope/")
         assert "Not here" in get(site, "/nope/")
         assert "404" in status(site, "/nginx/location/crawlers.conf")
+
+    # The real receiver.
+
+    site.succeed(
+        "mkdir -p /var/lib/personal-blog-receiver",
+        "git init -q --bare -b main /var/lib/personal-blog-receiver/remote.git",
+        "git init -q -b main /tmp/work",
+        "cp -r ${content} /tmp/work/content",
+        "chmod -R u+w /tmp/work",
+        "git -C /tmp/work add -A",
+        "git -C /tmp/work -c user.name=t -c user.email=t@t commit -qm content",
+        "git -C /tmp/work push -q /var/lib/personal-blog-receiver/remote.git HEAD:refs/heads/main",
+        "chown -R personal-blog-receiver:personal-blog-receiver /var/lib/personal-blog-receiver",
+    )
+
+    def micropub(body, *args):
+        site.succeed(f"cat > /tmp/post.json <<'EOF'\n{body}\nEOF")
+        return get(site, "/micropub", "-X POST", "-H 'Content-Type: application/json'", "--data-binary @/tmp/post.json", *args)
+
+    token = "-H 'Authorization: Bearer secret'"
+    post = '{"type": ["h-entry"], "properties": {"name": ["From the VM"], "summary": ["A test."], "content": ["Said in a VM."], "category": ["tech"], "mp-slug": ["from-the-vm"]}}'
+
+    with subtest("the receiver wants its token"):
+        out = micropub(post, "-w ' %{http_code}'")
+        assert out.endswith("401"), out
+
+    with subtest("the receiver refuses a post that would break the build"):
+        broken = post.replace('"summary": ["A test."], ', "")
+        out = micropub(broken, token, "-w ' %{http_code}'")
+        assert out.endswith("400") and "missing summary" in out, out
+
+    with subtest("the receiver commits a post"):
+        out = micropub(post, token, "-D -", "-o /dev/null")
+        assert "202" in out and "Location: https://bw20.test/log/from-the-vm/" in out, out
+        assert site.succeed("git -c safe.directory='*' --git-dir /var/lib/personal-blog-receiver/remote.git log -1 --format=%s") == "publish: from-the-vm\n"
+        text = site.succeed("git -c safe.directory='*' --git-dir /var/lib/personal-blog-receiver/remote.git show main:content/log/from-the-vm/index.md")
+        assert 'generator = "micropub"' in text and "Said in a VM." in text, text
   '';
 }

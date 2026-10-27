@@ -48,9 +48,13 @@ For each request, one at a time:
 - **A post without `generator`** is hand-written, and an update or withdrawal
   of it is `403`. Every post the receiver writes has
   `generator = 'micropub'`.
+- **Requests are JSON**, as In the Open sends them, and an update replaces
+  what changed (`replace`); `add` and `delete` aren't taken, nor `q=source`.
+  A slug, a date and an alias never change through the receiver.
 - **Uploads** are PNG or JPEG, at most 20 MB. They wait in the receiver's
   state directory, named by their hash and served at their URL, and are
-  removed after a day if no post takes them.
+  removed after a day if no post takes them. Next to its post, an image is
+  named by the start of its hash.
 
 `services.personal-blog.receiver` runs it: `enable`, `tokenFile`, `pushUrl`,
 `sshKeyFile` (a deploy key for this repository only), the forge's

@@ -41,13 +41,15 @@
         module = import ./nix/test.nix {
           inherit pkgs;
           module = self.nixosModules.default;
-          inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) site;
+          inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) site personal-blog;
+          content = ./content;
         };
       });
 
       devShells = forAllSystems (pkgs: {
         default = pkgs.mkShell {
           packages = with pkgs; [
+            git # the receiver's tests
             go
             gopls
           ];

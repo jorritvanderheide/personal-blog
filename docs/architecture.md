@@ -295,8 +295,10 @@ deploy, when there is no site yet.
   its pages, headers and caching, the crawlers' 403, the 404 page, and the
   build's includes kept from readers.
 
-Once there is a receiver, the deploy VM sends it a post that has to arrive
-as a commit.
+The site VM runs the real receiver too, against a repository on the VM
+with the real content: it wants its token, refuses a post that would break
+the build with the build's own message, and commits and pushes one that
+wouldn't.
 
 ## What comes from where
 

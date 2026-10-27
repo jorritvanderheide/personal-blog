@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  git,
 }:
 let
   root = ../.;
@@ -23,6 +24,9 @@ buildGoModule {
   };
 
   vendorHash = "sha256-pRmtJsS55ntxO0Hs3Ig2EPTB/pnYN5dVkUZ7MW7Zhps=";
+
+  # The receiver's tests run git against a repository on disk.
+  nativeCheckInputs = [ git ];
 
   env.CGO_ENABLED = 0;
   ldflags = [

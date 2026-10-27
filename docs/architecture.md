@@ -201,13 +201,15 @@ the price of a reproducible build, and on a blog it is a small one.
   or alias: each fails the build with the file it is in.
 - **Rendered into memory, written at the end.** A template error never
   leaves half a site in the output.
-- **Links are safe.** Only `http`, `https`, `mailto` and site-relative links
-  are written; raw HTML in Markdown stays off.
+- **Links are safe.** Only `http`, `https`, `mailto`, site-relative links
+  and links to a place on the same page are written; raw HTML in Markdown
+  stays off.
 - **Images are dithered at build time** into 6-grey paletted PNGs no wider
   than 800 pixels, with ordered Bayer dithering. The originals stay in
   `content/`; nothing derived is committed.
 - **Assets carry their hash** (`/static/site.css?v=1a2b3c4d`) and are cached
-  for a year; HTML is revalidated.
+  for a year; everything else is revalidated (`Cache-Control: no-cache`),
+  which its ETag answers.
 - **CSS is written by hand**, with no build step: custom properties, mobile
   first, `:focus-visible`, `prefers-reduced-motion`.
 - **Accessible by default:** a skip link, `aria-current` in the menu, a
@@ -234,7 +236,10 @@ time.
 
 `nix/module.nix` is `services.personal-blog`, which the flake exports as
 `nixosModules.default` for the host's own configuration to import. It needs
-nothing built: it serves, and runs, what its deploy builds.
+nothing built: it serves, and runs, what its deploy builds. The deploy runs
+`nix build` as the user `personal-blog`, so a host that limits
+`nix.settings.allowed-users` adds it there; the module refuses to build
+until it has.
 
 **The deploy** (`personal-blog-deploy`) builds the site on the host. A timer
 asks the repository for the newest commit on `main` with `git ls-remote`, a
@@ -277,13 +282,19 @@ deploy, when there is no site yet.
 `services.personal-blog.receiver` adds the receiver, as
 [Publishing](publishing.md) describes.
 
-`nix/test.nix` starts it in a VM, without the network, and deploys from a
-repository on the VM: a first commit, nginx serving it with its headers, a
-redirect, the 403 and the 404, a commit that doesn't build and fails once,
-and one that builds again. Until there is a program, the blog in it is a
-stand-in (`nix/test/`) that writes what the real build will. Once there is,
-the test deploys the real one, and sends the receiver a post that has to
-arrive as a commit.
+`nix/test.nix` starts it in two VMs, without the network.
+
+- **deploy** deploys from a repository on the VM: a first commit, the
+  build's redirect and 403, a commit that doesn't build and fails once, and
+  one that builds again. Building the real flake there would need nixpkgs
+  and Go without the network, so the blog in it is a stand-in
+  (`nix/test/`) that writes what the real build does.
+- **site** serves the real site, built on the host, as a reader gets it:
+  its pages, headers and caching, the crawlers' 403, the 404 page, and the
+  build's includes kept from readers.
+
+Once there is a receiver, the deploy VM sends it a post that has to arrive
+as a commit.
 
 ## What comes from where
 

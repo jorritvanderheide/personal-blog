@@ -196,6 +196,21 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        # The deploy runs nix build as its own user, which the daemon has to
+        # let in. The module can't add it itself: on a host that leaves the
+        # list at its default, "*", a value here would replace that, and shut
+        # everyone else out.
+        assertions = [
+          {
+            assertion =
+              let
+                allowed = config.nix.settings.allowed-users;
+              in
+              builtins.elem "*" allowed || builtins.elem "personal-blog" allowed || builtins.elem "@personal-blog" allowed;
+            message = "services.personal-blog: the deploy runs nix build as the user personal-blog. Add it to nix.settings.allowed-users.";
+          }
+        ];
+
         users.users.personal-blog = {
           isSystemUser = true;
           group = "personal-blog";
@@ -282,7 +297,12 @@ in
           '';
 
           locations = {
-            "/".extraConfig = crawlers;
+            # HTML is asked for again each time, and its ETag answers with a
+            # 304 when nothing changed: a new post shows at once.
+            "/".extraConfig = ''
+              expires -1;
+              ${crawlers}
+            '';
 
             # Hashed (?v=), so a year is safe: a new file has a new address.
             "/static/".extraConfig = ''
@@ -292,6 +312,9 @@ in
 
             # Everyone may read it, the crawlers it names included.
             "= /robots.txt" = { };
+
+            # The build's includes are for nginx, not for readers.
+            "^~ /nginx/".return = "404";
           };
         };
       }
@@ -391,6 +414,7 @@ in
           # page here: index would hand it to "/", without the Link header.
           "= /".extraConfig = ''
             try_files /index.html =404;
+            expires -1;
             ${headers}
             add_header Link '</micropub>; rel="micropub"' always;
             ${crawlers}

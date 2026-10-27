@@ -20,7 +20,9 @@ import (
 
 var markdown = goldmark.New(
 	goldmark.WithExtensions(
-		extension.Table,
+		// A column's alignment as an align attribute, not a style one, which
+		// the site's content security policy would block.
+		extension.NewTable(extension.WithTableCellAlignMethod(extension.TableCellAlignAttribute)),
 		extension.Strikethrough,
 		extension.Footnote,
 	),

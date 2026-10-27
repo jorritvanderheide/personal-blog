@@ -41,6 +41,7 @@
         module = import ./nix/test.nix {
           inherit pkgs;
           module = self.nixosModules.default;
+          inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) site;
         };
       });
 

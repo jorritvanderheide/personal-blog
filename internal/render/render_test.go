@@ -22,6 +22,12 @@ func TestHTML(t *testing.T) {
 			want: []string{"<table>", "<td>1</td>"},
 		},
 		{
+			name: "aligned table",
+			src:  "| a |\n| ---: |\n| 1 |",
+			want: []string{`<td align="right">1</td>`},
+			not:  []string{"style="},
+		},
+		{
 			name: "strikethrough",
 			src:  "~~gone~~",
 			want: []string{"<del>gone</del>"},

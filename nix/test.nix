@@ -1,7 +1,16 @@
-# The module in a VM, without the network. The blog is a stand-in (test/),
-# in a repository on the VM itself: a first deploy, nginx serving it with the
-# old site's rules, a commit that doesn't build, and one that does again.
-{ pkgs, module }:
+# The module in VMs, without the network.
+#
+# deploy: the deploy itself, from a repository on the VM. Building the real
+# flake there would need nixpkgs and Go without the network, so the blog in it
+# is a stand-in (test/) that writes what the real build does: a first deploy,
+# a commit that doesn't build, and one that does again.
+#
+# site: the real site, built here, as nginx serves it to a reader.
+{
+  pkgs,
+  module,
+  site,
+}:
 let
   inherit (pkgs.stdenv.hostPlatform) system;
 
@@ -17,7 +26,7 @@ in
 pkgs.testers.runNixOSTest {
   name = "personal-blog";
 
-  nodes.machine = {
+  nodes.deploy = {
     imports = [ module ];
 
     # The stand-in's builder is busybox by its path, not a dependency, so
@@ -59,9 +68,36 @@ pkgs.testers.runNixOSTest {
     };
   };
 
+  nodes.site = {
+    imports = [ module ];
+
+    # Where the deploy would have put it. The deploy finds no repository
+    # here, and leaves it.
+    systemd.tmpfiles.rules = [
+      "d /var/lib/personal-blog 0755 personal-blog personal-blog -"
+      "L+ /var/lib/personal-blog/site - - - - ${site}"
+    ];
+
+    services.personal-blog = {
+      enable = true;
+      domain = "bw20.test";
+      repository = "file:///srv/none";
+    };
+  };
+
   testScript = ''
+    def get(machine, path, *args):
+        return machine.succeed(f"curl -s -H 'Host: bw20.test' {' '.join(args)} http://localhost{path}")
+
+    def status(machine, path, *args):
+        return get(machine, path, "-o /dev/null", "-w '%{http_code}'", *args)
+
+    start_all()
+
+    # The deploy.
+
     def commit(page):
-        machine.succeed(
+        deploy.succeed(
             f"echo '{page}' > /tmp/work/page.txt",
             "git -C /tmp/work add -A",
             f"git -C /tmp/work -c user.name=t -c user.email=t@t commit -qm '{page}'",
@@ -72,15 +108,12 @@ pkgs.testers.runNixOSTest {
             "chown -R personal-blog:personal-blog /srv/blog.git",
         )
 
-    def get(path, *args):
-        return machine.succeed(f"curl -s -H 'Host: bw20.test' {' '.join(args)} http://localhost{path}")
-
-    machine.wait_for_unit("nginx.service")
+    deploy.wait_for_unit("nginx.service")
 
     with subtest("nginx starts before the first deploy"):
-        machine.succeed("systemctl is-active personal-blog-receiver.socket")
+        deploy.succeed("systemctl is-active personal-blog-receiver.socket")
 
-    machine.succeed(
+    deploy.succeed(
         "git init -q --bare -b main /srv/blog.git",
         "git init -q -b main /tmp/work",
         "cp ${standIn}/* /tmp/work/",
@@ -88,40 +121,69 @@ pkgs.testers.runNixOSTest {
 
     with subtest("a deploy publishes the newest commit"):
         commit("first")
-        machine.succeed("systemctl start personal-blog-deploy.service")
-        assert "first" in get("/")
+        deploy.succeed("systemctl start personal-blog-deploy.service")
+        assert "first" in get(deploy, "/")
 
-    with subtest("headers"):
-        headers = get("/", "-D -", "-o /dev/null")
-        assert "script-src" not in headers and "default-src 'none'" in headers, headers
-        assert "X-Content-Type-Options: nosniff" in headers, headers
-        assert 'rel="micropub"' in headers, headers
-        assert "default-src 'none'" in get("/log/hello/", "-D -", "-o /dev/null")
+    with subtest("the receiver's link"):
+        assert 'rel="micropub"' in get(deploy, "/", "-D -", "-o /dev/null")
 
     with subtest("the build's includes"):
-        assert "301" in get("/log/old/", "-o /dev/null", "-w '%{http_code}'")
-        assert "403" in get("/log/hello/", "-A GPTBot", "-o /dev/null", "-w '%{http_code}'")
-        assert "200" in get("/robots.txt", "-A GPTBot", "-o /dev/null", "-w '%{http_code}'")
-        assert "404" in get("/nope/", "-o /dev/null", "-w '%{http_code}'")
-        assert "not here" in get("/nope/")
+        # nginx reloads after a deploy, and its new workers start a moment
+        # later: the redirect shows once they have.
+        deploy.wait_until_succeeds(
+            "curl -s -H 'Host: bw20.test' -o /dev/null -w '%{http_code}' http://localhost/log/old/ | grep -qx 301",
+            timeout=30,
+        )
+        for want, args in [("403", ["/log/hello/", "-A GPTBot"]), ("404", ["/nginx/server/aliases.conf"])]:
+            got = status(deploy, *args)
+            assert want in got, f"{args}: {got}, want {want}"
 
     with subtest("a deploy with nothing new does nothing"):
-        machine.succeed("systemctl start personal-blog-deploy.service")
-        assert "first" in get("/")
+        deploy.succeed("systemctl start personal-blog-deploy.service")
+        assert "first" in get(deploy, "/")
 
     with subtest("a commit that doesn't build changes nothing, and fails once"):
         commit("fail")
-        machine.fail("systemctl start personal-blog-deploy.service")
-        machine.wait_for_file("/tmp/deploy-failed")
-        assert "first" in get("/")
-        machine.succeed("rm /tmp/deploy-failed")
-        machine.succeed("systemctl start personal-blog-deploy.service")
-        machine.fail("test -e /tmp/deploy-failed")
+        deploy.fail("systemctl start personal-blog-deploy.service")
+        deploy.wait_for_file("/tmp/deploy-failed")
+        assert "first" in get(deploy, "/")
+        deploy.succeed("rm /tmp/deploy-failed")
+        deploy.succeed("systemctl start personal-blog-deploy.service")
+        deploy.fail("test -e /tmp/deploy-failed")
 
     with subtest("the next commit that builds publishes again"):
         commit("second")
-        machine.succeed("systemctl start personal-blog-deploy.service")
-        assert "second" in get("/")
-        machine.succeed("systemctl is-active personal-blog-receiver.socket")
+        deploy.succeed("systemctl start personal-blog-deploy.service")
+        assert "second" in get(deploy, "/")
+        deploy.succeed("systemctl is-active personal-blog-receiver.socket")
+
+    # The real site.
+
+    site.wait_for_unit("nginx.service")
+
+    with subtest("the real site's pages"):
+        home = get(site, "/")
+        assert "A small, finite website" in home, home
+        post = get(site, "/log/digital-gardens/")
+        assert "Gardens over feeds" in post and "Cite this post" in post, post
+        assert "@online{digital-gardens," in get(site, "/log/digital-gardens/cite.bib")
+        assert "<feed" in get(site, "/feed.xml")
+        assert "200" in status(site, "/about/")
+
+    with subtest("the real site's headers"):
+        headers = get(site, "/log/digital-gardens/", "-D -", "-o /dev/null")
+        assert "default-src 'none'" in headers, headers
+        assert "X-Content-Type-Options: nosniff" in headers, headers
+        assert "Cache-Control: no-cache" in headers, headers
+        assert "micropub" not in headers, headers
+        css = site.succeed("grep -o '/static/site.css?v=[0-9a-f]*' /var/lib/personal-blog/site/index.html").strip()
+        assert "max-age=31536000" in get(site, css, "-D -", "-o /dev/null")
+
+    with subtest("the real site's crawlers, 404 and includes"):
+        assert "403" in status(site, "/log/digital-gardens/", "-A GPTBot")
+        assert "200" in status(site, "/robots.txt", "-A GPTBot")
+        assert "404" in status(site, "/nope/")
+        assert "Not here" in get(site, "/nope/")
+        assert "404" in status(site, "/nginx/location/crawlers.conf")
   '';
 }

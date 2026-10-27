@@ -7,10 +7,6 @@ lastmod = 2025-11-05T09:00:00Z
 draft = false
 cover = ''
 threads = ['sustainability']
-
-[[references]]
-  title = 'iFixit Self-Repair Manifesto'
-  link = 'https://www.ifixit.com/Manifesto'
 +++
 
 When your phone screen cracks and the manufacturer says replacing it voids your warranty, that is not a technical limitation. It is a business decision. The right to repair movement is pushing back.
@@ -32,3 +28,7 @@ When you extend the life of a laptop from three years to seven, you have halved 
 The same logic applies to software. Open source is repairability for code. Self-hosting is repairability for services. When a company shuts down a product you depend on, the ability to repair — to fork, to migrate, to run your own — is the difference between continuity and loss.
 
 The right to repair is not just about hardware. It is about who controls the things we depend on.
+
+### Further reading
+
+- [iFixit Self-Repair Manifesto](https://www.ifixit.com/Manifesto)

@@ -1,16 +1,2 @@
-# Hugo generated
-/public/
-/resources/_gen/
-/.hugo_build.lock
-hugo_stats.json
-
-# Hugo executables
-hugo.exe
-hugo.darwin
-hugo.linux
-
-# Nix
+result
 .direnv/
-
-# Editor
-.vscode/

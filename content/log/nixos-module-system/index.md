@@ -7,10 +7,6 @@ lastmod = 2026-03-15T10:00:00Z
 draft = false
 cover = ''
 threads = ['tech']
-
-[[references]]
-  title = 'NixOS Manual'
-  link = 'https://nixos.org/manual/nixos/stable/'
 +++
 
 Most people encounter NixOS and immediately get lost in the syntax. Fair enough. But the module system underneath is where the real shift happens.
@@ -32,3 +28,7 @@ You stop thinking about "how do I get from A to B" and start thinking about "wha
 ### The quiet part
 
 Nobody talks about this because the syntax is intimidating. But once you see the module system as a way to compose declarative descriptions of systems, NixOS stops being "that weird Linux distro" and starts being a fundamentally different approach to infrastructure.
+
+### Further reading
+
+- [NixOS Manual](https://nixos.org/manual/nixos/stable/)

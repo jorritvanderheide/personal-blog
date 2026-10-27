@@ -7,10 +7,6 @@ lastmod = 2026-01-08T11:00:00Z
 draft = false
 cover = ''
 threads = ['tech']
-
-[[references]]
-  title = 'Local-first software'
-  link = 'https://www.inkandswitch.com/local-first/'
 +++
 
 Every note-taking app, every task manager, every document editor — they all assume a cloud backend. Your data lives on someone else's computer. Local-first software asks: what if it did not?
@@ -30,3 +26,7 @@ CRDTs (conflict-free replicated data types) are one solution. They define data s
 ### Why it matters
 
 Cloud dependency is a single point of failure, a privacy risk, and a subscription fee. Local-first software eliminates all three. The data you create should survive the company that made the tool.
+
+### Further reading
+
+- [Local-first software](https://www.inkandswitch.com/local-first/)

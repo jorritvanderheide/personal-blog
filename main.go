@@ -51,11 +51,11 @@ func main() {
 		assets = sub
 	}
 	site := func() (build.Files, error) {
-		posts, err := content.Posts(os.DirFS(*contentDir))
+		s, err := content.Read(os.DirFS(*contentDir))
 		if err != nil {
 			return nil, err
 		}
-		return build.Site(posts, assets)
+		return build.Site(s.Posts, assets)
 	}
 
 	if *out != "" {

@@ -37,7 +37,7 @@ func Site(posts []content.Post, assets fs.FS) (Files, error) {
 	var errs []error
 	for _, p := range posts {
 		name := path.Join("log", p.Slug, "index.html")
-		text, err := render.Markdown(p.Body)
+		text, err := render.Parse(p.Body).HTML(render.Options{})
 		if err != nil {
 			errs = append(errs, fmt.Errorf("%s: %w", name, err))
 			continue

@@ -1,0 +1,9 @@
+{{define "main"}}
+<article>
+<header>
+<h1>{{.Post.Title}}</h1>
+<p class="meta"><time datetime="{{iso .Post.Date}}">{{season .Post.Date}}</time></p>
+</header>
+<p>This post was withdrawn in <time datetime="{{iso .Post.Withdrawn}}">{{season .Post.Withdrawn}}</time>. Its address stays, so links and citations to it still lead here, and you can still <a href="{{.Post.Path}}cite.bib" download>cite it</a>.</p>
+</article>
+{{end}}

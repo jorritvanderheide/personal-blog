@@ -6,5 +6,8 @@ goes live, and from then on each heading is the date a change went live.
 
 ## Unreleased
 
-- A new site, built by one Go program instead of Hugo. For now it has each
-  post's page and nothing else.
+- A new site, built by one Go program instead of Hugo: the home page, the
+  log by year, each post with its references, "Linked from" and "Cite this
+  post", threads, works, pages, a full-text Atom feed and a sitemap.
+- Every post has a `cite.bib`, and the tags Google Scholar and Zotero read.
+- The library is a page now, without its threads.

@@ -1,0 +1,5 @@
+{{define "main"}}
+<h1>{{.Thread.Name}}</h1>
+<p class="lead">{{.Thread.Description}}</p>
+{{template "posts" .Posts}}
+{{end}}

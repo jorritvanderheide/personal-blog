@@ -1,0 +1,7 @@
+{{define "main"}}
+<h1>{{.Site.Config.Title}}</h1>
+<p class="lead">{{.Site.Config.Description}}</p>
+<h2>Newest</h2>
+{{template "posts" .Posts}}
+<p><a href="/log/">Every post, in the log</a></p>
+{{end}}

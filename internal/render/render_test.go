@@ -139,3 +139,10 @@ func TestInline(t *testing.T) {
 		t.Errorf("Inline = %q, want %q", got, want)
 	}
 }
+
+func TestPlain(t *testing.T) {
+	got := Plain("Marsh, Ann. 2020. *Archives and Their Readers*. [Brill](https://brill.com).")
+	if want := "Marsh, Ann. 2020. Archives and Their Readers. Brill."; got != want {
+		t.Errorf("Plain = %q, want %q", got, want)
+	}
+}

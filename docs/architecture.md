@@ -21,7 +21,7 @@ turn a published post into a commit.
 | `internal/render/` | goldmark, its extensions, and the passes over each post's syntax tree. |
 | `internal/site/` | The site as a whole: posts, threads, works, backlinks, and every check that needs more than one post. |
 | `internal/build/` | Writing the output: pages, feed, sitemap, `cite.bib` files, images. |
-| `internal/dither/` | Ordered dithering of images. |
+| `internal/dither/` | Ordered dithering of images, as MeetINN's. |
 | `internal/micropub/` | The receiver: Micropub requests in, commits out. |
 | `web/` | Templates and static files, embedded with `embed.FS`. |
 | `content/` | Posts and pages. The only input. |
@@ -192,8 +192,9 @@ the price of a reproducible build, and on a blog it is a small one.
 ## Rules
 
 - **No JavaScript.** Folding is `<details>`, dark mode is
-  `prefers-color-scheme`, and nginx's policy (`script-src 'none'`) makes it
-  stick.
+  `prefers-color-scheme`, and nginx's policy (`default-src 'none'`) makes it
+  stick. The one `<script>` is a post's JSON-LD, which is data: no browser
+  runs it.
 - **A broken site does not build.** A link to a post that does not exist, a
   citation without a reference, a reference never cited, a reference with no
   work in `content/works/`, a thread not in `threads.toml`, a duplicate slug
@@ -291,8 +292,8 @@ arrive as a commit.
   VM test, threads.
 - **From MeetINN:** `html/template` with `embed.FS` and templates from disk
   in development, hashed asset URLs, rendering into memory first, goldmark
-  with passes over the syntax tree, safe links, `check.sh` for CI and local
-  runs alike, and docs that write the rules down.
+  with passes over the syntax tree, safe links, the dithering, `check.sh` for
+  CI and local runs alike, and docs that write the rules down.
 - **New:** citations and references from the plugin, publishing over
   Micropub, works pages, backlinks, citation tags, `cite.bib`, a full-text
   feed, withdrawn posts, and slugs that never change.

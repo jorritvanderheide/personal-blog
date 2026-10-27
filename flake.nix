@@ -22,7 +22,12 @@
         in
         {
           inherit personal-blog;
-          site = pkgs.callPackage ./nix/site.nix { inherit personal-blog; };
+          site = pkgs.callPackage ./nix/site.nix {
+            inherit personal-blog;
+            now = self.lastModified;
+            # A working copy with changes has no count: no build number then.
+            build = self.revCount or 0;
+          };
           default = self.packages.${pkgs.stdenv.hostPlatform.system}.site;
         }
       );

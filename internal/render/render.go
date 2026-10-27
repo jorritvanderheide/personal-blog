@@ -190,3 +190,9 @@ func words(n ast.Node, src []byte) string {
 	})
 	return b.String()
 }
+
+// Plain is one line of Markdown as plain text, for a tooltip or a meta tag.
+func Plain(src string) string {
+	d := Parse([]byte(src))
+	return strings.TrimSpace(words(d.root, d.src))
+}

@@ -19,7 +19,6 @@ import (
 	"os"
 	"path"
 	"strings"
-	"time"
 
 	"codeberg.org/BW20/personal-blog/internal/build"
 	"codeberg.org/BW20/personal-blog/internal/content"
@@ -38,7 +37,6 @@ func main() {
 		out        = fl.String("out", "", "write the site to this folder, which mustn't exist yet or must be empty")
 		serve      = fl.String("serve", "", "serve the site on this address, such as 127.0.0.1:8080, built again on every request (development)")
 		devAssets  = fl.String("dev-assets", "", "read the templates and stylesheet from web/ in this folder instead of the program, so edits show at once (development)")
-		now        = fl.Int64("now", 0, "the time to build the site for, in seconds since 1970, which fading depends on: the last commit's in the Nix build; the clock's when 0")
 		buildNum   = fl.Int("build", 0, "the build number at the foot of every page, the commit count; left out when 0")
 		receive    = fl.Bool("receive", false, "be the receiver: take posts over Micropub, and commit them (the -listen, -base-url, -push-url, -branch, -author, -token-file, -ssh-key-file, -known-hosts and -state flags)")
 		r          = receiverFlags(fl)
@@ -75,11 +73,7 @@ func main() {
 		if err != nil {
 			return nil, err
 		}
-		o := build.Options{Now: time.Unix(*now, 0).UTC(), Build: *buildNum}
-		if *now == 0 {
-			o.Now = time.Now()
-		}
-		return build.Site(s, assets, o)
+		return build.Site(s, assets, build.Options{Build: *buildNum})
 	}
 
 	if *out != "" {

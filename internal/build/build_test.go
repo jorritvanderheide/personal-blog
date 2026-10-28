@@ -17,8 +17,6 @@ import (
 	"codeberg.org/BW20/personal-blog/web"
 )
 
-var now = time.Date(2026, 10, 27, 12, 0, 0, 0, time.UTC)
-
 func photo(t *testing.T) []byte {
 	img := image.NewRGBA(image.Rect(0, 0, 1200, 600))
 	for y := range 600 {
@@ -65,7 +63,7 @@ func sample(t *testing.T) *site.Site {
 }
 
 func build(t *testing.T) Files {
-	files, err := Site(sample(t), web.Files, Options{Now: now, Build: 42})
+	files, err := Site(sample(t), web.Files, Options{Build: 42})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -117,8 +115,8 @@ func TestPost(t *testing.T) {
 		`<meta property="og:type" content="article">`,
 		"Build 42.",
 	)
-	// Written a year and more before now, and linked from the newer post.
-	contains(t, files, "log/older/index.html", `<article class="aging">`, "Linked from", `<a href="/log/quiet/">`)
+	// Linked from the newer post.
+	contains(t, files, "log/older/index.html", "Linked from", `<a href="/log/quiet/">`)
 	lacks(t, files, "log/quiet/index.html", "Linked from")
 }
 
@@ -149,7 +147,7 @@ func TestWithdrawn(t *testing.T) {
 func TestLists(t *testing.T) {
 	files := build(t)
 	contains(t, files, "index.html", "<title>BW20</title>", "A small, finite website.", `<a href="/log/quiet/">`, `<a class="name" href="/" aria-current="page">`)
-	contains(t, files, "log/index.html", "<h2>2026</h2>", "<h2>2025</h2>", `<li class="aging">`)
+	contains(t, files, "log/index.html", "<h2>2026</h2>", "<h2>2025</h2>")
 	contains(t, files, "threads/tech/index.html", "<h1>tech</h1>", "Notes on NixOS.", `<a href="/log/quiet/">`)
 	contains(t, files, "works/marsh2020/index.html", "<em>Archives &amp; Readers</em>", "Cited in", `<a href="/log/quiet/">`)
 	contains(t, files, "about/index.html", "<h1>About</h1>", "<p>Who, why.</p>", `<a href="/about/" aria-current="page">about</a>`)
@@ -189,15 +187,6 @@ func TestTime(t *testing.T) {
 			t.Errorf("season(%v) = %q, want %q", tt.month, got, tt.want)
 		}
 	}
-	for _, tt := range []struct {
-		years float64
-		want  string
-	}{{0.5, ""}, {1.5, "aging"}, {3.5, "faded"}} {
-		then := now.Add(-time.Duration(tt.years * 365 * 24 * float64(time.Hour)))
-		if got := age(then, now); got != tt.want {
-			t.Errorf("age after %v years = %q, want %q", tt.years, got, tt.want)
-		}
-	}
 }
 
 func TestCrawlers(t *testing.T) {
@@ -214,7 +203,7 @@ func TestSiteTemplateError(t *testing.T) {
 	}
 	assets["templates/posts.html"] = &fstest.MapFile{}
 	assets["templates/base.html"] = &fstest.MapFile{Data: []byte(`{{define "base"}}{{.Missing}}{{end}}`)}
-	files, err := Site(sample(t), assets, Options{Now: now})
+	files, err := Site(sample(t), assets, Options{})
 	if err == nil || !strings.Contains(err.Error(), "log/quiet/index.html") {
 		t.Fatalf("err = %v, want one naming log/quiet/index.html", err)
 	}
@@ -248,7 +237,7 @@ func TestNoPosts(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	files, err := Site(s, web.Files, Options{Now: now})
+	files, err := Site(s, web.Files, Options{})
 	if err != nil {
 		t.Fatal(err)
 	}

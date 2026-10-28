@@ -113,7 +113,7 @@ func check(fsys fs.FS) error {
 	if err != nil {
 		return err
 	}
-	_, err = build.Site(s, web.Files, build.Options{Now: time.Now()})
+	_, err = build.Site(s, web.Files, build.Options{})
 	return err
 }
 

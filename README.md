@@ -22,8 +22,8 @@ changes.
 
 The rest stays small. There's no JavaScript and no server program for
 visitors: a blog only changes when something is published, so every page is
-decided when the site is built. Images are dithered, and old posts fade,
-but they don't go away, because a citation has to keep working.
+decided when the site is built. Images are dithered, and posts don't go
+away, because a citation has to keep working.
 
 <br/>
 

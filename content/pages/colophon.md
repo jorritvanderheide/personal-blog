@@ -11,9 +11,8 @@ ordered Bayer dithering, to keep them small and keep the low-tech aesthetic.
 
 ## Time
 
-Dates are displayed as seasons rather than exact dates. Log entries fade as
-they age: slightly after one year, more after three. They don't expire: a
-post may be cited, and a citation has to keep working.
+Dates are displayed as seasons rather than exact dates. Posts don't expire:
+a post may be cited, and a citation has to keep working.
 
 The build number at the foot of every page counts the commits the site is
 built from.

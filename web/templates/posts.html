@@ -1,5 +1,5 @@
 {{define "posts"}}<ul class="posts">
-{{range .}}<li{{with age .Date}} class="{{.}}"{{end}}>
+{{range .}}<li>
 <a href="{{.Path}}">{{.Title}}</a>
 <time datetime="{{iso .Date}}">{{season .Date}}</time>
 <p>{{.Summary}}</p>

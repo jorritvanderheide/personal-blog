@@ -2,10 +2,9 @@
   lib,
   runCommand,
   personal-blog,
-  # The last commit's time, and the commit count: what fading and the build
-  # number go by (docs/architecture.md, Time). Not the clock: a Nix build is
-  # pure, so the same commit gives the same site.
-  now,
+  # The commit count, the build number at the foot of every page
+  # (docs/architecture.md, Time). From the flake, not a counter file, so the
+  # same commit gives the same site.
   build,
 }:
 let
@@ -17,5 +16,5 @@ let
   };
 in
 runCommand "site" { nativeBuildInputs = [ personal-blog ]; } ''
-  personal-blog -content ${src}/content -out $out -now ${toString now} -build ${toString build}
+  personal-blog -content ${src}/content -out $out -build ${toString build}
 ''

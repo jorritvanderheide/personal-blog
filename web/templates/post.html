@@ -9,7 +9,7 @@
 {{end}}<script type="application/ld+json">{{.JSONLD}}</script>
 {{end}}
 {{define "main"}}
-<article{{with age .Post.Date}} class="{{.}}"{{end}}>
+<article>
 <header>
 <h1>{{.Post.Title}}</h1>
 <p class="meta"><time datetime="{{iso .Post.Date}}">{{season .Post.Date}}</time>{{if not .Post.Updated.IsZero}}, updated <time datetime="{{iso .Post.Updated}}">{{season .Post.Updated}}</time>{{end}}{{with .Post.ThreadList}}, in {{range $i, $t := .}}{{if $i}}, {{end}}<a href="{{$t.Path}}">{{$t.Name}}</a>{{end}}{{end}}</p>

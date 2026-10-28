@@ -30,9 +30,6 @@ type Files map[string][]byte
 
 // Options are what a build takes besides the content.
 type Options struct {
-	// Now is the time the site is built for, which fading depends on: in
-	// the Nix build, the last commit's (docs/architecture.md, Time).
-	Now time.Time
 	// Build is the build number at the foot of every page, the commit count.
 	// 0 leaves it out.
 	Build int
@@ -113,7 +110,6 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 
 	funcs := template.FuncMap{
 		"season": season,
-		"age":    func(t time.Time) string { return age(t, o.Now) },
 		"iso":    func(t time.Time) string { return t.Format("2006-01-02") },
 		"stamp":  func(t time.Time) string { return t.Format(stamp) },
 		"abs":    func(p string) string { return s.Config.URL + p },

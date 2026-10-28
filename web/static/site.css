@@ -217,35 +217,6 @@ details pre {
   white-space: pre-wrap;
 }
 
-/* Posts fade as they age: slightly after a year, more after three. By
-   colour, not opacity, so the faded text keeps its contrast (4.5:1). */
-.aging {
-  --ink: #3b3a35;
-  --muted: #67665e;
-}
-
-.faded {
-  --ink: #55544d;
-  --muted: #75736b;
-}
-
-@media (prefers-color-scheme: dark) {
-  .aging {
-    --ink: #cfcdc5;
-    --muted: #9b998f;
-  }
-
-  .faded {
-    --ink: #b5b3aa;
-    --muted: #8f8d84;
-  }
-}
-
-.aging,
-.faded {
-  color: var(--ink);
-}
-
 footer.site {
   margin-top: 3rem;
   padding-top: 0.75rem;

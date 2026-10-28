@@ -176,18 +176,15 @@ Making a post easy to cite is a feature of every page, not a page of its own.
 
 ## Time
 
-A Nix build is pure, and the same inputs give the same site. So "now" is not
-the clock: it is the time of the last commit, passed in with `-now` (the
-flake's `lastModified`). Everything that depends on time uses it:
+Nothing on the site depends on when it is built: a Nix build is pure, and
+the same commit gives the same site.
 
-- **Fading.** A post more than a year older than now is *aging*, more than
-  three years *faded*, as on the old site. Posts no longer expire: a citation
-  has to keep working.
+- **Dates as seasons.** A post shows its date as a season, *early spring
+  2026*, with the exact date in `<time datetime>`, as on the old site.
+- **Posts stay.** They don't fade or expire: a post may be cited, and a
+  citation has to keep working.
 - **The build number** at the foot of every page is the commit count
   (`revCount`), so there is no counter file to commit.
-
-A post fades when the site is next published, not on the day itself. That is
-the price of a reproducible build, and on a blog it is a small one.
 
 ## Rules
 
@@ -263,8 +260,8 @@ is part of, so a commit that doesn't build changes nothing.
 - **The host's configuration only changes with the module.** Posts,
   templates and the Go code all come with the build; only a change to nginx
   or systemd needs a rebuild of the host.
-- **The fetch has the whole history**, so `lastModified` and `revCount` are
-  always there for [Time](#time).
+- **The fetch has the whole history**, so `revCount` is always there for
+  the build number ([Time](#time)).
 - **After a deploy**, nginx reads the build's includes again, and the
   receiver restarts with the program just built, so it checks posts by the
   same rules as the build that will publish them.
@@ -305,9 +302,9 @@ wouldn't.
 
 ## What comes from where
 
-- **From the old site:** no JavaScript, dates as seasons, fading, dithered
-  images, the build number, bot blocking, the hardened nginx module and its
-  VM test, threads.
+- **From the old site:** no JavaScript, dates as seasons, dithered images,
+  the build number, bot blocking, the hardened nginx module and its VM test,
+  threads.
 - **From MeetINN:** `html/template` with `embed.FS` and templates from disk
   in development, hashed asset URLs, rendering into memory first, goldmark
   with passes over the syntax tree, safe links, the dithering, `check.sh` for

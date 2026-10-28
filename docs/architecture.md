@@ -266,7 +266,10 @@ nix flake check      # the checks, the real content's build, and the VM test
 ```
 
 `check.sh` and `nix flake check` are what CI runs, on the Forgejo runner on
-dapple, which has KVM for the VM test: a local run and CI cannot disagree.
+dapple, which has KVM for the VM test: a local run and CI cannot disagree. A
+push that only changes `content/`, as every post published from Obsidian
+is, isn't checked by CI: the receiver ran the site's checks before
+committing it, and the deploy builds it, alerting when it fails.
 
 The flake builds two packages. `personal-blog` is the program, from
 everything but `content/`, so a commit that only adds or changes posts finds

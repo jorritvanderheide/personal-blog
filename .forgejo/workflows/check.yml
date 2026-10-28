@@ -3,11 +3,17 @@
 # NixOS VM test, which Codeberg's own runners lack. The runner has no git, so
 # the source comes as Codeberg's archive of the commit; without git there is
 # no commit count, so the site's build number is left out.
+#
+# Not for a push that only changes content/, as every post published from
+# Obsidian is: the receiver has run the site's checks on it before committing,
+# and the deploy builds it after, alerting when it fails. A push that changes
+# code as well is checked as always.
 name: Check
 
 on:
   push:
     branches: [main]
+    paths-ignore: ['content/**']
   pull_request:
 
 jobs:

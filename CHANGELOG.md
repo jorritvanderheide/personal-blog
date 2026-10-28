@@ -21,7 +21,6 @@ goes live, and from then on each heading is the date a change went live.
   every page; the feed also has each post's threads and the licence.
 - Pages print well, or save as PDF: without the menu, with web links'
   addresses written out.
-- The library is a page now, without its threads.
 - A thread exists while a post uses it: publishing a post with a new one
   makes it, without editing `threads.toml`, which now only describes, orders
   or keeps a thread.

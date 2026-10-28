@@ -242,14 +242,16 @@ nothing built: it serves, and runs, what its deploy builds. The deploy runs
 until it has.
 
 **The deploy** (`personal-blog-deploy`) builds the site on the host. A timer
-asks the repository for the newest commit on `main` with `git ls-remote`, a
-minute after it last looked, and when that commit is new, builds `site` and
-then `personal-blog` from it, as links in `/var/lib/personal-blog`. Each link
+asks the repository for the newest commit on `main` with `git ls-remote`,
+five minutes after it last looked, and when that commit is new, builds
+`site` and then `personal-blog` from it, as links in `/var/lib/personal-blog`. Each link
 moves in one step when its build is done; the site first, which the program
 is part of, so a commit that doesn't build changes nothing.
 
-- **Every push publishes**, from the receiver or from a laptop alike, within
-  a minute and a build.
+- **Every push publishes.** A post from the receiver is built at once: the
+  receiver writes the time to `pushed` in its state directory after each
+  push, and a path unit starts the deploy when that changes. A push from
+  elsewhere, such as a laptop, is live within five minutes and a build.
 - **A broken commit never goes live.** The site already there stays, and the
   units in `deploy.onFailure` are started, once: the deploy doesn't try that
   commit again. To try it anyway, remove `/var/lib/personal-blog/failed`.

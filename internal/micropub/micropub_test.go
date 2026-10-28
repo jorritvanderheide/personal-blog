@@ -367,3 +367,24 @@ func TestGitRepo(t *testing.T) {
 		t.Error("Sync didn't take the other push")
 	}
 }
+
+// Pushed is called once for each change pushed, and not for one refused or
+// one that couldn't be pushed.
+func TestPushed(t *testing.T) {
+	s, repo := setup(t)
+	pushed := 0
+	s.Pushed = func() { pushed++ }
+	p := quiet(upload(t, s))
+	expect(t, do(s, http.MethodPost, "/micropub", create(p)), http.StatusAccepted)
+	if pushed != 1 {
+		t.Errorf("pushed %d times for a post, want once", pushed)
+	}
+	delete(p, "summary")
+	p["mp-slug"] = "other"
+	expect(t, do(s, http.MethodPost, "/micropub", create(p)), http.StatusBadRequest)
+	repo.refuse = 2
+	expect(t, do(s, http.MethodPost, "/micropub", `{"action": "delete", "url": "`+base+`/log/quiet/"}`), http.StatusInternalServerError)
+	if pushed != 1 {
+		t.Errorf("pushed %d times, want once: a refused post and a failed push aren't pushes", pushed)
+	}
+}

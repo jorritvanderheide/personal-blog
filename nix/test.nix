@@ -77,8 +77,12 @@ pkgs.testers.runNixOSTest {
     };
   };
 
-  nodes.site = {
+  nodes.site = { lib, ... }: {
     imports = [ module ];
+
+    # The timer's first look an hour away, so a deploy the test sees is one
+    # the receiver started.
+    systemd.timers.personal-blog-deploy.timerConfig.OnBootSec = lib.mkForce "1h";
 
     # Where the deploy would have put them. The deploy finds no repository
     # here, and leaves them.
@@ -191,7 +195,7 @@ pkgs.testers.runNixOSTest {
         assert "A small, finite website" in home, home
         about = get(site, "/about/")
         assert "<h1>About</h1>" in about, about
-        assert "No posts yet." in get(site, "/log/")
+        assert "<h1>Log</h1>" in get(site, "/log/")
         assert "<feed" in get(site, "/feed.xml")
 
     with subtest("the real site's headers"):
@@ -240,11 +244,20 @@ pkgs.testers.runNixOSTest {
         out = micropub(broken, token, "-w ' %{http_code}'")
         assert out.endswith("400") and "missing summary" in out, out
 
+    deploys = lambda: site.succeed("systemctl show -p InvocationID --value personal-blog-deploy.service").strip()
+    before = deploys()
+
     with subtest("the receiver commits a post"):
         out = micropub(post, token, "-D -", "-o /dev/null")
         assert "202" in out and "Location: https://bw20.test/log/from-the-vm/" in out, out
         assert site.succeed("git -c safe.directory='*' --git-dir /var/lib/personal-blog-receiver/remote.git log -1 --format=%s") == "publish: from-the-vm\n"
         text = site.succeed("git -c safe.directory='*' --git-dir /var/lib/personal-blog-receiver/remote.git show main:content/log/from-the-vm/index.md")
         assert 'generator = "micropub"' in text and "Said in a VM." in text, text
+
+    with subtest("a post the receiver pushed starts the deploy at once"):
+        site.wait_until_succeeds(
+            f"test \"$(systemctl show -p InvocationID --value personal-blog-deploy.service)\" != '{before}'",
+            timeout=30,
+        )
   '';
 }

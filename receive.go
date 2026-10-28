@@ -80,6 +80,14 @@ func (r receiver) run() error {
 		Check: check,
 		Media: filepath.Join(*r.state, "media"),
 		Now:   time.Now,
+		// The file the module's path unit watches: a change to it starts the
+		// deploy (nix/module.nix).
+		Pushed: func() {
+			stamp := []byte(time.Now().UTC().Format(time.RFC3339) + "\n")
+			if err := os.WriteFile(filepath.Join(*r.state, "pushed"), stamp, 0o600); err != nil {
+				log.Printf("couldn't say it pushed: %v", err)
+			}
+		},
 	}
 
 	l, err := listen(*r.listen)

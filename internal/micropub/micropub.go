@@ -46,6 +46,9 @@ type Server struct {
 	Check   func(content fs.FS) error // the site's checks, on all of content/
 	Media   string                    // the folder uploads wait in
 	Now     func() time.Time
+	// Pushed, when set, is called after each push of a change: the module
+	// starts the deploy on it, rather than wait for the deploy's timer.
+	Pushed func()
 
 	mu sync.Mutex // one request at a time changes the repository
 }
@@ -187,6 +190,9 @@ func (s *Server) change(make func(content fs.FS) (Changes, string, string, error
 			return "", invalid("%v", err)
 		}
 		if last = s.Repo.Commit(message, changes); last == nil {
+			if s.Pushed != nil {
+				s.Pushed()
+			}
 			return slug, nil
 		}
 		log.Printf("%s: %v; trying again", message, last)

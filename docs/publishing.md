@@ -25,7 +25,9 @@ For each request, one at a time:
 4. Commit, as `publish: <slug>`, `update: <slug>`, `withdraw: <slug>` or
    `restore: <slug>`, and push. A rejected push is fetched and tried once
    more.
-5. Answer: `202 Accepted` for a new post, `204 No Content` for the rest.
+5. Write the time to `pushed` in its state directory, which starts the
+   deploy at once ([Deployment](architecture.md#deployment)).
+6. Answer: `202 Accepted` for a new post, `204 No Content` for the rest.
 
 | Micropub | This site |
 | --- | --- |

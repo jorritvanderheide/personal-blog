@@ -121,10 +121,11 @@ in
     deploy = {
       interval = lib.mkOption {
         type = lib.types.str;
-        default = "1min";
+        default = "5min";
         description = ''
           How long after one look at the repository the deploy looks again.
-          A push is live within this and a build.
+          A push from elsewhere, such as a laptop, is live within this and a
+          build. A post the receiver takes starts the deploy at once.
         '';
       };
 
@@ -357,6 +358,19 @@ in
         # systemd owns the socket: only the proxy's group may open it, and the
         # proxy keeps its connection while the receiver restarts after a
         # deploy.
+        # A post the receiver pushed is built at once, not at the timer's next
+        # look: it writes the time to `pushed` after each push, and a change to
+        # that file starts the deploy. A deploy already running takes the start
+        # as its own, and a commit that came in during it waits for the timer.
+        systemd.paths.personal-blog-pushed = {
+          description = "Start the BW20 personal blog's deploy when the receiver has pushed";
+          wantedBy = [ "paths.target" ];
+          pathConfig = {
+            PathChanged = "/var/lib/personal-blog-receiver/pushed";
+            Unit = "personal-blog-deploy.service";
+          };
+        };
+
         systemd.sockets.personal-blog-receiver = {
           description = "BW20 personal blog receiver socket";
           wantedBy = [ "sockets.target" ];

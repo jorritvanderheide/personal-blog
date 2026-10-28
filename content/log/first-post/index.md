@@ -1,10 +1,10 @@
 +++
 title = "First post"
 summary = "lab coats"
-date = 2026-10-28T10:11:24Z
+date = 2026-10-28T11:01:15Z
+threads = ["sustainability", "tech"]
 generator = "micropub"
 references = ["geelsVirtualLabCoats2024", "hoepmanAuthenticityEffectiveAntidote2025"]
-draft = true
 +++
 
 ([2024, 4](#ref-geelsVirtualLabCoats2024)) is a paper.

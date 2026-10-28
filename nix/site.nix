@@ -1,7 +1,7 @@
 {
   lib,
   runCommand,
-  personal-blog,
+  program,
   # The commit count, the build number at the foot of every page
   # (docs/architecture.md, Time). From the flake, not a counter file, so the
   # same commit gives the same site.
@@ -15,6 +15,6 @@ let
     fileset = ../content;
   };
 in
-runCommand "site" { nativeBuildInputs = [ personal-blog ]; } ''
+runCommand "site" { nativeBuildInputs = [ program ]; } ''
   personal-blog -content ${src}/content -out $out -build ${toString build}
 ''

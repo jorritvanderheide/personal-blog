@@ -1,7 +1,6 @@
 {
   lib,
   buildGoModule,
-  git,
 }:
 let
   root = ../.;
@@ -12,7 +11,7 @@ buildGoModule {
 
   # The program only: everything but content/, so a commit that only changes
   # posts finds it in the store already. The templates under web/ are
-  # embedded in it.
+  # embedded in it. small-press comes as go.mod pins it.
   src = lib.fileset.toSource {
     inherit root;
     fileset = lib.fileset.unions [
@@ -23,10 +22,7 @@ buildGoModule {
     ];
   };
 
-  vendorHash = "sha256-pRmtJsS55ntxO0Hs3Ig2EPTB/pnYN5dVkUZ7MW7Zhps=";
-
-  # The receiver's tests run git against a repository on disk.
-  nativeCheckInputs = [ git ];
+  vendorHash = "sha256-kF8dR4jTDWJtXau1rLOO8cAMfJ13q1X1ryJzmb5rnFg=";
 
   env.CGO_ENABLED = 0;
   ldflags = [

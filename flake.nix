@@ -13,17 +13,20 @@
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
     in
     {
-      # What the deploy builds (nix/module.nix): the program, and the site
-      # it makes from content/.
+      # What the deploy builds (small-press's module): the program, and the
+      # site it makes from content/.
       packages = forAllSystems (
         pkgs:
         let
-          personal-blog = pkgs.callPackage ./nix/package.nix { };
+          program = pkgs.callPackage ./nix/package.nix { };
         in
         {
-          inherit personal-blog;
+          inherit program;
+          # The name the module before small-press built, until dapple runs
+          # small-press's: take it out then.
+          personal-blog = program;
           site = pkgs.callPackage ./nix/site.nix {
-            inherit personal-blog;
+            inherit program;
             # A working copy with changes has no count: no build number then.
             build = self.revCount or 0;
           };
@@ -31,24 +34,16 @@
         }
       );
 
-      nixosModules.default = ./nix/module.nix;
-
-      # The program's tests run in its build; the site's build is the real
-      # content's, which fails on a post the site can't take.
+      # The program's tests run in its build, small-press's own in
+      # small-press; the site's build is the real content's, which fails on a
+      # post the site can't take.
       checks = forAllSystems (pkgs: {
-        inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) personal-blog site;
-        module = import ./nix/test.nix {
-          inherit pkgs;
-          module = self.nixosModules.default;
-          inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) site personal-blog;
-          content = ./content;
-        };
+        inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) program site;
       });
 
       devShells = forAllSystems (pkgs: {
         default = pkgs.mkShell {
           packages = with pkgs; [
-            git # the receiver's tests
             go
             gopls
           ];

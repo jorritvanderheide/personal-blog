@@ -5,8 +5,9 @@
 One Go program reads a folder of Markdown and writes a static site, which
 nginx serves. Posts are written in Obsidian and published with the
 [In the Open](https://codeberg.org/BW20/obsidian-in-the-open) plugin, over
-Micropub, with their citations already formatted. See
-[Running it](#1-running-it).
+Micropub, with their citations already formatted. The program is built on
+[small-press](https://codeberg.org/BW20/small-press), with this site's own
+pages. See [Running it](#1-running-it).
 
 <br/>
 
@@ -29,8 +30,8 @@ away, because a citation has to keep working.
 
 ## 1 Running it
 
-**On a server**, the site runs on NixOS from this flake's module:
-`services.personal-blog`, nginx serving the site, which the host builds
+**On a server**, the site runs on NixOS from small-press's module:
+`services.small-press.sites`, nginx serving the site, which the host builds
 itself from every push. See [Deployment](docs/architecture.md#deployment).
 
 **To work on it**, `nix develop` gives everything, and `nix run .#dev` serves
@@ -67,10 +68,12 @@ page.
 
 For whoever works on the site:
 
-- [**Architecture**](docs/architecture.md) - What the site is made of, what
-  a post looks like, the rules the build keeps to, and deployment.
-- [**Publishing**](docs/publishing.md) - The receiver: how a post from
-  In the Open becomes a commit.
+- [**Architecture**](docs/architecture.md) - What is this site's own: its
+  program, its pages and how they look, and how it moves to a new commit of
+  small-press.
+- [**small-press**](https://codeberg.org/BW20/small-press) - The rest: the
+  content's format, the rules the build keeps to, the receiver that takes a
+  post from In the Open, and deployment.
 
 <br/>
 

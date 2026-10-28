@@ -1,2 +1,5 @@
 result
 .direnv/
+# small-press from ../small-press, as you work on both (docs/architecture.md)
+go.work
+go.work.sum

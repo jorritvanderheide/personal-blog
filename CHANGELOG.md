@@ -29,3 +29,5 @@ goes live, and from then on each heading is the date a change went live.
   notice saying when it was withdrawn, and why.
 - A post can be a draft first: at its address, but in none of the lists,
   the feed or the sitemap, until In the Open publishes it.
+- The program is built on small-press, a library other sites share, with
+  this site's own pages on top; the site it builds is the same, to the byte.

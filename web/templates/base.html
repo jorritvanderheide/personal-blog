@@ -7,7 +7,7 @@
 <meta name="description" content="{{.Description}}">
 {{if .NoIndex}}<meta name="robots" content="noindex">
 {{else}}<link rel="canonical" href="{{abs .Path}}">
-{{end}}<link rel="stylesheet" href="{{.CSS}}">
+{{end}}<link rel="stylesheet" href="{{asset "site.css"}}">
 <link rel="alternate" type="application/atom+xml" href="/feed.xml" title="{{.Site.Config.Title}}">
 <link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
 <meta property="og:site_name" content="{{.Site.Config.Title}}">

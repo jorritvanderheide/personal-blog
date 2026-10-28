@@ -32,6 +32,9 @@ type request struct {
 	Replace    map[string][]json.RawMessage `json:"replace"`
 	Add        json.RawMessage              `json:"add"`
 	Delete     json.RawMessage              `json:"delete"`
+	// Overwrite says to replace a post even when it was edited elsewhere
+	// since the receiver last wrote it.
+	Overwrite bool `json:"mp-overwrite"`
 }
 
 // reference is one entry of the references extension.
@@ -266,6 +269,18 @@ func (s *Server) edit(fsys fs.FS, req request) (Changes, string, string, error) 
 		return changes, "restore: " + slug, slug, s.writePost(changes, slug, fm, body, post.Images)
 	}
 
+	// An update replaces the whole post, so one edited by hand since, or by
+	// another tool, is refused unless the request says to replace it: the
+	// person publishing is asked, rather than losing the edit without a word.
+	if !req.Overwrite {
+		commit, err := s.Repo.EditedElsewhere("log/" + slug + "/index.md")
+		if err != nil {
+			return nil, "", "", err
+		}
+		if commit != "" {
+			return nil, "", "", conflict("log/%s was edited elsewhere since it was last published (commit %s): publishing the note again replaces that edit", slug, commit)
+		}
+	}
 	if len(req.Add) > 0 || len(req.Delete) > 0 {
 		return nil, "", "", invalid("an update replaces what changed (replace): add and delete aren't taken")
 	}

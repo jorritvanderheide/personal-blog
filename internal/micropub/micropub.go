@@ -32,6 +32,9 @@ type Repo interface {
 	Content() fs.FS
 	// Commit writes the changes into content/, commits them, and pushes.
 	Commit(message string, changes Changes) error
+	// EditedElsewhere is the commit that last changed a file under content/,
+	// when the receiver didn't make it, or "" when it did.
+	EditedElsewhere(name string) (string, error)
 }
 
 // Changes are files under content/, by path, and what they become: nil to
@@ -64,6 +67,10 @@ func (e *apiError) Error() string { return e.description }
 
 func invalid(format string, args ...any) error {
 	return &apiError{http.StatusBadRequest, "invalid_request", fmt.Sprintf(format, args...)}
+}
+
+func conflict(format string, args ...any) error {
+	return &apiError{http.StatusConflict, "conflict", fmt.Sprintf(format, args...)}
 }
 
 func forbidden(format string, args ...any) error {

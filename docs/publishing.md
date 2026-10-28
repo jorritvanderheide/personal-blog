@@ -52,6 +52,12 @@ For each request, one at a time:
   of it is `403`. Every post the receiver writes has
   `generator = 'micropub'`. An update keeps what the receiver doesn't
   take from a request: the date, the slug, the aliases and a `doi`.
+- **A post edited elsewhere** since the receiver last wrote it, by hand or by
+  another tool, isn't replaced without asking: an update is `409 Conflict`,
+  naming the commit, unless it says `"mp-overwrite": true`, which In the Open
+  sends once you agree. Who last changed it is `git log`'s author of its
+  `index.md`: anyone but the receiver's `author`. Withdrawing or restoring it
+  keeps its text, so isn't refused.
 - **Requests are JSON**, as In the Open sends them, and an update replaces
   what changed (`replace`); `add` and `delete` aren't taken. `q=source`
   answers with the post as it is in the repository, or only the properties

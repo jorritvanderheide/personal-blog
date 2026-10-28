@@ -8,6 +8,7 @@ import (
 	"net/mail"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -23,14 +24,39 @@ type GitRepo struct {
 }
 
 func (g *GitRepo) git(args ...string) error {
+	_, err := g.output(args...)
+	return err
+}
+
+// output runs git, and is what it wrote, or an error with what it said.
+func (g *GitRepo) output(args ...string) (string, error) {
 	cmd := exec.Command("git", append([]string{"-C", g.Dir}, args...)...)
 	cmd.Env = append(os.Environ(), g.Env...)
-	var out bytes.Buffer
-	cmd.Stdout, cmd.Stderr = &out, &out
+	var out, said bytes.Buffer
+	cmd.Stdout, cmd.Stderr = &out, &said
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("git %s: %w: %s", args[0], err, strings.TrimSpace(out.String()))
+		return "", fmt.Errorf("git %s: %w: %s", args[0], err, strings.TrimSpace(said.String()+out.String()))
 	}
-	return nil
+	return out.String(), nil
+}
+
+// EditedElsewhere is the commit that last changed a file under content/,
+// when someone other than the receiver made it, or "" when the receiver did,
+// or the file has no history yet.
+func (g *GitRepo) EditedElsewhere(name string) (string, error) {
+	author, err := mail.ParseAddress(g.Author)
+	if err != nil {
+		return "", fmt.Errorf("the author %q isn't Name <address>: %w", g.Author, err)
+	}
+	out, err := g.output("log", "-1", "--format=%h %ae", "--", path.Join("content", name))
+	if err != nil {
+		return "", err
+	}
+	commit, email, _ := strings.Cut(strings.TrimSpace(out), " ")
+	if commit == "" || strings.EqualFold(email, author.Address) {
+		return "", nil
+	}
+	return commit, nil
 }
 
 // Sync clones the repository the first time, and after that fetches the

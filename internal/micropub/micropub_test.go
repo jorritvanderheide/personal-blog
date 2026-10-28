@@ -32,8 +32,11 @@ var now = time.Date(2026, 10, 28, 9, 30, 0, 0, time.UTC)
 type memRepo struct {
 	files    fstest.MapFS
 	messages []string
-	refuse   int // pushes to refuse first, as when something else was pushed
+	refuse   int               // pushes to refuse first, as when something else was pushed
+	edited   map[string]string // files last changed by someone else, and the commit
 }
+
+func (m *memRepo) EditedElsewhere(name string) (string, error) { return m.edited[name], nil }
 
 func (m *memRepo) Sync() error    { return nil }
 func (m *memRepo) Content() fs.FS { return m.files }
@@ -43,6 +46,7 @@ func (m *memRepo) Commit(message string, changes Changes) error {
 		return errors.New("rejected: fetch first")
 	}
 	for name, data := range changes {
+		delete(m.edited, name)
 		if data == nil {
 			delete(m.files, name)
 		} else {
@@ -371,6 +375,25 @@ func TestGitRepo(t *testing.T) {
 	if _, err := fs.Stat(g.Content(), "threads.toml"); err != nil {
 		t.Error("Sync didn't take the other push")
 	}
+
+	// Who last changed a post: the receiver, then someone else.
+	if commit, err := g.EditedElsewhere("log/quiet/index.md"); err != nil || commit != "" {
+		t.Errorf("after the receiver: %q, %v", commit, err)
+	}
+	os.WriteFile(filepath.Join(seed, "content", "log", "quiet", "index.md"), []byte("fixed by hand"), 0o644)
+	run("-C", seed, "add", ".")
+	run("-C", seed, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "typo")
+	run("-C", seed, "push", "-q", remote, "main")
+	if err := g.Sync(); err != nil {
+		t.Fatal(err)
+	}
+	want := strings.TrimSpace(run("--git-dir", remote, "log", "-1", "--format=%h"))
+	if commit, err := g.EditedElsewhere("log/quiet/index.md"); err != nil || commit != want {
+		t.Errorf("after a hand edit: %q, %v, want %s", commit, err, want)
+	}
+	if commit, _ := g.EditedElsewhere("log/none/index.md"); commit != "" {
+		t.Errorf("a file with no history: %q", commit)
+	}
 }
 
 // Pushed is called once for each change pushed, and not for one refused or
@@ -478,4 +501,23 @@ func TestSource(t *testing.T) {
 	)
 	expect(t, do(s, http.MethodGet, "/micropub?q=source&properties[]=name&properties[]=nope&url="+base+"/log/quiet/", ""), http.StatusOK,
 		`{"properties":{"name":["The NixOS module system is a quiet revolution"]}}`)
+}
+
+// A post edited elsewhere since the receiver wrote it isn't replaced without
+// being asked; withdrawing it doesn't replace its text, so isn't refused.
+func TestEditedElsewhere(t *testing.T) {
+	s, repo := setup(t)
+	expect(t, do(s, http.MethodPost, "/micropub", create(quiet(upload(t, s)))), http.StatusAccepted)
+	repo.edited = map[string]string{"log/quiet/index.md": "3f2a1b9"}
+	update := func(overwrite string) string {
+		return `{"action": "update", "url": "` + base + `/log/quiet/",` + overwrite + ` "replace": {"content": ["Again, as [(Marsh 2020)](#ref-marsh2020) says."]}}`
+	}
+	expect(t, do(s, http.MethodPost, "/micropub", update("")), http.StatusConflict, `"error":"conflict"`, "log/quiet was edited elsewhere since it was last published (commit 3f2a1b9)")
+	expect(t, do(s, http.MethodPost, "/micropub", update(` "mp-overwrite": true,`)), http.StatusNoContent)
+	file(t, repo, "log/quiet/index.md", "Again, as")
+	// Written by the receiver again, so the next update goes through.
+	expect(t, do(s, http.MethodPost, "/micropub", update("")), http.StatusNoContent)
+
+	repo.edited = map[string]string{"log/quiet/index.md": "4a5b6c7"}
+	expect(t, do(s, http.MethodPost, "/micropub", `{"action": "delete", "url": "`+base+`/log/quiet/"}`), http.StatusNoContent)
 }

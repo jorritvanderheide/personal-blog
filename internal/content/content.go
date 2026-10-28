@@ -43,6 +43,7 @@ type Config struct {
 type Author struct {
 	Given  string `toml:"given"`
 	Family string `toml:"family"`
+	ORCID  string `toml:"orcid"` // 0009-0005-6464-7721, optional
 }
 
 // Name is the author's name as it is written: "Jorrit van der Heide".
@@ -68,6 +69,7 @@ type Post struct {
 	Generator  string    `toml:"generator"`
 	References []string  `toml:"references"`
 	Withdrawn  time.Time `toml:"withdrawn"`
+	DOI        string    `toml:"doi"` // 10.64000/…, once it has one
 
 	Body   []byte            `toml:"-"`
 	Images map[string][]byte `toml:"-"` // by file name
@@ -99,6 +101,10 @@ var (
 	namePattern = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)*$`)
 	// A work's citation key, as Better BibTeX writes it.
 	keyPattern = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
+	// A DOI, as it is registered: 10.64000/abcd-1234.
+	doiPattern = regexp.MustCompile(`^10\.\d{4,9}/\S+$`)
+	// An ORCID iD's shape; its last character is a check digit (IsORCID).
+	orcidPattern = regexp.MustCompile(`^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$`)
 )
 
 // IsName says whether s can be a slug, a page's name or a thread's name.
@@ -207,6 +213,9 @@ func readPost(fsys fs.FS, e fs.DirEntry, dir string) (Post, error) {
 			if err := required(map[string]bool{"title": p.Title != "", "summary": p.Summary != "", "date": !p.Date.IsZero()}); err != nil {
 				errs = append(errs, fmt.Errorf("index.md: %w", err))
 			}
+			if p.DOI != "" && !doiPattern.MatchString(p.DOI) {
+				errs = append(errs, fmt.Errorf("index.md: doi %q isn't a DOI: 10.<number>/<suffix>, without https://doi.org/", p.DOI))
+			}
 		case !f.IsDir() && slices.Contains(imageExts, strings.ToLower(path.Ext(f.Name()))):
 			data, err := fs.ReadFile(fsys, name)
 			if err != nil {
@@ -301,6 +310,9 @@ func (c Config) check() error {
 	if !strings.HasPrefix(c.URL, "https://") || strings.HasSuffix(c.URL, "/") {
 		return errors.New("url is the site's https:// address, without a slash at the end")
 	}
+	if c.Author.ORCID != "" && !IsORCID(c.Author.ORCID) {
+		return fmt.Errorf("author.orcid %q isn't an ORCID iD: four groups of four digits, as 0009-0005-6464-7721, whose last digit checks the others", c.Author.ORCID)
+	}
 	for _, m := range c.Menu {
 		if m.Name == "" || !strings.HasPrefix(m.Link, "/") {
 			return errors.New("each menu entry has a name, and a link on the site, starting with /")
@@ -380,4 +392,23 @@ func decode(data []byte, v any) error {
 		return fmt.Errorf("unknown field %s", strings.Join(keys, ", "))
 	}
 	return nil
+}
+
+// IsORCID says whether s is an ORCID iD: its shape, and its check digit, ISO
+// 7064 MOD 11-2 over the fifteen digits before it.
+func IsORCID(s string) bool {
+	if !orcidPattern.MatchString(s) {
+		return false
+	}
+	digits := strings.ReplaceAll(s, "-", "")
+	total := 0
+	for _, d := range digits[:15] {
+		total = (total + int(d-'0')) * 2
+	}
+	check := (12 - total%11) % 11
+	want := byte('0' + check)
+	if check == 10 {
+		want = 'X'
+	}
+	return digits[15] == want
 }

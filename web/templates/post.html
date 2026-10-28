@@ -5,6 +5,8 @@
 <meta name="citation_publication_date" content="{{.Post.Date.Format "2006/01/02"}}">
 <meta name="citation_public_url" content="{{abs .Post.Path}}">
 <meta name="citation_language" content="en">
+{{with .Post.DOI}}<meta name="citation_doi" content="{{.}}">
+{{end}}
 {{range .References}}<meta name="citation_reference" content="{{.Plain}}">
 {{end}}<script type="application/ld+json">{{.JSONLD}}</script>
 {{end}}
@@ -12,7 +14,7 @@
 <article>
 <header>
 <h1>{{.Post.Title}}</h1>
-<p class="meta"><time datetime="{{iso .Post.Date}}">{{season .Post.Date}}</time>{{if not .Post.Updated.IsZero}}, updated <time datetime="{{iso .Post.Updated}}">{{season .Post.Updated}}</time>{{end}}{{with .Post.ThreadList}}, in {{range $i, $t := .}}{{if $i}}, {{end}}<a href="{{$t.Path}}">{{$t.Name}}</a>{{end}}{{end}}</p>
+<p class="meta"><time datetime="{{iso .Post.Date}}">{{date .Post.Date}}</time>{{if not .Post.Updated.IsZero}}, updated <time datetime="{{iso .Post.Updated}}">{{date .Post.Updated}}</time>{{end}}{{with .Post.ThreadList}}, in {{range $i, $t := .}}{{if $i}}, {{end}}<a href="{{$t.Path}}">{{$t.Name}}</a>{{end}}{{end}}</p>
 </header>
 {{.Text}}
 {{with .References}}<section aria-labelledby="references">

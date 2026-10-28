@@ -71,6 +71,10 @@ func (w *Work) Path() string { return "/works/" + w.Key + "/" }
 // Files at the site's root, which a link may go to.
 var rootFiles = []string{"/feed.xml", "/sitemap.xml", "/robots.txt"}
 
+// The ids a post's page has for its own sections (web/templates/post.html),
+// which a heading in its text can't have too.
+var sectionIDs = []string{"references", "linked-from", "cite"}
+
 // Names a page can't have: the site's own folders are there.
 var reserved = []string{"log", "threads", "works", "static", "nginx"}
 
@@ -192,6 +196,11 @@ func New(c *content.Site) (*Site, error) {
 		file := "log/" + p.Slug + "/index.md"
 		for _, problem := range p.Doc.Problems() {
 			fail(file, "%s", problem)
+		}
+		for _, h := range p.Doc.Headings() {
+			if slices.Contains(sectionIDs, h.ID) {
+				fail(file, "heading %q would have the id %s, which the page has for its own section: call it something else", h.Words, h.ID)
+			}
 		}
 		cited := map[string]bool{}
 		used := map[string]bool{}

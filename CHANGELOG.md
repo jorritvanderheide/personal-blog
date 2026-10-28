@@ -12,4 +12,13 @@ goes live, and from then on each heading is the date a change went live.
 - Every post has a `cite.bib`, and the tags Google Scholar and Zotero read.
 - A citation links to its reference, in the post's own list, with the reference
   as its tooltip; the reference links on to every post that cites the work.
+- A post's own page gives its exact date, and when it was updated; the
+  lists keep their seasons.
+- Every heading in a post can be linked to, as `/log/<slug>/#<heading>`.
+- A post can have a DOI, which its citation, `cite.bib` and citation tags
+  then give.
+- The author's ORCID iD, in the feed, the page's metadata and at the foot of
+  every page; the feed also has each post's threads and the licence.
+- Pages print well, or save as PDF: without the menu, with web links'
+  addresses written out.
 - The library is a page now, without its threads.

@@ -117,6 +117,9 @@ func TestNewErrors(t *testing.T) {
 		{"a text's problems", func(c *content.Site) {
 			c.Posts[0].Body = []byte("# Again")
 		}, "log/older/index.md: heading \"Again\" is a level 1 heading"},
+		{"a heading with a section's id", func(c *content.Site) {
+			c.Posts[0].Body = []byte("## References")
+		}, `log/older/index.md: heading "References" would have the id references`},
 		{"a page's problems", func(c *content.Site) {
 			c.Pages[0].Body = []byte("<b>x</b>")
 		}, "pages/about.md: raw HTML"},

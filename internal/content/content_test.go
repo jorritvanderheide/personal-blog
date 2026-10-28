@@ -167,3 +167,40 @@ name = 'quiet'
 		}
 	}
 }
+
+func TestIsORCID(t *testing.T) {
+	for _, id := range []string{"0009-0005-6464-7721", "0000-0002-1825-0097", "0000-0001-5109-3700", "0000-0002-1694-233X"} {
+		if !IsORCID(id) {
+			t.Errorf("IsORCID(%q) = false, want true", id)
+		}
+	}
+	for _, id := range []string{"0009-0005-6464-7722", "0000-0002-1825-0098", "0009000564647721", "https://orcid.org/0009-0005-6464-7721", ""} {
+		if IsORCID(id) {
+			t.Errorf("IsORCID(%q) = true, want false", id)
+		}
+	}
+}
+
+func TestReadORCIDAndDOI(t *testing.T) {
+	fsys := site()
+	fsys["site.toml"] = &fstest.MapFile{Data: []byte(strings.Replace(siteTOML, "family = 'van der Heide'", "family = 'van der Heide'\norcid = '0009-0005-6464-7722'", 1))}
+	fsys["log/doi/index.md"] = &fstest.MapFile{Data: []byte("+++\ntitle = 'A'\nsummary = 'B'\ndate = 2025-01-01T00:00:00Z\ndoi = 'https://doi.org/10.64000/x'\n+++\n")}
+	_, err := Read(fsys)
+	for _, want := range []string{"site.toml: author.orcid \"0009-0005-6464-7722\" isn't an ORCID iD", `log/doi: index.md: doi "https://doi.org/10.64000/x" isn't a DOI`} {
+		if err == nil || !strings.Contains(err.Error(), want) {
+			t.Errorf("err = %v, want one saying %q", err, want)
+		}
+	}
+
+	fsys = site()
+	fsys["site.toml"] = &fstest.MapFile{Data: []byte(strings.Replace(siteTOML, "family = 'van der Heide'", "family = 'van der Heide'\norcid = '0009-0005-6464-7721'", 1))}
+	fsys["log/doi/index.md"] = &fstest.MapFile{Data: []byte("+++\ntitle = 'A'\nsummary = 'B'\ndate = 2025-01-01T00:00:00Z\ndoi = '10.64000/abcd-1234'\n+++\n")}
+	s, err := Read(fsys)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// By slug: another, doi, quiet.
+	if s.Config.Author.ORCID != "0009-0005-6464-7721" || s.Posts[1].DOI != "10.64000/abcd-1234" {
+		t.Errorf("ORCID %q, DOI %q", s.Config.Author.ORCID, s.Posts[1].DOI)
+	}
+}

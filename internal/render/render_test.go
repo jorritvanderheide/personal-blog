@@ -166,3 +166,24 @@ func TestHTMLLink(t *testing.T) {
 		}
 	}
 }
+
+func TestHeadings(t *testing.T) {
+	doc := Parse([]byte("## The method\n\nText.\n\n## The method\n\n### What *we* found"))
+	got := doc.Headings()
+	want := []Heading{{"The method", "the-method"}, {"The method", "the-method-1"}, {"What we found", "what-we-found"}}
+	if len(got) != len(want) {
+		t.Fatalf("Headings = %+v", got)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Errorf("heading %d = %+v, want %+v", i, got[i], want[i])
+		}
+	}
+	html, err := doc.HTML(Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(html), `<h2 id="the-method">The method</h2>`) {
+		t.Errorf("no id in\n%s", html)
+	}
+}

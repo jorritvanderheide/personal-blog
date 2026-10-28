@@ -37,7 +37,7 @@ func sample(t *testing.T) *site.Site {
 	c := &content.Site{
 		Config: content.Config{
 			Title: "BW20", URL: "https://bw20.nl", Description: "A small, finite website.",
-			Author: content.Author{Given: "Jorrit", Family: "van der Heide"},
+			Author: content.Author{Given: "Jorrit", Family: "van der Heide", ORCID: "0009-0005-6464-7721"},
 			Menu:   []content.MenuItem{{Name: "log", Link: "/log/"}, {Name: "about", Link: "/about/"}},
 		},
 		Threads: []content.Thread{{Name: "tech", Description: "Notes on NixOS."}},
@@ -46,6 +46,7 @@ func sample(t *testing.T) *site.Site {
 		Posts: []content.Post{
 			{Slug: "quiet", Title: "The NixOS module system is a quiet revolution", Summary: "Why it matters.",
 				Date: time.Date(2026, 3, 15, 10, 0, 0, 0, time.UTC), Threads: []string{"tech"}, Aliases: []string{"nixos"},
+				DOI:        "10.64000/abcd-1234",
 				References: []string{"marsh2020"},
 				Body:       []byte("As [(Marsh 2020, 12)](#ref-marsh2020) says, and [before](https://bw20.nl/log/older/).\n\n![A raised bed](bed.jpg)\n\n## More"),
 				Images:     map[string][]byte{"bed.jpg": photo(t)}},
@@ -100,7 +101,14 @@ func TestPost(t *testing.T) {
 		`<link rel="canonical" href="https://bw20.nl/log/quiet/">`,
 		`<link rel="stylesheet" href="/static/site.css?v=`,
 		`<a href="/log/" aria-current="page">log</a>`,
-		`<time datetime="2026-03-15">early spring 2026</time>`,
+		`<time datetime="2026-03-15">15 March 2026</time>`,
+		`<meta name="citation_doi" content="10.64000/abcd-1234">`,
+		`<a href="https://doi.org/10.64000/abcd-1234">https://doi.org/10.64000/abcd-1234</a>`,
+		`"sameAs":"https://orcid.org/0009-0005-6464-7721"`,
+		`"identifier":"https://doi.org/10.64000/abcd-1234"`,
+		`<link rel="license" href="https://creativecommons.org/licenses/by/4.0/">`,
+		`<a rel="author" href="https://orcid.org/0009-0005-6464-7721">Jorrit van der Heide</a>`,
+		`<h2 id="more">More</h2>`,
 		`in <a href="/threads/tech/">tech</a>`,
 		`<a href="#ref-marsh2020" title="Marsh, Ann. 2020. Archives &amp; Readers.">(Marsh 2020, 12)</a>`,
 		`<a href="/log/older/">before</a>`,
@@ -128,6 +136,7 @@ func TestCiteBib(t *testing.T) {
 		"  author = {van der Heide, Jorrit},\n",
 		"  title = {{The NixOS module system is a quiet revolution}},\n",
 		"  date = {2026-03-15},\n",
+		"  doi = {10.64000/abcd-1234},\n",
 		"  url = {https://bw20.nl/log/quiet/},\n",
 	)
 	if got := bibEscape(`50% & $5_#{x}`); got != `50\% \& \$5\_\#\{x\}` {
@@ -137,7 +146,7 @@ func TestCiteBib(t *testing.T) {
 
 func TestWithdrawn(t *testing.T) {
 	files := build(t)
-	contains(t, files, "log/gone/index.html", `<meta name="robots" content="noindex">`, "withdrawn in", `<time datetime="2026-04-01">mid spring 2026</time>`)
+	contains(t, files, "log/gone/index.html", `<meta name="robots" content="noindex">`, "withdrawn on", `<time datetime="2026-04-01">1 April 2026</time>`)
 	lacks(t, files, "log/gone/index.html", "Secret words", `rel="canonical"`)
 	contains(t, files, "log/gone/cite.bib", "@online{gone,")
 	// Off every list.
@@ -149,7 +158,7 @@ func TestWithdrawn(t *testing.T) {
 func TestLists(t *testing.T) {
 	files := build(t)
 	contains(t, files, "index.html", "<title>BW20</title>", "A small, finite website.", `<a href="/log/quiet/">`, `<a class="name" href="/" aria-current="page">`)
-	contains(t, files, "log/index.html", "<h2>2026</h2>", "<h2>2025</h2>")
+	contains(t, files, "log/index.html", "<h2>2026</h2>", "<h2>2025</h2>", `<time datetime="2026-03-15">early spring 2026</time>`)
 	contains(t, files, "threads/tech/index.html", "<h1>tech</h1>", "Notes on NixOS.", `<a href="/log/quiet/">`)
 	contains(t, files, "works/marsh2020/index.html", "<em>Archives &amp; Readers</em>", "Cited in", `<a href="/log/quiet/">`)
 	contains(t, files, "about/index.html", "<h1>About</h1>", "<p>Who, why.</p>", `<a href="/about/" aria-current="page">about</a>`)
@@ -165,6 +174,9 @@ func TestFeeds(t *testing.T) {
 		"&lt;img src=&#34;bed.png&#34;",
 		// As new as the newest post, not the build.
 		"<updated>2026-03-15T10:00:00Z</updated>",
+		"<uri>https://orcid.org/0009-0005-6464-7721</uri>",
+		`<category term="tech"></category>`,
+		"<rights>CC BY 4.0: https://creativecommons.org/licenses/by/4.0/</rights>",
 	)
 	contains(t, files, "sitemap.xml", "<loc>https://bw20.nl/log/quiet/</loc>", "<lastmod>2026-03-15</lastmod>", "<loc>https://bw20.nl/works/marsh2020/</loc>")
 }

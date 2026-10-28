@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"codeberg.org/BW20/personal-blog/internal/content"
 	"codeberg.org/BW20/personal-blog/internal/render"
 	"codeberg.org/BW20/personal-blog/internal/site"
 )
@@ -22,6 +23,7 @@ type atomFeed struct {
 	Subtitle string      `xml:"subtitle"`
 	ID       string      `xml:"id"`
 	Updated  string      `xml:"updated"`
+	Rights   string      `xml:"rights"`
 	Links    []atomLink  `xml:"link"`
 	Author   atomAuthor  `xml:"author"`
 	Entries  []atomEntry `xml:"entry"`
@@ -34,16 +36,22 @@ type atomLink struct {
 
 type atomAuthor struct {
 	Name string `xml:"name"`
+	URI  string `xml:"uri,omitempty"` // the author's ORCID iD, as an address
+}
+
+type atomCategory struct {
+	Term string `xml:"term,attr"`
 }
 
 type atomEntry struct {
-	Title     string      `xml:"title"`
-	ID        string      `xml:"id"`
-	Link      atomLink    `xml:"link"`
-	Published string      `xml:"published"`
-	Updated   string      `xml:"updated"`
-	Summary   string      `xml:"summary"`
-	Content   atomContent `xml:"content"`
+	Title      string         `xml:"title"`
+	ID         string         `xml:"id"`
+	Link       atomLink       `xml:"link"`
+	Published  string         `xml:"published"`
+	Updated    string         `xml:"updated"`
+	Categories []atomCategory `xml:"category"`
+	Summary    string         `xml:"summary"`
+	Content    atomContent    `xml:"content"`
 }
 
 type atomContent struct {
@@ -62,7 +70,8 @@ func feed(s *site.Site, text func(*site.Post) (string, error)) ([]byte, error) {
 	f := atomFeed{
 		Title: c.Title, Subtitle: c.Description, ID: c.URL + "/",
 		Links:  []atomLink{{Href: c.URL + "/feed.xml", Rel: "self"}, {Href: c.URL + "/"}},
-		Author: atomAuthor{Name: c.Author.Name()},
+		Author: atomAuthor{Name: c.Author.Name(), URI: orcidURL(c)},
+		Rights: license,
 	}
 	var newest time.Time
 	for _, p := range s.Posts {
@@ -78,11 +87,17 @@ func feed(s *site.Site, text func(*site.Post) (string, error)) ([]byte, error) {
 		if updated.After(newest) {
 			newest = updated
 		}
+		// Its threads, which Rogue Scholar reads as the post's tags.
+		var categories []atomCategory
+		for _, t := range p.ThreadList {
+			categories = append(categories, atomCategory{Term: t.Name})
+		}
 		f.Entries = append(f.Entries, atomEntry{
 			Title: p.Title, ID: url, Link: atomLink{Href: url},
 			Published: p.Date.Format(stamp), Updated: updated.Format(stamp),
-			Summary: p.Summary,
-			Content: atomContent{Type: "html", Base: url, Text: html},
+			Categories: categories,
+			Summary:    p.Summary,
+			Content:    atomContent{Type: "html", Base: url, Text: html},
 		})
 	}
 	// No post yet: the epoch, which the first post replaces.
@@ -205,3 +220,14 @@ func aliasRedirects(s *site.Site) []byte {
 // plainReference is a work's reference as plain text, for a tooltip or a
 // citation_reference tag.
 func plainReference(w *site.Work) string { return render.Plain(w.Text) }
+
+// license is what posts are under, as the feed and every page say.
+const license = "CC BY 4.0: https://creativecommons.org/licenses/by/4.0/"
+
+// orcidURL is the author's ORCID iD as an address, or "" without one.
+func orcidURL(c content.Config) string {
+	if c.Author.ORCID == "" {
+		return ""
+	}
+	return "https://orcid.org/" + c.Author.ORCID
+}

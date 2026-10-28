@@ -49,7 +49,8 @@ For each request, one at a time:
   numbered: slugs never change, so you choose.
 - **A post without `generator`** is hand-written, and an update or withdrawal
   of it is `403`. Every post the receiver writes has
-  `generator = 'micropub'`.
+  `generator = 'micropub'`. An update keeps what the receiver doesn't
+  take from a request: the date, the slug, the aliases and a `doi`.
 - **Requests are JSON**, as In the Open sends them, and an update replaces
   what changed (`replace`); `add` and `delete` aren't taken, nor `q=source`.
   A slug, a date and an alias never change through the receiver.

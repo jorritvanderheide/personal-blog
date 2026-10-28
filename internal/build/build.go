@@ -111,8 +111,10 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 	funcs := template.FuncMap{
 		"season": season,
 		"iso":    func(t time.Time) string { return t.Format("2006-01-02") },
-		"stamp":  func(t time.Time) string { return t.Format(stamp) },
-		"abs":    func(p string) string { return s.Config.URL + p },
+		// The exact date, on a post's own page, where a reader citing it needs it.
+		"date":  func(t time.Time) string { return t.Format("2 January 2006") },
+		"stamp": func(t time.Time) string { return t.Format(stamp) },
+		"abs":   func(p string) string { return s.Config.URL + p },
 		// A menu entry is the current one on its page and the pages under
 		// it: the log's on every post.
 		"current": func(link, at string) bool { return link == at || link != "/" && strings.HasPrefix(at, link) },

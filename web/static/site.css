@@ -236,3 +236,66 @@ footer.site {
     transition: none !important;
   }
 }
+
+/* Printed, or saved as PDF: the text, its references and how to cite it, in
+   black on white, without the menu, and each web link's address after it,
+   so a printed copy still says where its sources are. */
+@media print {
+  :root {
+    --paper: #fff;
+    --ink: #000;
+    --muted: #333;
+    --line: #999;
+    --accent: #000;
+    color-scheme: light;
+  }
+
+  html {
+    font-size: 11pt;
+  }
+
+  body {
+    max-width: none;
+    padding: 0;
+  }
+
+  .skip,
+  header.site nav,
+  details {
+    display: none;
+  }
+
+  header.site {
+    margin-bottom: 1.5rem;
+  }
+
+  main a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    overflow-wrap: anywhere;
+  }
+
+  /* "Where it’s cited" leads to another page: on paper, it leads nowhere. */
+  ul.references .cited {
+    display: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  img,
+  pre,
+  table,
+  blockquote,
+  ul.references li {
+    break-inside: avoid;
+  }
+
+  img {
+    mix-blend-mode: normal;
+    opacity: 1;
+  }
+}

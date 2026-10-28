@@ -9,6 +9,7 @@
 {{else}}<link rel="canonical" href="{{abs .Path}}">
 {{end}}<link rel="stylesheet" href="{{.CSS}}">
 <link rel="alternate" type="application/atom+xml" href="/feed.xml" title="{{.Site.Config.Title}}">
+<link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
 <meta property="og:site_name" content="{{.Site.Config.Title}}">
 <meta property="og:title" content="{{or .Title .Site.Config.Title}}">
 <meta property="og:description" content="{{.Description}}">
@@ -29,7 +30,7 @@
 {{template "main" .}}
 </main>
 <footer class="site">
-<p>{{if .Build}}Build {{.Build}}. {{end}}Posts under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. <a href="/feed.xml">Feed</a>.</p>
+<p>By {{with .Site.Config.Author.ORCID}}<a rel="author" href="https://orcid.org/{{.}}">{{$.Site.Config.Author.Name}}</a>{{else}}{{.Site.Config.Author.Name}}{{end}}. Posts under <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. <a href="/feed.xml">Feed</a>.{{if .Build}} Build {{.Build}}.{{end}}</p>
 </footer>
 </body>
 </html>

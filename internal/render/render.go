@@ -15,6 +15,7 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/text"
 )
 
@@ -26,6 +27,9 @@ var markdown = goldmark.New(
 		extension.Strikethrough,
 		extension.Footnote,
 	),
+	// Every heading an id made from its words, so a section can be linked to
+	// and cited.
+	goldmark.WithParserOptions(parser.WithAutoHeadingID()),
 )
 
 // A Doc is a Markdown text, parsed.
@@ -203,4 +207,25 @@ func words(n ast.Node, src []byte) string {
 func Plain(src string) string {
 	d := Parse([]byte(src))
 	return strings.TrimSpace(words(d.root, d.src))
+}
+
+// A Heading is a heading in a text: its words, and the id it is written
+// with.
+type Heading struct {
+	Words string
+	ID    string
+}
+
+// Headings lists the text's headings, in order.
+func (d *Doc) Headings() []Heading {
+	var headings []Heading
+	ast.Walk(d.root, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
+		if h, ok := n.(*ast.Heading); ok && entering {
+			id, _ := h.AttributeString("id")
+			value, _ := id.([]byte)
+			headings = append(headings, Heading{Words: words(h, d.src), ID: string(value)})
+		}
+		return ast.WalkContinue, nil
+	})
+	return headings
 }

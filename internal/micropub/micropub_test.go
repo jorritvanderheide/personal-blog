@@ -399,3 +399,14 @@ func TestImageInAngleBrackets(t *testing.T) {
 	staged := strings.TrimPrefix(image, base+"/micropub/media/")
 	file(t, repo, "log/quiet/index.md", "![A raised bed]("+staged[:12]+".png)")
 }
+
+// An update keeps a DOI given by hand: the receiver takes none from a request.
+func TestUpdateKeepsDOI(t *testing.T) {
+	s, repo := setup(t)
+	expect(t, do(s, http.MethodPost, "/micropub", create(quiet(upload(t, s)))), http.StatusAccepted)
+	index := repo.files["log/quiet/index.md"]
+	index.Data = []byte(strings.Replace(string(index.Data), "generator = ", "doi = \"10.64000/abcd-1234\"\ngenerator = ", 1))
+	update := `{"action": "update", "url": "` + base + `/log/quiet/", "replace": {"content": ["Changed, as [(Marsh 2020)](#ref-marsh2020) says."]}}`
+	expect(t, do(s, http.MethodPost, "/micropub", update), http.StatusNoContent)
+	file(t, repo, "log/quiet/index.md", `doi = "10.64000/abcd-1234"`, "Changed, as")
+}

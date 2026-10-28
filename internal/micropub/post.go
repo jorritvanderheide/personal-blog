@@ -51,6 +51,7 @@ type frontMatter struct {
 	Generator  string     `toml:"generator"`
 	References []string   `toml:"references,omitempty"`
 	Withdrawn  *time.Time `toml:"withdrawn,omitempty"`
+	DOI        string     `toml:"doi,omitempty"`
 }
 
 // work is works/<key>.toml.
@@ -207,6 +208,7 @@ func (s *Server) edit(fsys fs.FS, req request) (Changes, string, string, error) 
 		Title: post.Title, Summary: post.Summary, Date: post.Date, Updated: optional(post.Updated),
 		Threads: post.Threads, Aliases: post.Aliases, Generator: Generator,
 		References: post.References, Withdrawn: optional(post.Withdrawn),
+		DOI: post.DOI,
 	}
 	body := string(post.Body)
 	changes := Changes{}

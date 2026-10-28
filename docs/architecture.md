@@ -40,7 +40,7 @@ content/
   pages/<name>.md         about, colophon, library: pages outside the log
   works/<key>.toml        a work a post cites, formatted once
   threads.toml            each thread's name and description
-  site.toml               the site's name, address, author, line and menu
+  site.toml               the site's name, address, author and ORCID, line and menu
 ```
 
 Nothing else belongs in `content/`: anything else there fails the build, so
@@ -68,6 +68,7 @@ threads = ['tech']
 aliases = []                       # optional, earlier slugs
 generator = 'micropub'             # set by the receiver, absent on hand-written posts
 references = ['marsh2020']         # keys of the works cited, in reference-list order
+doi = '10.64000/abcd-1234'          # optional, once the post has one
 withdrawn = 2026-11-02T08:00:00Z   # optional, when the post was withdrawn
 +++
 ```
@@ -78,6 +79,9 @@ withdrawn = 2026-11-02T08:00:00Z   # optional, when the post was withdrawn
   order of the reference list.
 - `generator` marks what the receiver may replace or withdraw. It never
   touches a post without it.
+- `doi` is the post's DOI, once it has one: from Rogue Scholar, which
+  registers one for each post it archives. It is set by hand, and the
+  receiver keeps it when it updates the post.
 
 ### Works
 
@@ -136,8 +140,9 @@ Images are Markdown images of files in the post's folder.
 
 From top to bottom:
 
-1. The title, the date as a season (*early spring 2026*, the exact date in
-   `<time datetime>`), and its threads.
+1. The title, the exact date (*15 March 2026*, in `<time datetime>`), when
+   it was updated, if it was, and its threads. A reader citing it needs the
+   date as it is.
 2. The text, with footnotes.
 3. **References**: `references` in order, each with `id="ref-<key>"`, which
    the in-text citations link to, with the reference as their tooltip. Each
@@ -145,7 +150,12 @@ From top to bottom:
 4. **Linked from**: every post whose body links to this one, newest first.
    Left out when there is none.
 5. **Cite this post**: one formatted citation, in a fixed author-date form,
-   and the BibTeX entry in a `<details>`, with a link to `cite.bib`.
+   and the BibTeX entry in a `<details>`, with a link to `cite.bib`. With
+   a DOI, the citation and the entry give the DOI rather than the address.
+
+Every heading in the text has an `id`, made from its words, so a section can
+be linked to and cited: `/log/<slug>/#method`. One the page uses for its own
+sections (`references`, `linked-from`, `cite`) fails the build.
 
 ### A withdrawn post
 
@@ -170,22 +180,31 @@ Making a post easy to cite is a feature of every page, not a page of its own.
   Highwire set, which Google Scholar reads and Zotero's connector saves with
   one click, with Jorrit van der Heide as the author. Also schema.org
   `BlogPosting` as JSON-LD, and Open Graph.
+  With a DOI, `citation_doi` too.
+- **The author's ORCID iD**, `orcid` in `site.toml`, in the JSON-LD, the
+  feed's `<author>`, and a link at the foot of every page. It is checked when
+  the site is read, check digit and all, so a typo fails the build rather
+  than point at someone else.
 - **`cite.bib`** next to each post, and the same entry on the page.
 - **Stable URLs**, by the rule above, and a canonical link on every page.
-- **The feed has every post in full**, with a stable `<id>` per post, which is
-  what [Rogue Scholar](https://rogue-scholar.org) needs to archive the blog
-  and give each post a DOI. Joining it is a later choice; nothing here stops
-  it.
-- **Posts are under CC BY 4.0**, as Rogue Scholar asks. The code is
-  EUPL-1.2.
+- **The feed has every post in full**, with a stable `<id>` per post, its
+  threads as `<category>` and the licence as `<rights>`, which is what
+  [Rogue Scholar](https://rogue-scholar.org) needs to archive the blog and
+  give each post a DOI. Joining it is a later choice; nothing here stops it.
+- **Posts are under CC BY 4.0**, as Rogue Scholar asks, which every page
+  says with `rel="license"`. The code is EUPL-1.2.
+- **A page prints as it should** (`@media print`): the text, its references
+  and how to cite it, without the menu, and with each web link's address
+  after it, so "Save as PDF" gives a copy fit to file.
 
 ## Time
 
 Nothing on the site depends on when it is built: a Nix build is pure, and
 the same commit gives the same site.
 
-- **Dates as seasons.** A post shows its date as a season, *early spring
-  2026*, with the exact date in `<time datetime>`, as on the old site.
+- **Dates as seasons, in the lists.** The log, the home page and the
+  threads give a post's date as a season, *early spring 2026*, as on the old
+  site. A post's own page gives it exactly.
 - **Posts stay.** They don't fade or expire: a post may be cited, and a
   citation has to keep working.
 - **The build number** at the foot of every page is the commit count
@@ -213,7 +232,7 @@ the same commit gives the same site.
   for a year; everything else is revalidated (`Cache-Control: no-cache`),
   which its ETag answers.
 - **CSS is written by hand**, with no build step: custom properties, mobile
-  first, `:focus-visible`, `prefers-reduced-motion`.
+  first, `:focus-visible`, `prefers-reduced-motion`, and print.
 - **Accessible by default:** a skip link, `aria-current` in the menu, a
   heading order that holds, alt text required on every image.
 

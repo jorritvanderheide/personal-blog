@@ -293,3 +293,28 @@ func TestWorkURL(t *testing.T) {
 		}
 	}
 }
+
+// A thread only a post names gets a page; one only a draft names isn't
+// announced in the sitemap.
+func TestThreadFromPost(t *testing.T) {
+	c := &content.Site{
+		Config: content.Config{Title: "BW20", URL: "https://bw20.nl", Description: "A site.", Author: content.Author{Given: "J", Family: "H"}},
+		Posts: []content.Post{
+			{Slug: "open", Title: "Open", Summary: "S", Date: time.Date(2026, 3, 1, 10, 0, 0, 0, time.UTC), Threads: []string{"open-science"}, Body: []byte("Words.")},
+			{Slug: "soon", Title: "Soon", Summary: "S", Date: time.Date(2026, 3, 2, 10, 0, 0, 0, time.UTC), Threads: []string{"later"}, Draft: true, Body: []byte("Words.")},
+		},
+	}
+	s, err := site.New(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	files, err := Site(s, web.Files, Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	contains(t, files, "threads/open-science/index.html", "<h1>open-science</h1>", `content="Posts in open-science."`, `<a href="/log/open/">`)
+	lacks(t, files, "threads/open-science/index.html", `<p class="lead">`)
+	contains(t, files, "threads/later/index.html", "No posts in this thread yet.")
+	contains(t, files, "sitemap.xml", "<loc>https://bw20.nl/threads/open-science/</loc>")
+	lacks(t, files, "sitemap.xml", "/threads/later/")
+}

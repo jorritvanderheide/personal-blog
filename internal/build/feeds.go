@@ -138,8 +138,12 @@ func sitemap(s *site.Site) ([]byte, error) {
 	for _, p := range s.Pages {
 		set.URLs = append(set.URLs, siteURL{Loc: u + p.Path()})
 	}
+	// A thread no live post is in only when threads.toml keeps it: a draft's
+	// alone isn't announced.
 	for _, t := range s.Threads {
-		set.URLs = append(set.URLs, siteURL{Loc: u + t.Path()})
+		if len(t.Posts) > 0 || t.Listed {
+			set.URLs = append(set.URLs, siteURL{Loc: u + t.Path()})
+		}
 	}
 	for _, w := range s.Works {
 		set.URLs = append(set.URLs, siteURL{Loc: u + w.Path()})

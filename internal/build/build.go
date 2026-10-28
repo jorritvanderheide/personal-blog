@@ -177,7 +177,11 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 	}
 
 	for _, t := range s.Threads {
-		write(path.Join("threads", t.Name, "index.html"), "thread", page{Path: t.Path(), Title: t.Name, Description: t.Description, Thread: t, Posts: t.Posts})
+		description := t.Description
+		if description == "" {
+			description = "Posts in " + t.Name + "."
+		}
+		write(path.Join("threads", t.Name, "index.html"), "thread", page{Path: t.Path(), Title: t.Name, Description: description, Thread: t, Posts: t.Posts})
 	}
 	for _, w := range s.Works {
 		html, err := render.Inline(w.Text)

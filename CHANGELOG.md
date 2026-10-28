@@ -22,6 +22,9 @@ goes live, and from then on each heading is the date a change went live.
 - Pages print well, or save as PDF: without the menu, with web links'
   addresses written out.
 - The library is a page now, without its threads.
+- A thread exists while a post uses it: publishing a post with a new one
+  makes it, without editing `threads.toml`, which now only describes, orders
+  or keeps a thread.
 - A withdrawn post keeps its text, as a retracted article does, under a
   notice saying when it was withdrawn, and why.
 - A post can be a draft first: at its address, but in none of the lists,

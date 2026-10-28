@@ -34,7 +34,7 @@ For each request, one at a time:
 | `name` | `title` |
 | `summary` | `summary`, required as for every post |
 | `content` | the body of `content/log/<slug>/index.md` |
-| `category` | `threads`, each one in `threads.toml` |
+| `category` | `threads`; a new one becomes a thread of the site, and `q=category` lists every thread |
 | `mp-slug` | the slug, else one made from the title |
 | `published` | `date` |
 | `updated` | `updated` |

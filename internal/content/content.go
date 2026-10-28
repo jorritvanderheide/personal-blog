@@ -84,7 +84,9 @@ type Page struct {
 	Body  []byte `toml:"-"`
 }
 
-// A Thread is one of threads.toml's.
+// A Thread is one of threads.toml's. A thread exists while a post names it;
+// threads.toml only describes one, puts it in order, or keeps its page when
+// no post names it any more.
 type Thread struct {
 	Name        string `toml:"name"`
 	Description string `toml:"description"`
@@ -157,6 +159,28 @@ func Read(fsys fs.FS) (*Site, error) {
 		fail("site.toml", errors.New("missing"))
 	}
 	return s, errors.Join(errs...)
+}
+
+// ThreadNames is every thread: threads.toml's, in its order, then the others
+// a post names, by name.
+func (s *Site) ThreadNames() []string {
+	names := []string{}
+	seen := map[string]bool{}
+	for _, t := range s.Threads {
+		names = append(names, t.Name)
+		seen[t.Name] = true
+	}
+	var named []string
+	for _, p := range s.Posts {
+		for _, name := range p.Threads {
+			if !seen[name] {
+				seen[name] = true
+				named = append(named, name)
+			}
+		}
+	}
+	slices.Sort(named)
+	return append(names, named...)
 }
 
 // readAll reads each entry of dir with read, which knows what an entry must
@@ -296,8 +320,6 @@ func readThreads(fsys fs.FS, name string) ([]Thread, error) {
 			errs = append(errs, fmt.Errorf("thread %d: a thread's name is lowercase letters, digits and hyphens", i+1))
 		case seen[t.Name]:
 			errs = append(errs, fmt.Errorf("thread %s: listed twice", t.Name))
-		case t.Description == "":
-			errs = append(errs, fmt.Errorf("thread %s: missing description", t.Name))
 		}
 		seen[t.Name] = true
 	}

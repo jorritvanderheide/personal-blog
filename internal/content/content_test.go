@@ -161,10 +161,25 @@ description = 'C'
 name = 'quiet'
 `)}
 	_, err := Read(fsys)
-	for _, want := range []string{"thread tech: listed twice", "thread 3: a thread's name is lowercase", "thread quiet: missing description"} {
+	for _, want := range []string{"thread tech: listed twice", "thread 3: a thread's name is lowercase"} {
 		if err == nil || !strings.Contains(err.Error(), want) {
 			t.Errorf("err = %v, want one saying %q", err, want)
 		}
+	}
+	// A thread without a description is fine: threads.toml only keeps it.
+	if err != nil && strings.Contains(err.Error(), "quiet") {
+		t.Errorf("err = %v, wants a description", err)
+	}
+}
+
+// Every thread: threads.toml's in its order, then the ones only posts name.
+func TestThreadNames(t *testing.T) {
+	s := &Site{
+		Threads: []Thread{{Name: "tech"}, {Name: "garden"}},
+		Posts:   []Post{{Threads: []string{"tech", "open-science"}}, {Threads: []string{"art", "open-science"}}},
+	}
+	if got := strings.Join(s.ThreadNames(), " "); got != "tech garden art open-science" {
+		t.Errorf("ThreadNames = %s", got)
 	}
 }
 

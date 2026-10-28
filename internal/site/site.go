@@ -54,7 +54,8 @@ func (p *Page) Path() string { return "/" + p.Name + "/" }
 // A Thread is a thread with its live posts, newest first.
 type Thread struct {
 	content.Thread
-	Posts []*Post
+	Posts  []*Post
+	Listed bool // in threads.toml, which keeps its page when no post is in it
 }
 
 // Path is where the thread is on the site.
@@ -88,11 +89,20 @@ func New(c *content.Site) (*Site, error) {
 		errs = append(errs, fmt.Errorf("%s: %s", file, fmt.Sprintf(format, args...)))
 	}
 
-	threads := map[string]*Thread{}
+	// Every thread a post names, and threads.toml's, described there or not.
+	listed := map[string]content.Thread{}
 	for _, t := range c.Threads {
-		th := &Thread{Thread: t}
+		listed[t.Name] = t
+	}
+	threads := map[string]*Thread{}
+	for _, name := range c.ThreadNames() {
+		t, ok := listed[name]
+		if !ok {
+			t = content.Thread{Name: name}
+		}
+		th := &Thread{Thread: t, Listed: ok}
 		s.Threads = append(s.Threads, th)
-		threads[t.Name] = th
+		threads[name] = th
 	}
 	works := map[string]*Work{}
 	for _, w := range c.Works {
@@ -141,8 +151,8 @@ func New(c *content.Site) (*Site, error) {
 		}
 		for _, name := range p.Threads {
 			t := threads[name]
-			if t == nil {
-				fail(file, "thread %s isn't in threads.toml", name)
+			if !content.IsName(name) {
+				fail(file, "thread %q isn't a name: lowercase letters, digits and hyphens, as tech or open-science", name)
 				continue
 			}
 			p.ThreadList = append(p.ThreadList, t)

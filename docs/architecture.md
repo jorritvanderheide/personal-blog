@@ -39,13 +39,21 @@ content/
   log/<slug>/index.md     a post, with its images next to it
   pages/<name>.md         about, colophon, library: pages outside the log
   works/<key>.toml        a work a post cites, formatted once
-  threads.toml            each thread's name and description
+  threads.toml            optional: a thread's description, their order, or a page kept
   site.toml               the site's name, address, author and ORCID, line and menu
 ```
 
 Nothing else belongs in `content/`: anything else there fails the build, so
 a file in the wrong place is found rather than left out. A slug, a page's
 name and a thread's name are lowercase letters, digits and hyphens.
+
+A thread exists while a post names it: a post published with a new one makes
+its page, and when no post names it any more, the page goes. Nothing about a
+post depends on its threads, so no post's address changes. `threads.toml`
+only describes a thread, puts the threads in order (the ones it doesn't list
+come after, by name), or keeps a thread's page when no post is in it, such as
+one the menu links to. A thread only a draft names has a page, for the draft's
+own, but isn't in the sitemap.
 
 The directory name is the post's slug, and **a slug never changes**: people
 cite the URL. A post that must move lists its old slugs under `aliases`, and
@@ -135,7 +143,7 @@ Images are Markdown images of files in the post's folder.
 | `/log/` | Every post, newest first, grouped by year. |
 | `/log/<slug>/` | A post: its text, references, "Linked from", and "Cite this post". |
 | `/log/<slug>/cite.bib` | The post as a BibTeX entry. |
-| `/threads/<thread>/` | The posts in a thread, under its description. |
+| `/threads/<thread>/` | The posts in a thread, under its description if `threads.toml` gives one. |
 | `/works/<key>/` | A work you cited: its reference, and every post that cites it. |
 | `/<name>/` | A page from `content/pages/`. |
 | `/feed.xml` | Atom, every post in full. |
@@ -238,8 +246,9 @@ the same commit gives the same site.
   runs it.
 - **A broken site does not build.** A link to a post that does not exist, a
   citation without a reference, a reference never cited, a reference with no
-  work in `content/works/`, a thread not in `threads.toml`, a duplicate slug
-  or alias: each fails the build with the file it is in.
+  work in `content/works/`, a thread whose name isn't a name, a link to a
+  thread no post names and `threads.toml` doesn't keep, a duplicate slug or
+  alias: each fails the build with the file it is in.
 - **Rendered into memory, written at the end.** A template error never
   leaves half a site in the output.
 - **Links are safe.** Only `http`, `https`, `mailto`, site-relative links

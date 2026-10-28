@@ -1,6 +1,7 @@
 package site
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -99,9 +100,9 @@ func TestNewErrors(t *testing.T) {
 		{"reference twice", func(c *content.Site) {
 			c.Posts[1].References = []string{"marsh2020", "marsh2020"}
 		}, "reference marsh2020 is listed twice"},
-		{"thread not in threads.toml", func(c *content.Site) {
-			c.Posts[0].Threads = []string{"cooking"}
-		}, "log/older/index.md: thread cooking isn't in threads.toml"},
+		{"a thread that isn't a name", func(c *content.Site) {
+			c.Posts[0].Threads = []string{"Cooking"}
+		}, `log/older/index.md: thread "Cooking" isn't a name`},
 		{"alias that is a slug", func(c *content.Site) {
 			c.Posts[0].Aliases = []string{"newer"}
 		}, "log/older/index.md: alias newer is another post's slug"},
@@ -187,5 +188,23 @@ func TestDraft(t *testing.T) {
 	}
 	if len(s.Works[0].CitedBy) != 1 || s.Works[0].CitedBy[0] != newer {
 		t.Errorf("CitedBy = %v, want newer only", s.Works[0].CitedBy)
+	}
+}
+
+// A thread a post names exists without threads.toml; one threads.toml lists
+// exists without a post.
+func TestThreadFromPost(t *testing.T) {
+	c := sample()
+	c.Posts[0].Threads = []string{"tech", "open-science"}
+	s, err := New(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var names []string
+	for _, th := range s.Threads {
+		names = append(names, fmt.Sprintf("%s:%v:%d", th.Name, th.Listed, len(th.Posts)))
+	}
+	if got := strings.Join(names, " "); got != "tech:true:2 garden:true:1 open-science:false:1" {
+		t.Errorf("threads = %s", got)
 	}
 }

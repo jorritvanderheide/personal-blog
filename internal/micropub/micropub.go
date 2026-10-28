@@ -145,11 +145,7 @@ func (s *Server) query(w http.ResponseWriter, r *http.Request) error {
 		if err != nil {
 			return err
 		}
-		categories := []string{}
-		for _, t := range site.Threads {
-			categories = append(categories, t.Name)
-		}
-		return writeJSON(w, map[string]any{"categories": categories})
+		return writeJSON(w, map[string]any{"categories": site.ThreadNames()})
 	default:
 		return invalid("q=%s isn't something this site answers: it answers q=config, q=category and q=source", q)
 	}

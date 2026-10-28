@@ -221,7 +221,7 @@ func TestCreateRefused(t *testing.T) {
 		says   string
 	}{
 		{"no summary", func(p map[string]any) { delete(p, "summary") }, "log/quiet: index.md: missing summary"},
-		{"unknown thread", func(p map[string]any) { p["category"] = []any{"cooking"} }, "thread cooking isn't in threads.toml"},
+		{"a thread that isn't a name", func(p map[string]any) { p["category"] = []any{"Cooking"} }, `thread \"Cooking\" isn't a name`},
 		{"citation without reference", func(p map[string]any) { delete(p, "references") }, `citation \"(Marsh 2020, 12)\" of marsh2020 has no reference`},
 		{"slug taken", func(p map[string]any) { p["mp-slug"] = "hand" }, "slug hand is taken"},
 		{"bad slug", func(p map[string]any) { p["mp-slug"] = "../hand" }, "is lowercase letters"},
@@ -520,4 +520,14 @@ func TestEditedElsewhere(t *testing.T) {
 
 	repo.edited = map[string]string{"log/quiet/index.md": "4a5b6c7"}
 	expect(t, do(s, http.MethodPost, "/micropub", `{"action": "delete", "url": "`+base+`/log/quiet/"}`), http.StatusNoContent)
+}
+
+// A category a post names becomes one of the site's, and q=category says so.
+func TestNewCategory(t *testing.T) {
+	s, repo := setup(t)
+	p := quiet(upload(t, s))
+	p["category"] = []any{"tech", "open-science"}
+	expect(t, do(s, http.MethodPost, "/micropub", create(p)), http.StatusAccepted)
+	file(t, repo, "log/quiet/index.md", `threads = ["tech", "open-science"]`)
+	expect(t, do(s, http.MethodGet, "/micropub?q=category", ""), http.StatusOK, `"categories":["tech","open-science"]`)
 }

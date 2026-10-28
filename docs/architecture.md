@@ -84,11 +84,12 @@ store already and builds in seconds. `site` is that program run over
 
 small-press comes as `go.mod` pins it. To work on both at once, a `go.work`
 next to `go.mod`, ignored by `.gitignore`, uses `../small-press`; Nix
-doesn't see it. To move to a new commit of small-press, as its
+doesn't see it. To move to a new release of small-press, as its
 [Sites](https://codeberg.org/BW20/small-press/src/branch/main/docs/sites.md)
-page says: `GOWORK=off go get codeberg.org/BW20/small-press@main` and
-`GOWORK=off go mod tidy`, then the `vendorHash` in `nix/package.nix` that
-`nix build .#program` gives, and `./check.sh` and `nix flake check`.
+page says: `GOWORK=off go get codeberg.org/BW20/small-press@v<version>` and
+`GOWORK=off go mod tidy`, then `vendorHash` in `nix/package.nix` set to
+`lib.fakeHash` and to what `nix build .#program` gives, and `./check.sh`
+and `nix flake check`.
 
 ## Deployment
 

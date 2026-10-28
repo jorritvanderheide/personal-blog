@@ -52,6 +52,7 @@ type frontMatter struct {
 	References []string   `toml:"references,omitempty"`
 	Withdrawn  *time.Time `toml:"withdrawn,omitempty"`
 	DOI        string     `toml:"doi,omitempty"`
+	Draft      bool       `toml:"draft,omitempty"`
 }
 
 // work is works/<key>.toml.
@@ -110,6 +111,19 @@ func (p props) references() ([]reference, bool, error) {
 		}
 	}
 	return refs, true, nil
+}
+
+// draft reads post-status: whether the post is a draft, and whether the
+// request says.
+func (p props) draft() (bool, bool, error) {
+	status, ok, err := p.str("post-status")
+	if !ok || err != nil {
+		return false, false, err
+	}
+	if status != "published" && status != "draft" {
+		return false, false, invalid("post-status is published or draft")
+	}
+	return status == "draft", true, nil
 }
 
 func (p props) time(name string) (time.Time, bool, error) {
@@ -178,6 +192,9 @@ func (s *Server) create(fsys fs.FS, req request) (Changes, string, string, error
 	} else if ok {
 		fm.Updated = optional(t)
 	}
+	if fm.Draft, _, err = p.draft(); err != nil {
+		return nil, "", "", err
+	}
 	changes := Changes{}
 	if err := s.setReferences(changes, &fm, p); err != nil {
 		return nil, "", "", err
@@ -185,22 +202,35 @@ func (s *Server) create(fsys fs.FS, req request) (Changes, string, string, error
 	if err := s.writePost(changes, slug, fm, body, nil); err != nil {
 		return nil, "", "", err
 	}
+	if fm.Draft {
+		return changes, "draft: " + slug, slug, nil
+	}
 	return changes, "publish: " + slug, slug, nil
 }
 
-// edit updates, withdraws or restores a post the receiver wrote.
+// find is the post at url, by its slug.
+func (s *Server) find(site *content.Site, url string) (content.Post, error) {
+	slug, ok := strings.CutPrefix(url, s.BaseURL+"/log/")
+	slug = strings.TrimSuffix(slug, "/")
+	i := slices.IndexFunc(site.Posts, func(p content.Post) bool { return p.Slug == slug })
+	if !ok || i < 0 {
+		return content.Post{}, invalid("there's no post at %s", url)
+	}
+	return site.Posts[i], nil
+}
+
+// edit updates, withdraws or restores a post the receiver wrote, publishes
+// a draft, or discards one.
 func (s *Server) edit(fsys fs.FS, req request) (Changes, string, string, error) {
 	site, err := readSite(fsys)
 	if err != nil {
 		return nil, "", "", err
 	}
-	slug, ok := strings.CutPrefix(req.URL, s.BaseURL+"/log/")
-	slug = strings.TrimSuffix(slug, "/")
-	i := slices.IndexFunc(site.Posts, func(p content.Post) bool { return p.Slug == slug })
-	if !ok || i < 0 {
-		return nil, "", "", invalid("there's no post at %s", req.URL)
+	post, err := s.find(site, req.URL)
+	if err != nil {
+		return nil, "", "", err
 	}
-	post := site.Posts[i]
+	slug := post.Slug
 	if post.Generator != Generator {
 		return nil, "", "", forbidden("log/%s is written by hand, so it's changed by hand", slug)
 	}
@@ -208,11 +238,22 @@ func (s *Server) edit(fsys fs.FS, req request) (Changes, string, string, error) 
 		Title: post.Title, Summary: post.Summary, Date: post.Date, Updated: optional(post.Updated),
 		Threads: post.Threads, Aliases: post.Aliases, Generator: Generator,
 		References: post.References, Withdrawn: optional(post.Withdrawn),
-		DOI: post.DOI,
+		DOI: post.DOI, Draft: post.Draft,
 	}
 	body := string(post.Body)
 	changes := Changes{}
 
+	switch {
+	case req.Action == "delete" && post.Draft:
+		// Never public, so nothing links to it or cites it: it goes.
+		changes["log/"+slug+"/index.md"] = nil
+		for name := range post.Images {
+			changes["log/"+slug+"/"+name] = nil
+		}
+		return changes, "discard: " + slug, slug, nil
+	case req.Action == "undelete" && post.Draft:
+		return nil, "", "", invalid("log/%s is a draft, which is never withdrawn, so there's nothing to restore", slug)
+	}
 	switch req.Action {
 	case "delete":
 		fm.Withdrawn = optional(s.Now().UTC().Truncate(time.Second))
@@ -227,7 +268,7 @@ func (s *Server) edit(fsys fs.FS, req request) (Changes, string, string, error) 
 	}
 	p := props(req.Replace)
 	for name := range p {
-		if !slices.Contains([]string{"name", "summary", "content", "category", "references", "updated"}, name) {
+		if !slices.Contains([]string{"name", "summary", "content", "category", "references", "updated", "post-status"}, name) {
 			return nil, "", "", invalid("%s can't be replaced: a post's slug and date never change", name)
 		}
 	}
@@ -259,7 +300,37 @@ func (s *Server) edit(fsys fs.FS, req request) (Changes, string, string, error) 
 	if err := s.setReferences(changes, &fm, p); err != nil {
 		return nil, "", "", err
 	}
-	return changes, "update: " + slug, slug, s.writePost(changes, slug, fm, body, post.Images)
+	message := "update: " + slug
+	draft, ok, err := p.draft()
+	switch {
+	case err != nil:
+		return nil, "", "", err
+	case ok && draft && !post.Draft:
+		return nil, "", "", invalid("log/%s is published, and a published post doesn't become a draft again: withdraw it instead", slug)
+	case ok && !draft && post.Draft:
+		// Its date is when it's published, and it hasn't been updated since.
+		fm.Draft, fm.Date, fm.Updated = false, s.Now().UTC().Truncate(time.Second), nil
+		message = "publish: " + slug
+	}
+	return changes, message, slug, s.writePost(changes, slug, fm, body, post.Images)
+}
+
+// source answers q=source for a post: only its post-status, which is all
+// In the Open asks.
+func (s *Server) source(fsys fs.FS, url string) (map[string]any, error) {
+	site, err := readSite(fsys)
+	if err != nil {
+		return nil, err
+	}
+	post, err := s.find(site, url)
+	if err != nil {
+		return nil, err
+	}
+	status := "published"
+	if post.Draft {
+		status = "draft"
+	}
+	return map[string]any{"properties": map[string][]string{"post-status": {status}}}, nil
 }
 
 // setReferences takes the references extension: the keys in the post's

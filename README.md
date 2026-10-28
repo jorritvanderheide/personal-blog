@@ -43,8 +43,9 @@ the site on <http://localhost:8080>, rebuilt on every request. See
 
 Posts are written in Obsidian, and the In the Open plugin sends them to the
 site's receiver, which commits them to this repository. A post is published
-when the host has built that commit. A post can be withdrawn, but never
-deleted: its address keeps working.
+when the host has built that commit. A post can be sent as a draft first,
+to see it on the site before anyone else does. A post can be withdrawn, but
+never deleted: its address keeps working.
 
 The plugin speaks [Micropub](https://www.w3.org/TR/micropub/), with one small
 extension for references, so it isn't tied to this site. To make your own

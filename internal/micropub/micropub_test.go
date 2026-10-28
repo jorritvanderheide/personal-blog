@@ -172,7 +172,10 @@ func TestQuery(t *testing.T) {
 	s, _ := setup(t)
 	expect(t, do(s, http.MethodGet, "/micropub?q=config", ""), http.StatusOK, `"media-endpoint":"https://bw20.test/micropub/media"`, `"references":1`)
 	expect(t, do(s, http.MethodGet, "/micropub?q=category", ""), http.StatusOK, `"categories":["tech"]`)
-	expect(t, do(s, http.MethodGet, "/micropub?q=source", ""), http.StatusBadRequest, "q=source isn't something this site answers")
+	expect(t, do(s, http.MethodGet, "/micropub?q=config", ""), http.StatusOK, `"post-status":["published","draft"]`)
+	expect(t, do(s, http.MethodGet, "/micropub?q=source&url="+base+"/log/hand/", ""), http.StatusOK, `{"properties":{"post-status":["published"]}}`)
+	expect(t, do(s, http.MethodGet, "/micropub?q=source&url="+base+"/log/nope/", ""), http.StatusBadRequest, "there's no post at")
+	expect(t, do(s, http.MethodGet, "/micropub?q=nope", ""), http.StatusBadRequest, "q=nope isn't something this site answers")
 }
 
 func TestCreate(t *testing.T) {
@@ -409,4 +412,50 @@ func TestUpdateKeepsDOI(t *testing.T) {
 	update := `{"action": "update", "url": "` + base + `/log/quiet/", "replace": {"content": ["Changed, as [(Marsh 2020)](#ref-marsh2020) says."]}}`
 	expect(t, do(s, http.MethodPost, "/micropub", update), http.StatusNoContent)
 	file(t, repo, "log/quiet/index.md", `doi = "10.64000/abcd-1234"`, "Changed, as")
+}
+
+// A draft is sent again while it is one, published once, and discarded
+// rather than withdrawn.
+func TestDraft(t *testing.T) {
+	s, repo := setup(t)
+	p := quiet(upload(t, s))
+	p["post-status"] = "draft"
+	expect(t, do(s, http.MethodPost, "/micropub", create(p)), http.StatusAccepted)
+	file(t, repo, "log/quiet/index.md", "draft = true", "date = 2026-10-28T09:30:00Z")
+	source := "/micropub?q=source&properties[]=post-status&url=" + base + "/log/quiet/"
+	expect(t, do(s, http.MethodGet, source, ""), http.StatusOK, `"post-status":["draft"]`)
+
+	again := `{"action": "update", "url": "` + base + `/log/quiet/", "replace": {
+		"post-status": ["draft"], "content": ["Still a draft, as [(Marsh 2020)](#ref-marsh2020) says."]}}`
+	expect(t, do(s, http.MethodPost, "/micropub", again), http.StatusNoContent)
+	file(t, repo, "log/quiet/index.md", "draft = true", "Still a draft")
+
+	// Published two days on: that is its date.
+	s.Now = func() time.Time { return now.Add(48 * time.Hour) }
+	publish := `{"action": "update", "url": "` + base + `/log/quiet/", "replace": {
+		"post-status": ["published"], "content": ["Out now, as [(Marsh 2020)](#ref-marsh2020) says."], "updated": ["2026-10-29T08:00:00Z"]}}`
+	expect(t, do(s, http.MethodPost, "/micropub", publish), http.StatusNoContent)
+	index := string(repo.files["log/quiet/index.md"].Data)
+	if strings.Contains(index, "draft") || strings.Contains(index, "updated") || !strings.Contains(index, "date = 2026-10-30T09:30:00Z") {
+		t.Errorf("published as:\n%s", index)
+	}
+	expect(t, do(s, http.MethodGet, source, ""), http.StatusOK, `"post-status":["published"]`)
+	expect(t, do(s, http.MethodPost, "/micropub", again), http.StatusBadRequest, "doesn't become a draft again")
+
+	p = quiet(upload(t, s))
+	p["mp-slug"], p["post-status"] = "second", "draft"
+	expect(t, do(s, http.MethodPost, "/micropub", create(p)), http.StatusAccepted)
+	expect(t, do(s, http.MethodPost, "/micropub", `{"action": "undelete", "url": "`+base+`/log/second/"}`), http.StatusBadRequest, "nothing to restore")
+	expect(t, do(s, http.MethodPost, "/micropub", `{"action": "delete", "url": "`+base+`/log/second/"}`), http.StatusNoContent)
+	for name := range repo.files {
+		if strings.HasPrefix(name, "log/second/") {
+			t.Errorf("%s stayed after the draft was discarded", name)
+		}
+	}
+	if got := strings.Join(repo.messages, "; "); got != "draft: quiet; update: quiet; publish: quiet; draft: second; discard: second" {
+		t.Errorf("commits = %s", got)
+	}
+
+	p["post-status"] = "private"
+	expect(t, do(s, http.MethodPost, "/micropub", create(p)), http.StatusBadRequest, "post-status is published or draft")
 }

@@ -35,8 +35,9 @@ type Post struct {
 	LinkedFrom []*Post // live posts that link to it, newest first
 }
 
-// Live says whether the post is up: not withdrawn.
-func (p *Post) Live() bool { return p.Withdrawn.IsZero() }
+// Live says whether the post is up: published, and not withdrawn. Only a
+// live post is in the site's lists, its feed and its sitemap.
+func (p *Post) Live() bool { return p.Withdrawn.IsZero() && !p.Draft }
 
 // Path is where the post is on the site.
 func (p *Post) Path() string { return "/log/" + p.Slug + "/" }
@@ -235,6 +236,10 @@ func New(c *content.Site) (*Site, error) {
 					fail(file, "link %q goes to %s, an old slug of log/%s: link to /log/%s/", l.Words, l.Dest, now, now)
 					continue
 				}
+				if to := posts[slug]; to != nil && to.Draft && p.Live() {
+					fail(file, "link %q goes to %s, which is a draft: publish it first", l.Words, l.Dest)
+					continue
+				}
 				if to := posts[slug]; to != nil && to != p && p.Live() && !slices.Contains(to.LinkedFrom, p) {
 					to.LinkedFrom = append(to.LinkedFrom, p)
 				}
@@ -266,8 +271,15 @@ func New(c *content.Site) (*Site, error) {
 			if !strings.HasPrefix(dest, "/") || strings.HasPrefix(dest, "//") {
 				continue
 			}
-			if u, err := url.Parse(dest); err != nil || !paths[u.Path] {
+			u, err := url.Parse(dest)
+			if err != nil || !paths[u.Path] {
 				fail("pages/"+p.Name+".md", "link %q goes to %s, which the site doesn't have", l.Words, l.Dest)
+				continue
+			}
+			if slug, ok := strings.CutPrefix(u.Path, "/log/"); ok {
+				if to := posts[strings.TrimSuffix(slug, "/")]; to != nil && to.Draft {
+					fail("pages/"+p.Name+".md", "link %q goes to %s, which is a draft: publish it first", l.Words, l.Dest)
+				}
 			}
 		}
 	}

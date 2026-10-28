@@ -70,6 +70,7 @@ generator = 'micropub'             # set by the receiver, absent on hand-written
 references = ['marsh2020']         # keys of the works cited, in reference-list order
 doi = '10.64000/abcd-1234'          # optional, once the post has one
 withdrawn = 2026-11-02T08:00:00Z   # optional, when the post was withdrawn
+draft = true                       # optional, until the post is published
 +++
 ```
 
@@ -82,6 +83,7 @@ withdrawn = 2026-11-02T08:00:00Z   # optional, when the post was withdrawn
 - `doi` is the post's DOI, once it has one: from Rogue Scholar, which
   registers one for each post it archives. It is set by hand, and the
   receiver keeps it when it updates the post.
+- `draft` makes the post a draft; see [A draft](#a-draft).
 
 ### Works
 
@@ -156,6 +158,21 @@ From top to bottom:
 Every heading in the text has an `id`, made from its words, so a section can
 be linked to and cited: `/log/<slug>/#method`. One the page uses for its own
 sections (`references`, `linked-from`, `cite`) fails the build.
+
+### A draft
+
+A draft is a post only its address leads to, for seeing it as readers will
+before they can. Its page is the post's, with a line saying it is a draft,
+and `noindex` for search engines. It is in none of the lists: not `/log/`,
+its threads, the feed, the sitemap, nor any "Linked from" or works page. A
+live post or a page that links to it fails the build, since the link would
+lead readers there; a draft may link to another. Its address is unlisted,
+not secret: the repository is public.
+
+The receiver publishes it when In the Open says so, and its `date` becomes
+that moment. A draft is never withdrawn: it was never public, so it is
+discarded instead, its folder deleted. A draft with `withdrawn` fails the
+build.
 
 ### A withdrawn post
 

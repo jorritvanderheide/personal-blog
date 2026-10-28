@@ -138,6 +138,14 @@ func TestNewErrors(t *testing.T) {
 		{"a reserved page name", func(c *content.Site) {
 			c.Pages = append(c.Pages, content.Page{Name: "works", Title: "W"})
 		}, "pages/works.md: a page can't be called works"},
+		{"link to a draft", func(c *content.Site) {
+			c.Posts = append(c.Posts, content.Post{Slug: "soon", Title: "Soon", Summary: "S", Date: day(10), Draft: true})
+			c.Posts[0].Body = []byte("[x](/log/soon/)")
+		}, `log/older/index.md: link "x" goes to /log/soon/, which is a draft: publish it first`},
+		{"a page's link to a draft", func(c *content.Site) {
+			c.Posts = append(c.Posts, content.Post{Slug: "soon", Title: "Soon", Summary: "S", Date: day(10), Draft: true})
+			c.Pages[0].Body = []byte("[x](https://bw20.nl/log/soon/)")
+		}, `pages/about.md: link "x" goes to https://bw20.nl/log/soon/, which is a draft`},
 		{"a menu entry to nowhere", func(c *content.Site) {
 			c.Config.Menu = append(c.Config.Menu, content.MenuItem{Name: "now", Link: "/now/"})
 		}, "site.toml: menu entry now goes to /now/"},
@@ -151,5 +159,33 @@ func TestNewErrors(t *testing.T) {
 				t.Fatalf("err = %v, want one saying %q", err, tt.want)
 			}
 		})
+	}
+}
+
+// A draft is in no list, links from it count for nothing, and it may link
+// to another draft.
+func TestDraft(t *testing.T) {
+	c := sample()
+	c.Posts = append(c.Posts,
+		content.Post{Slug: "soon", Title: "Soon", Summary: "S", Date: day(10), Threads: []string{"tech"}, Draft: true,
+			References: []string{"marsh2020"}, Body: []byte("As [(Marsh 2020)](#ref-marsh2020) says, [before](/log/older/) and [later](/log/later/).")},
+		content.Post{Slug: "later", Title: "Later", Summary: "S", Date: day(11), Draft: true, Body: []byte("Not yet.")},
+	)
+	s, err := New(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	later, soon, newer, older := s.Posts[0], s.Posts[1], s.Posts[2], s.Posts[4]
+	if soon.Live() || later.Live() || !newer.Live() {
+		t.Error("Live is wrong")
+	}
+	if tech := s.Threads[0]; len(tech.Posts) != 2 {
+		t.Errorf("tech.Posts = %v, want no draft", tech.Posts)
+	}
+	if len(older.LinkedFrom) != 1 || older.LinkedFrom[0] != newer {
+		t.Errorf("older.LinkedFrom = %v, want newer only", older.LinkedFrom)
+	}
+	if len(s.Works[0].CitedBy) != 1 || s.Works[0].CitedBy[0] != newer {
+		t.Errorf("CitedBy = %v, want newer only", s.Works[0].CitedBy)
 	}
 }

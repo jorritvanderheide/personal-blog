@@ -22,9 +22,9 @@ For each request, one at a time:
 3. Run the site's checks on `content/` with the change laid over it, in
    memory. A change that would break the build is refused with `400` and the
    build's own messages, and nothing is written.
-4. Commit, as `publish: <slug>`, `update: <slug>`, `withdraw: <slug>` or
-   `restore: <slug>`, and push. A rejected push is fetched and tried once
-   more.
+4. Commit, as `publish: <slug>`, `draft: <slug>`, `update: <slug>`,
+   `withdraw: <slug>`, `restore: <slug>` or `discard: <slug>`, and push. A
+   rejected push is fetched and tried once more.
 5. Write the time to `pushed` in its state directory, which starts the
    deploy at once ([Deployment](architecture.md#deployment)).
 6. Answer: `202 Accepted` for a new post, `204 No Content` for the rest.
@@ -38,8 +38,9 @@ For each request, one at a time:
 | `mp-slug` | the slug, else one made from the title |
 | `published` | `date` |
 | `updated` | `updated` |
+| `post-status` | `draft = true` for `draft`; for `published`, a draft's `draft` removed, and its `date` set to now |
 | `references` | the keys in `references`, and each work's `text` and `url` in `content/works/<key>.toml`; `csl` is not kept |
-| delete, undelete | `withdrawn` set or removed |
+| delete, undelete | `withdrawn` set or removed; a draft's delete removes its folder |
 
 - **The text is kept as it comes.** Citations, `#ref-<key>`, and links to
   the site's own posts are what the site reads already (the architecture's
@@ -52,8 +53,10 @@ For each request, one at a time:
   `generator = 'micropub'`. An update keeps what the receiver doesn't
   take from a request: the date, the slug, the aliases and a `doi`.
 - **Requests are JSON**, as In the Open sends them, and an update replaces
-  what changed (`replace`); `add` and `delete` aren't taken, nor `q=source`.
-  A slug, a date and an alias never change through the receiver.
+  what changed (`replace`); `add` and `delete` aren't taken. `q=source`
+  answers a post's `post-status` only, which is all In the Open asks.
+  A slug, an alias and a published post's date never change through the
+  receiver.
 - **Uploads** are PNG or JPEG, at most 20 MB. They wait in the receiver's
   state directory, named by their hash and served at their URL, and are
   removed after a day if no post takes them. Next to its post, an image is

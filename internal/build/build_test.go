@@ -32,7 +32,7 @@ func photo(t *testing.T) []byte {
 }
 
 // sample is a small site: two posts up, one older than a year, one
-// withdrawn, a page, a thread, a work, an alias and an image.
+// withdrawn, a draft, a page, a thread, a work, an alias and an image.
 func sample(t *testing.T) *site.Site {
 	c := &content.Site{
 		Config: content.Config{
@@ -54,6 +54,8 @@ func sample(t *testing.T) *site.Site {
 				Body: []byte("Old words.")},
 			{Slug: "gone", Title: "Gone", Summary: "Not any more.", Date: time.Date(2026, 2, 1, 10, 0, 0, 0, time.UTC),
 				Withdrawn: time.Date(2026, 4, 1, 10, 0, 0, 0, time.UTC), Body: []byte("Secret words.")},
+			{Slug: "soon", Title: "Soon", Summary: "Not yet.", Date: time.Date(2026, 5, 1, 10, 0, 0, 0, time.UTC), Threads: []string{"tech"},
+				Draft: true, References: []string{"marsh2020"}, Body: []byte("Draft words, as [(Marsh 2020)](#ref-marsh2020) says.")},
 		},
 	}
 	s, err := site.New(c)
@@ -153,6 +155,17 @@ func TestWithdrawn(t *testing.T) {
 	for _, name := range []string{"index.html", "log/index.html", "threads/tech/index.html", "feed.xml", "sitemap.xml"} {
 		lacks(t, files, name, "/log/gone/")
 	}
+}
+
+// A draft is a whole post at its address, and nowhere else.
+func TestDraft(t *testing.T) {
+	files := build(t)
+	contains(t, files, "log/soon/index.html", `<meta name="robots" content="noindex">`, "<strong>A draft.</strong>", "Draft words", `<li id="ref-marsh2020">`)
+	lacks(t, files, "log/soon/index.html", `rel="canonical"`)
+	for _, name := range []string{"index.html", "log/index.html", "threads/tech/index.html", "works/marsh2020/index.html", "feed.xml", "sitemap.xml"} {
+		lacks(t, files, name, "/log/soon/")
+	}
+	lacks(t, files, "log/quiet/index.html", "A draft.")
 }
 
 func TestLists(t *testing.T) {

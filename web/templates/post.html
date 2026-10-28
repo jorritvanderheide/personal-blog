@@ -15,7 +15,8 @@
 <header>
 <h1>{{.Post.Title}}</h1>
 <p class="meta"><time datetime="{{iso .Post.Date}}">{{date .Post.Date}}</time>{{if not .Post.Updated.IsZero}}, updated <time datetime="{{iso .Post.Updated}}">{{date .Post.Updated}}</time>{{end}}{{with .Post.ThreadList}}, in {{range $i, $t := .}}{{if $i}}, {{end}}<a href="{{$t.Path}}">{{$t.Name}}</a>{{end}}{{end}}</p>
-</header>
+{{if .Post.Draft}}<p class="meta"><strong>A draft.</strong> Only its address leads here: it's in none of the site's lists, nor its feed, until it's published.</p>
+{{end}}</header>
 {{.Text}}
 {{with .References}}<section aria-labelledby="references">
 <h2 id="references">References</h2>

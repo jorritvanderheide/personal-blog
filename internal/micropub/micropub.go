@@ -108,14 +108,26 @@ func (s *Server) authorized(r *http.Request) bool {
 	return ok && s.Token != "" && subtle.ConstantTimeCompare([]byte(token), []byte(s.Token)) == 1
 }
 
-// query answers q=config and q=category.
+// query answers q=config, q=category and q=source.
 func (s *Server) query(w http.ResponseWriter, r *http.Request) error {
 	switch q := r.URL.Query().Get("q"); q {
 	case "config":
 		return writeJSON(w, map[string]any{
 			"media-endpoint": s.BaseURL + mediaEndpoint,
 			"references":     1,
+			"post-status":    []string{"published", "draft"},
 		})
+	case "source":
+		s.mu.Lock()
+		defer s.mu.Unlock()
+		if err := s.Repo.Sync(); err != nil {
+			return err
+		}
+		source, err := s.source(s.Repo.Content(), r.URL.Query().Get("url"))
+		if err != nil {
+			return err
+		}
+		return writeJSON(w, source)
 	case "category":
 		s.mu.Lock()
 		defer s.mu.Unlock()
@@ -132,7 +144,7 @@ func (s *Server) query(w http.ResponseWriter, r *http.Request) error {
 		}
 		return writeJSON(w, map[string]any{"categories": categories})
 	default:
-		return invalid("q=%s isn't something this site answers: it answers q=config and q=category", q)
+		return invalid("q=%s isn't something this site answers: it answers q=config, q=category and q=source", q)
 	}
 }
 

@@ -22,3 +22,5 @@ goes live, and from then on each heading is the date a change went live.
 - Pages print well, or save as PDF: without the menu, with web links'
   addresses written out.
 - The library is a page now, without its threads.
+- A post can be a draft first: at its address, but in none of the lists,
+  the feed or the sitemap, until In the Open publishes it.

@@ -181,6 +181,14 @@ func TestIsORCID(t *testing.T) {
 	}
 }
 
+func TestReadWithdrawnDraft(t *testing.T) {
+	fsys := site()
+	fsys["log/draft/index.md"] = &fstest.MapFile{Data: []byte("+++\ntitle = 'A'\nsummary = 'B'\ndate = 2025-01-01T00:00:00Z\ndraft = true\nwithdrawn = 2025-02-01T00:00:00Z\n+++\n")}
+	if _, err := Read(fsys); err == nil || !strings.Contains(err.Error(), "log/draft: index.md: a draft was never published") {
+		t.Errorf("err = %v", err)
+	}
+}
+
 func TestReadORCIDAndDOI(t *testing.T) {
 	fsys := site()
 	fsys["site.toml"] = &fstest.MapFile{Data: []byte(strings.Replace(siteTOML, "family = 'van der Heide'", "family = 'van der Heide'\norcid = '0009-0005-6464-7722'", 1))}

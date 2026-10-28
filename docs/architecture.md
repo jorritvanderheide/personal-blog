@@ -224,7 +224,8 @@ nix flake check      # the checks, the real content's build, and the VM test
 ./check.sh           # gofmt, go vet, go test, staticcheck, govulncheck
 ```
 
-`check.sh` is what Forgejo CI runs, so a local run and CI cannot disagree.
+`check.sh` and `nix flake check` are what CI runs, on the Forgejo runner on
+dapple, which has KVM for the VM test: a local run and CI cannot disagree.
 
 The flake builds two packages. `personal-blog` is the program, from
 everything but `content/`, so a commit that only adds or changes posts finds

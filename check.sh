@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The Go checks, as CI runs them (.forgejo/workflows/check.yml, a job each)
+# The Go checks, as CI runs them (.forgejo/workflows/check.yml)
 # and as you run them before calling a change done: ./check.sh for all of
 # them (in the dev shell: nix develop -c ./check.sh), or one by name. The
 # tools' versions are pinned here, so a new release can't fail a build that

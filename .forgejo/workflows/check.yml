@@ -1,30 +1,26 @@
-# The Go checks, on every push and pull request, on Codeberg's shared
-# runners. Their containers have no KVM and no Nix, so `nix flake check`,
-# with the module's VM test, stays a local step. The checks are in
-# check.sh, with the tools' versions.
+# The checks on every push to main and every pull request, on the Forgejo
+# runner on dapple (label nix): Nix through dapple's daemon, with KVM for the
+# NixOS VM test, which Codeberg's own runners lack. The runner has no git, so
+# the source comes as Codeberg's archive of the commit; without git there is
+# no commit count, so the site's build number is left out.
+name: Check
+
 on:
   push:
+    branches: [main]
   pull_request:
 
 jobs:
-  go:
-    # A job each, side by side: a codeberg-small runner gives a job five
-    # minutes (https://codeberg.org/actions/meta), and building the two
-    # tools takes most of that.
-    name: ${{ matrix.check }}
-    runs-on: codeberg-small
-    timeout-minutes: 5
-    strategy:
-      fail-fast: false
-      matrix:
-        check: [tests, staticcheck, govulncheck] # tests: gofmt, vet and the tests
+  check:
+    runs-on: nix
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          # The newest 1.26, as nixpkgs builds the site with; go.mod only
-          # names the least.
-          go-version: "1.26.x"
-          check-latest: true
-      - name: ${{ matrix.check }}
-        run: ./check.sh ${{ matrix.check }} # as by hand
+      - name: Source
+        run: curl -fsSL "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/archive/$GITHUB_SHA.tar.gz" | tar -xz --strip-components=1
+
+      # gofmt, vet, the tests, staticcheck and govulncheck, as by hand.
+      - name: check.sh
+        run: nix develop -c ./check.sh
+
+      # The program, the site from the real content, and the module's VM test.
+      - run: nix flake check -L

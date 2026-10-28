@@ -7,6 +7,6 @@ generator = "micropub"
 references = ["geelsVirtualLabCoats2024", "hoepmanAuthenticityEffectiveAntidote2025"]
 +++
 
-([2024, 4](#ref-geelsVirtualLabCoats2024)) is a paper.
+([2024, p. 4](#ref-geelsVirtualLabCoats2024)) is a paper.
 
-> Interestingly enough, lack of education and lack of access to reliable news were considered the least likely determinants ([Hoepman 2025, 3](#ref-hoepmanAuthenticityEffectiveAntidote2025))
+> Interestingly enough, lack of education and lack of access to reliable news were considered the least likely determinants ([Hoepman, 2025, p. 3](#ref-hoepmanAuthenticityEffectiveAntidote2025))

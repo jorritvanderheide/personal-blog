@@ -236,7 +236,7 @@ func New(c *content.Site) (*Site, error) {
 					fail(file, "link %q goes to %s, an old slug of log/%s: link to /log/%s/", l.Words, l.Dest, now, now)
 					continue
 				}
-				if to := posts[slug]; to != nil && to.Draft && p.Live() {
+				if to := posts[slug]; to != nil && to.Draft && !p.Draft {
 					fail(file, "link %q goes to %s, which is a draft: publish it first", l.Words, l.Dest)
 					continue
 				}

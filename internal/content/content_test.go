@@ -189,6 +189,14 @@ func TestReadWithdrawnDraft(t *testing.T) {
 	}
 }
 
+func TestReadReasonWithoutWithdrawn(t *testing.T) {
+	fsys := site()
+	fsys["log/why/index.md"] = &fstest.MapFile{Data: []byte("+++\ntitle = 'A'\nsummary = 'B'\ndate = 2025-01-01T00:00:00Z\nwithdrawn-reason = 'Wrong.'\n+++\n")}
+	if _, err := Read(fsys); err == nil || !strings.Contains(err.Error(), "log/why: index.md: withdrawn-reason without withdrawn") {
+		t.Errorf("err = %v", err)
+	}
+}
+
 func TestReadORCIDAndDOI(t *testing.T) {
 	fsys := site()
 	fsys["site.toml"] = &fstest.MapFile{Data: []byte(strings.Replace(siteTOML, "family = 'van der Heide'", "family = 'van der Heide'\norcid = '0009-0005-6464-7722'", 1))}

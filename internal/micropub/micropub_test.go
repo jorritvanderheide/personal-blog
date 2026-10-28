@@ -262,8 +262,8 @@ func TestEdit(t *testing.T) {
 		}
 	}
 
-	expect(t, do(s, http.MethodPost, "/micropub", `{"action": "delete", "url": "`+base+`/log/quiet/"}`), http.StatusNoContent)
-	file(t, repo, "log/quiet/index.md", "withdrawn = 2026-10-28T09:30:00Z")
+	expect(t, do(s, http.MethodPost, "/micropub", `{"action": "delete", "url": "`+base+`/log/quiet/", "reason": " The figures\n were wrong. "}`), http.StatusNoContent)
+	file(t, repo, "log/quiet/index.md", "withdrawn = 2026-10-28T09:30:00Z", `withdrawn-reason = "The figures were wrong."`)
 	expect(t, do(s, http.MethodPost, "/micropub", `{"action": "undelete", "url": "`+base+`/log/quiet/"}`), http.StatusNoContent)
 	if strings.Contains(string(repo.files["log/quiet/index.md"].Data), "withdrawn") {
 		t.Error("still withdrawn")

@@ -70,6 +70,7 @@ generator = 'micropub'             # set by the receiver, absent on hand-written
 references = ['marsh2020']         # keys of the works cited, in reference-list order
 doi = '10.64000/abcd-1234'          # optional, once the post has one
 withdrawn = 2026-11-02T08:00:00Z   # optional, when the post was withdrawn
+withdrawn-reason = 'The figures in section 2 are wrong.'   # optional, why
 draft = true                       # optional, until the post is published
 +++
 ```
@@ -83,6 +84,8 @@ draft = true                       # optional, until the post is published
 - `doi` is the post's DOI, once it has one: from Rogue Scholar, which
   registers one for each post it archives. It is set by hand, and the
   receiver keeps it when it updates the post.
+- `withdrawn-reason` is plain text, a sentence for readers, and only with
+  `withdrawn`.
 - `draft` makes the post a draft; see [A draft](#a-draft).
 
 ### Works
@@ -165,8 +168,8 @@ A draft is a post only its address leads to, for seeing it as readers will
 before they can. Its page is the post's, with a line saying it is a draft,
 and `noindex` for search engines. It is in none of the lists: not `/log/`,
 its threads, the feed, the sitemap, nor any "Linked from" or works page. A
-live post or a page that links to it fails the build, since the link would
-lead readers there; a draft may link to another. Its address is unlisted,
+published or withdrawn post, or a page, that links to it fails the build,
+since the link would lead readers there; a draft may link to another. Its address is unlisted,
 not secret: the repository is public.
 
 The receiver publishes it when In the Open says so, and its `date` becomes
@@ -177,13 +180,13 @@ build.
 ### A withdrawn post
 
 A post is withdrawn, never deleted: other posts link to it, and people may
-have cited it. A withdrawn post keeps its URL and its `cite.bib`, but its
-page shows only the title, the date, and when it was withdrawn, with
+have cited it. As a journal keeps a retracted article, a withdrawn post
+keeps its page, text and all, and its `cite.bib`. Above the text, the page
+says it was withdrawn, when, and why, from `withdrawn-reason`, and it has
 `noindex` for search engines. It is served as any page is, with `200`: a
-DOI's landing page has to keep answering, as a journal's tombstone page
-does. It leaves `/log/`, its threads, the feed, the sitemap, and every
-"Linked from" and works page. Links to it still build, and lead to that
-page.
+DOI's landing page has to keep answering. It leaves `/log/`, its threads,
+the feed, the sitemap, and every "Linked from" and works page. Links to it
+still build, and lead to its page.
 
 Taking a post down for good, for legal or privacy reasons, is done by hand:
 delete its folder, and the build names every post that still links to it.

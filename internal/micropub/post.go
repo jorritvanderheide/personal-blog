@@ -28,6 +28,7 @@ type request struct {
 	Properties map[string][]json.RawMessage `json:"properties"`
 	Action     string                       `json:"action"`
 	URL        string                       `json:"url"`
+	Reason     string                       `json:"reason"` // why a post is withdrawn
 	Replace    map[string][]json.RawMessage `json:"replace"`
 	Add        json.RawMessage              `json:"add"`
 	Delete     json.RawMessage              `json:"delete"`
@@ -42,17 +43,18 @@ type reference struct {
 
 // frontMatter is a post's front matter as the receiver writes it.
 type frontMatter struct {
-	Title      string     `toml:"title"`
-	Summary    string     `toml:"summary"`
-	Date       time.Time  `toml:"date"`
-	Updated    *time.Time `toml:"updated,omitempty"`
-	Threads    []string   `toml:"threads,omitempty"`
-	Aliases    []string   `toml:"aliases,omitempty"`
-	Generator  string     `toml:"generator"`
-	References []string   `toml:"references,omitempty"`
-	Withdrawn  *time.Time `toml:"withdrawn,omitempty"`
-	DOI        string     `toml:"doi,omitempty"`
-	Draft      bool       `toml:"draft,omitempty"`
+	Title           string     `toml:"title"`
+	Summary         string     `toml:"summary"`
+	Date            time.Time  `toml:"date"`
+	Updated         *time.Time `toml:"updated,omitempty"`
+	Threads         []string   `toml:"threads,omitempty"`
+	Aliases         []string   `toml:"aliases,omitempty"`
+	Generator       string     `toml:"generator"`
+	References      []string   `toml:"references,omitempty"`
+	Withdrawn       *time.Time `toml:"withdrawn,omitempty"`
+	WithdrawnReason string     `toml:"withdrawn-reason,omitempty"`
+	DOI             string     `toml:"doi,omitempty"`
+	Draft           bool       `toml:"draft,omitempty"`
 }
 
 // work is works/<key>.toml.
@@ -237,7 +239,7 @@ func (s *Server) edit(fsys fs.FS, req request) (Changes, string, string, error) 
 	fm := frontMatter{
 		Title: post.Title, Summary: post.Summary, Date: post.Date, Updated: optional(post.Updated),
 		Threads: post.Threads, Aliases: post.Aliases, Generator: Generator,
-		References: post.References, Withdrawn: optional(post.Withdrawn),
+		References: post.References, Withdrawn: optional(post.Withdrawn), WithdrawnReason: post.WithdrawnReason,
 		DOI: post.DOI, Draft: post.Draft,
 	}
 	body := string(post.Body)
@@ -257,9 +259,10 @@ func (s *Server) edit(fsys fs.FS, req request) (Changes, string, string, error) 
 	switch req.Action {
 	case "delete":
 		fm.Withdrawn = optional(s.Now().UTC().Truncate(time.Second))
+		fm.WithdrawnReason = strings.Join(strings.Fields(req.Reason), " ")
 		return changes, "withdraw: " + slug, slug, s.writePost(changes, slug, fm, body, post.Images)
 	case "undelete":
-		fm.Withdrawn = nil
+		fm.Withdrawn, fm.WithdrawnReason = nil, ""
 		return changes, "restore: " + slug, slug, s.writePost(changes, slug, fm, body, post.Images)
 	}
 

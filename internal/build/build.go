@@ -40,7 +40,7 @@ const ImageWidth = 800
 
 // The templates each kind of page is made of, in web/templates/, on top of
 // base.html and posts.html.
-var kinds = []string{"home", "log", "post", "withdrawn", "thread", "work", "page", "404"}
+var kinds = []string{"home", "log", "post", "thread", "work", "page", "404"}
 
 // page is what a template gets: the site, the page's own facts, and the
 // fields of its kind.
@@ -150,10 +150,6 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 	for _, p := range s.Posts {
 		dir := path.Join("log", p.Slug)
 		files[path.Join(dir, "cite.bib")] = []byte(bibtex(s.Config, p))
-		if !p.Withdrawn.IsZero() {
-			write(path.Join(dir, "index.html"), "withdrawn", page{Path: p.Path(), Title: p.Title, Description: p.Summary, NoIndex: true, Post: p})
-			continue
-		}
 		images, err := writeImages(files, dir, p)
 		if err != nil {
 			fail(path.Join(dir, "index.md"), err)
@@ -174,7 +170,7 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 			refs = append(refs, reference{Key: w.Key, Text: html, Plain: plainReference(w), URL: w.URL})
 		}
 		write(path.Join(dir, "index.html"), "post", page{
-			Path: p.Path(), Title: p.Title, Description: p.Summary, NoIndex: p.Draft, Post: p, Text: text, References: refs,
+			Path: p.Path(), Title: p.Title, Description: p.Summary, NoIndex: !p.Live(), Post: p, Text: text, References: refs,
 			Cite: citation(s.Config, p), BibTeX: bibtex(s.Config, p), JSONLD: jsonLD(s.Config, p),
 		})
 	}

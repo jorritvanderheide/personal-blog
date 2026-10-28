@@ -15,7 +15,8 @@
 <header>
 <h1>{{.Post.Title}}</h1>
 <p class="meta"><time datetime="{{iso .Post.Date}}">{{date .Post.Date}}</time>{{if not .Post.Updated.IsZero}}, updated <time datetime="{{iso .Post.Updated}}">{{date .Post.Updated}}</time>{{end}}{{with .Post.ThreadList}}, in {{range $i, $t := .}}{{if $i}}, {{end}}<a href="{{$t.Path}}">{{$t.Name}}</a>{{end}}{{end}}</p>
-{{if .Post.Draft}}<p class="meta"><strong>A draft.</strong> Only its address leads here: it's in none of the site's lists, nor its feed, until it's published.</p>
+{{if .Post.Draft}}<p class="meta"><strong>A draft.</strong> Only its address leads here: it’s in none of the site’s lists, nor its feed, until it’s published.</p>
+{{end}}{{if not .Post.Withdrawn.IsZero}}<p class="notice"><strong>Withdrawn on <time datetime="{{iso .Post.Withdrawn}}">{{date .Post.Withdrawn}}</time>.</strong>{{with .Post.WithdrawnReason}} {{.}}{{end}} It’s no longer in the site’s lists or its feed. Its address stays, so links and citations to it still lead here.</p>
 {{end}}</header>
 {{.Text}}
 {{with .References}}<section aria-labelledby="references">

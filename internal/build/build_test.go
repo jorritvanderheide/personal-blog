@@ -53,7 +53,7 @@ func sample(t *testing.T) *site.Site {
 			{Slug: "older", Title: "Older", Summary: "From before.", Date: time.Date(2025, 1, 5, 10, 0, 0, 0, time.UTC),
 				Body: []byte("Old words.")},
 			{Slug: "gone", Title: "Gone", Summary: "Not any more.", Date: time.Date(2026, 2, 1, 10, 0, 0, 0, time.UTC),
-				Withdrawn: time.Date(2026, 4, 1, 10, 0, 0, 0, time.UTC), Body: []byte("Secret words.")},
+				Withdrawn: time.Date(2026, 4, 1, 10, 0, 0, 0, time.UTC), WithdrawnReason: "The figures were wrong.", Body: []byte("Its words.")},
 			{Slug: "soon", Title: "Soon", Summary: "Not yet.", Date: time.Date(2026, 5, 1, 10, 0, 0, 0, time.UTC), Threads: []string{"tech"},
 				Draft: true, References: []string{"marsh2020"}, Body: []byte("Draft words, as [(Marsh 2020)](#ref-marsh2020) says.")},
 		},
@@ -148,8 +148,10 @@ func TestCiteBib(t *testing.T) {
 
 func TestWithdrawn(t *testing.T) {
 	files := build(t)
-	contains(t, files, "log/gone/index.html", `<meta name="robots" content="noindex">`, "withdrawn on", `<time datetime="2026-04-01">1 April 2026</time>`)
-	lacks(t, files, "log/gone/index.html", "Secret words", `rel="canonical"`)
+	// Still readable, as a retracted article is, and saying so before its text.
+	contains(t, files, "log/gone/index.html", `<meta name="robots" content="noindex">`,
+		`<p class="notice"><strong>Withdrawn on <time datetime="2026-04-01">1 April 2026</time>.</strong> The figures were wrong. It’s`, "Its words.")
+	lacks(t, files, "log/gone/index.html", `rel="canonical"`)
 	contains(t, files, "log/gone/cite.bib", "@online{gone,")
 	// Off every list.
 	for _, name := range []string{"index.html", "log/index.html", "threads/tech/index.html", "feed.xml", "sitemap.xml"} {

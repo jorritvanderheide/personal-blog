@@ -60,17 +60,18 @@ type MenuItem struct {
 type Post struct {
 	Slug string `toml:"-"`
 
-	Title      string    `toml:"title"`
-	Summary    string    `toml:"summary"`
-	Date       time.Time `toml:"date"`
-	Updated    time.Time `toml:"updated"`
-	Threads    []string  `toml:"threads"`
-	Aliases    []string  `toml:"aliases"`
-	Generator  string    `toml:"generator"`
-	References []string  `toml:"references"`
-	Withdrawn  time.Time `toml:"withdrawn"`
-	DOI        string    `toml:"doi"` // 10.64000/…, once it has one
-	Draft      bool      `toml:"draft"`
+	Title           string    `toml:"title"`
+	Summary         string    `toml:"summary"`
+	Date            time.Time `toml:"date"`
+	Updated         time.Time `toml:"updated"`
+	Threads         []string  `toml:"threads"`
+	Aliases         []string  `toml:"aliases"`
+	Generator       string    `toml:"generator"`
+	References      []string  `toml:"references"`
+	Withdrawn       time.Time `toml:"withdrawn"`
+	WithdrawnReason string    `toml:"withdrawn-reason"` // why, for its readers
+	DOI             string    `toml:"doi"`              // 10.64000/…, once it has one
+	Draft           bool      `toml:"draft"`
 
 	Body   []byte            `toml:"-"`
 	Images map[string][]byte `toml:"-"` // by file name
@@ -216,6 +217,9 @@ func readPost(fsys fs.FS, e fs.DirEntry, dir string) (Post, error) {
 			}
 			if p.DOI != "" && !doiPattern.MatchString(p.DOI) {
 				errs = append(errs, fmt.Errorf("index.md: doi %q isn't a DOI: 10.<number>/<suffix>, without https://doi.org/", p.DOI))
+			}
+			if p.WithdrawnReason != "" && p.Withdrawn.IsZero() {
+				errs = append(errs, errors.New("index.md: withdrawn-reason without withdrawn: a reason goes with a withdrawal"))
 			}
 			if p.Draft && !p.Withdrawn.IsZero() {
 				errs = append(errs, errors.New("index.md: a draft was never published, so it isn't withdrawn: delete its folder instead"))

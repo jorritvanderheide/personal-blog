@@ -40,7 +40,7 @@ For each request, one at a time:
 | `updated` | `updated` |
 | `post-status` | `draft = true` for `draft`; for `published`, a draft's `draft` removed, and its `date` set to now |
 | `references` | the keys in `references`, and each work's `text` and `url` in `content/works/<key>.toml`; `csl` is not kept |
-| delete, undelete | `withdrawn` set or removed; a draft's delete removes its folder |
+| delete, undelete | `withdrawn` set or removed, with `withdrawn-reason` from the delete's `reason`; a draft's delete removes its folder |
 
 - **The text is kept as it comes.** Citations, `#ref-<key>`, and links to
   the site's own posts are what the site reads already (the architecture's

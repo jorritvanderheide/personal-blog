@@ -276,3 +276,20 @@ func TestNoPosts(t *testing.T) {
 	contains(t, files, "feed.xml", "<updated>1970-01-01T00:00:00Z</updated>")
 	lacks(t, files, "index.html", "Newest")
 }
+
+// A reference whose style gives the DOI, in either form, doesn't get it twice.
+func TestWorkURL(t *testing.T) {
+	doi := "https://doi.org/10.34669/WI.WJDS/5.4.3"
+	for _, tt := range []struct{ text, url, want string }{
+		{"Hoepman. 2025. “Is Authenticity.” https://doi.org/10.34669/WI.WJDS/5.4.3.", doi, ""},
+		{"Hoepman. 2025. “Is Authenticity.” doi:10.34669/wi.wjds/5.4.3.", doi, ""},
+		{"Hoepman. 2025. “Is Authenticity.”", doi, doi},
+		{"A page. https://example.org/a.", "https://example.org/a", ""},
+		{"No address.", "", ""},
+	} {
+		w := &site.Work{Work: content.Work{Text: tt.text, URL: tt.url}}
+		if got := workURL(w); got != tt.want {
+			t.Errorf("workURL(%q) = %q, want %q", tt.text, got, tt.want)
+		}
+	}
+}

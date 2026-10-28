@@ -221,6 +221,17 @@ func aliasRedirects(s *site.Site) []byte {
 // citation_reference tag.
 func plainReference(w *site.Work) string { return render.Plain(w.Text) }
 
+// workURL is where a work can be found, or "" when its reference says so
+// already: a style that writes the DOI puts it in the text, as
+// https://doi.org/… or doi:…, so a DOI is looked for by itself.
+func workURL(w *site.Work) string {
+	find := strings.TrimPrefix(w.URL, "https://doi.org/")
+	if w.URL == "" || strings.Contains(strings.ToLower(w.Text), strings.ToLower(find)) {
+		return ""
+	}
+	return w.URL
+}
+
 // license is what posts are under, as the feed and every page say.
 const license = "CC BY 4.0: https://creativecommons.org/licenses/by/4.0/"
 

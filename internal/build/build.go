@@ -64,6 +64,7 @@ type page struct {
 	Thread     *site.Thread
 	Work       *site.Work
 	WorkText   template.HTML
+	WorkURL    string // where the work is, when its reference doesn't say
 	Page       *site.Page
 }
 
@@ -167,7 +168,7 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 				fail("works/"+w.Key+".toml", err)
 				continue
 			}
-			refs = append(refs, reference{Key: w.Key, Text: html, Plain: plainReference(w), URL: w.URL})
+			refs = append(refs, reference{Key: w.Key, Text: html, Plain: plainReference(w), URL: workURL(w)})
 		}
 		write(path.Join(dir, "index.html"), "post", page{
 			Path: p.Path(), Title: p.Title, Description: p.Summary, NoIndex: !p.Live(), Post: p, Text: text, References: refs,
@@ -184,7 +185,7 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 			fail("works/"+w.Key+".toml", err)
 			continue
 		}
-		write(path.Join("works", w.Key, "index.html"), "work", page{Path: w.Path(), Title: plainReference(w), Description: "A work cited here, and the posts that cite it.", Work: w, WorkText: html, Posts: w.CitedBy})
+		write(path.Join("works", w.Key, "index.html"), "work", page{Path: w.Path(), Title: plainReference(w), Description: "A work cited here, and the posts that cite it.", Work: w, WorkText: html, WorkURL: workURL(w), Posts: w.CitedBy})
 	}
 	for _, pg := range s.Pages {
 		text, err := pg.Doc.HTML(render.Options{Link: s.Local})

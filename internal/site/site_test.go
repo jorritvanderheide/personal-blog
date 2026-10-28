@@ -26,7 +26,7 @@ func sample() *content.Site {
 				Aliases: []string{"old"}, Body: []byte("Nothing yet.")},
 			{Slug: "newer", Title: "Newer", Summary: "S", Date: day(9), Threads: []string{"tech", "garden"},
 				References: []string{"marsh2020"},
-				Body:       []byte("As [(Marsh 2020)](/works/marsh2020/) says, see [before](/log/older/#a) and ![a bed](bed.png)."),
+				Body:       []byte("As [(Marsh 2020)](#ref-marsh2020) says, see [before](https://bw20.nl/log/older/#a) and ![a bed](bed.png)."),
 				Images:     map[string][]byte{"bed.png": nil}},
 			{Slug: "gone", Title: "Gone", Summary: "S", Date: day(5), Threads: []string{"tech"}, Withdrawn: day(6),
 				Body: []byte("Linked [before](/log/older/).")},
@@ -85,10 +85,10 @@ func TestNewErrors(t *testing.T) {
 			c.Posts[0].Body = []byte("[x](/log/nope/)")
 		}, `log/older/index.md: link "x" goes to /log/nope/, which the site doesn't have`},
 		{"link to an alias", func(c *content.Site) {
-			c.Posts[1].Body = []byte("[x](/log/old/) [(Marsh 2020)](/works/marsh2020/) ![a bed](bed.png)")
+			c.Posts[1].Body = []byte("[x](/log/old/) [(Marsh 2020)](#ref-marsh2020) ![a bed](bed.png)")
 		}, "an old slug of log/older: link to /log/older/"},
 		{"citation without a reference", func(c *content.Site) {
-			c.Posts[0].Body = []byte("[(Marsh 2020)](/works/marsh2020/)")
+			c.Posts[0].Body = []byte("[(Marsh 2020)](#ref-marsh2020)")
 		}, `log/older/index.md: citation "(Marsh 2020)" of marsh2020 has no reference`},
 		{"reference never cited", func(c *content.Site) {
 			c.Posts[0].References = []string{"marsh2020"}
@@ -120,6 +120,9 @@ func TestNewErrors(t *testing.T) {
 		{"a page's problems", func(c *content.Site) {
 			c.Pages[0].Body = []byte("<b>x</b>")
 		}, "pages/about.md: raw HTML"},
+		{"an absolute link to a post the site doesn't have", func(c *content.Site) {
+			c.Posts[0].Body = []byte("[x](https://bw20.nl/log/nope/)")
+		}, `log/older/index.md: link "x" goes to https://bw20.nl/log/nope/, which the site doesn't have`},
 		{"a page's broken link", func(c *content.Site) {
 			c.Pages[0].Body = []byte("[x](/nope/)")
 		}, `pages/about.md: link "x" goes to /nope/`},

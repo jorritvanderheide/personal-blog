@@ -152,3 +152,17 @@ func TestPlain(t *testing.T) {
 		t.Errorf("Plain = %q, want %q", got, want)
 	}
 }
+
+func TestHTMLLink(t *testing.T) {
+	got, err := Parse([]byte("[home](https://bw20.nl/log/quiet/) and [away](https://example.org/)")).HTML(Options{
+		Link: func(dest string) string { return strings.TrimPrefix(dest, "https://bw20.nl") },
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{`<a href="/log/quiet/">home</a>`, `<a href="https://example.org/">away</a>`} {
+		if !strings.Contains(string(got), want) {
+			t.Errorf("no %q in\n%s", want, got)
+		}
+	}
+}

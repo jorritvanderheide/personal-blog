@@ -233,7 +233,7 @@ pkgs.testers.runNixOSTest {
         return get(site, "/micropub", "-X POST", "-H 'Content-Type: application/json'", "--data-binary @/tmp/post.json", *args)
 
     token = "-H 'Authorization: Bearer secret'"
-    post = '{"type": ["h-entry"], "properties": {"name": ["From the VM"], "summary": ["A test."], "content": ["Said in a VM."], "category": ["tech"], "mp-slug": ["from-the-vm"]}}'
+    post = '{"type": ["h-entry"], "properties": {"name": ["From the VM"], "summary": ["A test."], "content": ["Said in a VM, as [(Marsh 2020)](#ref-marsh2020) has it."], "category": ["tech"], "mp-slug": ["from-the-vm"], "references": [{"key": "marsh2020", "text": "Marsh, Ann. 2020. *Archives*.", "url": "https://doi.org/10.1/x"}]}}'
 
     with subtest("the receiver wants its token"):
         out = micropub(post, "-w ' %{http_code}'")
@@ -252,7 +252,9 @@ pkgs.testers.runNixOSTest {
         assert "202" in out and "Location: https://bw20.test/log/from-the-vm/" in out, out
         assert site.succeed("git -c safe.directory='*' --git-dir /var/lib/personal-blog-receiver/remote.git log -1 --format=%s") == "publish: from-the-vm\n"
         text = site.succeed("git -c safe.directory='*' --git-dir /var/lib/personal-blog-receiver/remote.git show main:content/log/from-the-vm/index.md")
-        assert 'generator = "micropub"' in text and "Said in a VM." in text, text
+        assert 'generator = "micropub"' in text and "[(Marsh 2020)](#ref-marsh2020)" in text, text
+        work = site.succeed("git -c safe.directory='*' --git-dir /var/lib/personal-blog-receiver/remote.git show main:content/works/marsh2020.toml")
+        assert "Marsh, Ann. 2020. *Archives*." in work, work
 
     with subtest("a post the receiver pushed starts the deploy at once"):
         site.wait_until_succeeds(

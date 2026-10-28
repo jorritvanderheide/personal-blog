@@ -157,7 +157,7 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 			fail(path.Join(dir, "index.md"), err)
 			continue
 		}
-		text, err := postText(p, images)
+		text, err := postText(s, p, images)
 		if err != nil {
 			fail(path.Join(dir, "index.md"), err)
 			continue
@@ -189,7 +189,7 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 		write(path.Join("works", w.Key, "index.html"), "work", page{Path: w.Path(), Title: plainReference(w), Description: "A work cited here, and the posts that cite it.", Work: w, WorkText: html, Posts: w.CitedBy})
 	}
 	for _, pg := range s.Pages {
-		text, err := pg.Doc.HTML(render.Options{})
+		text, err := pg.Doc.HTML(render.Options{Link: s.Local})
 		if err != nil {
 			fail("pages/"+pg.Name+".md", err)
 			continue
@@ -198,7 +198,7 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 	}
 
 	if f, err := feed(s, func(p *site.Post) (string, error) {
-		html, err := postText(p, imageNames(p))
+		html, err := postText(s, p, imageNames(p))
 		return string(html), err
 	}); err != nil {
 		fail("feed.xml", err)
@@ -218,14 +218,16 @@ func Site(s *site.Site, assets fs.FS, o Options) (Files, error) {
 }
 
 // postText is a post's text as HTML: each image at the name it is written
-// to, and each citation with its work's reference as its tooltip.
-func postText(p *site.Post, images map[string]string) (template.HTML, error) {
+// to, each citation with its work's reference as its tooltip, and each link to
+// the site's own address made relative.
+func postText(s *site.Site, p *site.Post, images map[string]string) (template.HTML, error) {
 	works := map[string]*site.Work{}
 	for _, w := range p.Works {
-		works[w.Path()] = w
+		works["#ref-"+w.Key] = w
 	}
 	return p.Doc.HTML(render.Options{
 		Image: func(dest string) string { return images[dest] },
+		Link:  s.Local,
 		Title: func(dest string) string {
 			if w := works[dest]; w != nil {
 				return plainReference(w)

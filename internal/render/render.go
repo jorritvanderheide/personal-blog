@@ -128,6 +128,9 @@ type Options struct {
 	Image func(dest string) string
 	// Title gives a link's title, its tooltip, or "" for none.
 	Title func(dest string) string
+	// Link gives the address a link is written with, such as a site's own
+	// address made relative.
+	Link func(dest string) string
 }
 
 // HTML renders the text.
@@ -148,6 +151,9 @@ func (d *Doc) HTML(o Options) (template.HTML, error) {
 				if t := o.Title(string(n.Destination)); t != "" {
 					n.Title = []byte(t)
 				}
+			}
+			if o.Link != nil {
+				n.Destination = []byte(o.Link(string(n.Destination)))
 			}
 		}
 		return ast.WalkContinue, nil

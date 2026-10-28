@@ -205,6 +205,11 @@ ul.references li {
   overflow-wrap: anywhere;
 }
 
+ul.references .cited {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 ul.references li:target {
   background: color-mix(in srgb, var(--accent) 15%, transparent);
 }

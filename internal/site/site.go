@@ -176,6 +176,17 @@ func New(c *content.Site) (*Site, error) {
 	for _, t := range s.Threads {
 		paths[t.Path()] = true
 	}
+	for _, key := range sortedKeys(works) {
+		// Only works a post cites have a page; a withdrawn post's keep theirs.
+		w := works[key]
+		for _, p := range s.Posts {
+			if slices.Contains(p.References, key) {
+				s.Works = append(s.Works, w)
+				paths[w.Path()] = true
+				break
+			}
+		}
+	}
 
 	for _, p := range s.Posts {
 		file := "log/" + p.Slug + "/index.md"
@@ -193,20 +204,20 @@ func New(c *content.Site) (*Site, error) {
 				used[l.Dest] = true
 				continue
 			}
-			if !strings.HasPrefix(l.Dest, "/") || strings.HasPrefix(l.Dest, "//") {
-				continue // outside the site, or on the page itself
-			}
-			u, err := url.Parse(l.Dest)
-			if err != nil {
-				fail(file, "link %q goes to %s, which isn't an address", l.Words, l.Dest)
-				continue
-			}
-			if key, ok := strings.CutPrefix(u.Path, "/works/"); ok {
-				key = strings.TrimSuffix(key, "/")
+			dest := s.Local(l.Dest)
+			if key, ok := strings.CutPrefix(dest, "#ref-"); ok {
 				if !slices.Contains(p.References, key) {
 					fail(file, "citation %q of %s has no reference: add %s to references", l.Words, key, key)
 				}
 				cited[key] = true
+				continue
+			}
+			if !strings.HasPrefix(dest, "/") || strings.HasPrefix(dest, "//") {
+				continue // outside the site, or on the page itself
+			}
+			u, err := url.Parse(dest)
+			if err != nil {
+				fail(file, "link %q goes to %s, which isn't an address", l.Words, l.Dest)
 				continue
 			}
 			if slug, ok := strings.CutPrefix(u.Path, "/log/"); ok {
@@ -225,7 +236,7 @@ func New(c *content.Site) (*Site, error) {
 		}
 		for _, key := range p.References {
 			if !cited[key] {
-				fail(file, "reference %s is never cited: cite it as [(Author Year)](/works/%s/), or take it out of references", key, key)
+				fail(file, "reference %s is never cited: cite it as [(Author Year)](#ref-%s), or take it out of references", key, key)
 			}
 		}
 		for name := range p.Images {
@@ -235,29 +246,18 @@ func New(c *content.Site) (*Site, error) {
 		}
 	}
 
-	for _, key := range sortedKeys(works) {
-		// Only works a post cites have a page; a withdrawn post's keep theirs.
-		w := works[key]
-		for _, p := range s.Posts {
-			if slices.Contains(p.References, key) {
-				s.Works = append(s.Works, w)
-				paths[w.Path()] = true
-				break
-			}
-		}
-	}
-
-	// A page has no references, so it cites nothing; it may link to a work.
+	// A page has no references, so it cites nothing; it may link to a work's page.
 	for _, p := range s.Pages {
 		for _, l := range p.Doc.Links() {
 			if l.Image {
 				fail("pages/"+p.Name+".md", "image %s: a page has no images, only a post has", l.Dest)
 				continue
 			}
-			if !strings.HasPrefix(l.Dest, "/") || strings.HasPrefix(l.Dest, "//") {
+			dest := s.Local(l.Dest)
+			if !strings.HasPrefix(dest, "/") || strings.HasPrefix(dest, "//") {
 				continue
 			}
-			if u, err := url.Parse(l.Dest); err != nil || !paths[u.Path] {
+			if u, err := url.Parse(dest); err != nil || !paths[u.Path] {
 				fail("pages/"+p.Name+".md", "link %q goes to %s, which the site doesn't have", l.Words, l.Dest)
 			}
 		}
@@ -281,4 +281,13 @@ func sortedKeys[V any](m map[string]V) []string {
 	}
 	slices.Sort(keys)
 	return keys
+}
+
+// Local is dest as the site writes it: a link to the site's own address,
+// https://bw20.nl/log/<slug>/, as /log/<slug>/, and any other as it is.
+func (s *Site) Local(dest string) string {
+	if rest, ok := strings.CutPrefix(dest, s.Config.URL); ok && strings.HasPrefix(rest, "/") {
+		return rest
+	}
+	return dest
 }

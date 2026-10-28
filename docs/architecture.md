@@ -102,11 +102,15 @@ have a meaning of their own:
 
 - **A link to another post**, `/log/<slug>/`, is an ordinary link. The site
   reads every such link to build backlinks, so there is nothing to keep in
-  step by hand.
-- **A citation** is a link to `/works/<key>/` with the in-text form as its
-  words: `[(Marsh 2020, 12)](/works/marsh2020/)`. Every
-  key cited in the body is in `references`, every key in `references` is
-  cited and has a file in `content/works/`, or the build fails.
+  step by hand. A link to the site's own address,
+  `https://bw20.nl/log/<slug>/`, is the same link: the page writes it as
+  `/log/<slug>/`.
+- **A citation** is a link to its entry in the post's reference list,
+  `#ref-<key>`, with the in-text form as its words:
+  `[(Marsh 2020, 12)](#ref-marsh2020)`. That is what pandoc writes, so a post
+  from In the Open and one written by hand are written alike. Every key cited
+  in the body is in `references`, every key in `references` is cited and has
+  a file in `content/works/`, or the build fails.
 
 Every other link is just a link. Further reading, a web page that isn't
 cited, goes in the body as a list of links under its own heading:
@@ -135,8 +139,9 @@ From top to bottom:
 1. The title, the date as a season (*early spring 2026*, the exact date in
    `<time datetime>`), and its threads.
 2. The text, with footnotes.
-3. **References**: `references` in order, each with an `id` the in-text
-   citations' tooltips and the works page can point to.
+3. **References**: `references` in order, each with `id="ref-<key>"`, which
+   the in-text citations link to, with the reference as their tooltip. Each
+   links on to its work's page, with every post that cites it.
 4. **Linked from**: every post whose body links to this one, newest first.
    Left out when there is none.
 5. **Cite this post**: one formatted citation, in a fixed author-date form,

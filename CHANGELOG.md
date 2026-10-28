@@ -10,4 +10,6 @@ goes live, and from then on each heading is the date a change went live.
   log by year, each post with its references, "Linked from" and "Cite this
   post", threads, works, pages, a full-text Atom feed and a sitemap.
 - Every post has a `cite.bib`, and the tags Google Scholar and Zotero read.
+- A citation links to its reference, in the post's own list, with the reference
+  as its tooltip; the reference links on to every post that cites the work.
 - The library is a page now, without its threads.

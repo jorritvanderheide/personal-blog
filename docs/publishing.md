@@ -41,10 +41,10 @@ For each request, one at a time:
 | `references` | the keys in `references`, and each work's `text` and `url` in `content/works/<key>.toml`; `csl` is not kept |
 | delete, undelete | `withdrawn` set or removed |
 
-- **Links are made the site's own.** `#ref-<key>` becomes `/works/<key>/`, a
-  link to one of the site's posts becomes `/log/<slug>/`, and an image the
-  media endpoint holds moves into the post's folder and is linked by its
-  file name.
+- **The text is kept as it comes.** Citations, `#ref-<key>`, and links to
+  the site's own posts are what the site reads already (the architecture's
+  [body](architecture.md#the-body)). Only an image the media endpoint holds
+  moves, into the post's folder, and is linked by its file name.
 - **A slug already taken**, by a post or an alias, is refused rather than
   numbered: slugs never change, so you choose.
 - **A post without `generator`** is hand-written, and an update or withdrawal

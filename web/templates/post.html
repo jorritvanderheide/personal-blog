@@ -18,7 +18,7 @@
 {{with .References}}<section aria-labelledby="references">
 <h2 id="references">References</h2>
 <ul class="references">
-{{range .}}<li id="ref-{{.Key}}">{{.Text}}{{with .URL}} <a href="{{.}}">{{.}}</a>{{end}}</li>
+{{range .}}<li id="ref-{{.Key}}">{{.Text}}{{with .URL}} <a href="{{.}}">{{.}}</a>{{end}} <a class="cited" href="/works/{{.Key}}/">Where it’s cited</a></li>
 {{end}}</ul>
 </section>
 {{end}}{{with .Post.LinkedFrom}}<section aria-labelledby="linked-from">

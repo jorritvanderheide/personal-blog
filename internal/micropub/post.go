@@ -314,35 +314,34 @@ func (s *Server) writePost(changes Changes, slug string, fm frontMatter, body st
 	return nil
 }
 
-// A link's address in Markdown: [words](address), or ![alt](address).
-var linkDest = regexp.MustCompile(`\]\(([^)\s]+)\)`)
+// An image's address in Markdown, ![alt](address), with or without the <…>
+// pandoc puts around an address with a space or a parenthesis in it.
+var imageDest = regexp.MustCompile(`(!\[(?:[^\]\\]|\\.)*\]\()(<[^>]*>|[^)\s]+)\)`)
 
-// rewrite makes the text's links the site's own: a citation, #ref-<key>,
-// goes to /works/<key>/; an address on the site loses the site's own
-// address; and an image the media endpoint holds is put next to the post,
-// by a name of its own. It returns the images it took, by their names.
+// rewrite puts each image the media endpoint holds next to the post, by a
+// name of its own, and links it by that name. Everything else in the text is
+// kept as it comes: citations, #ref-<key>, and links to the site's own posts
+// are what the site reads already. It returns the images it took, by their
+// names.
 func (s *Server) rewrite(body string) (string, map[string][]byte, error) {
 	uploads := map[string][]byte{}
 	var errs []error
-	body = linkDest.ReplaceAllStringFunc(body, func(m string) string {
-		dest := linkDest.FindStringSubmatch(m)[1]
-		switch {
-		case strings.HasPrefix(dest, "#ref-"):
-			return "](/works/" + strings.TrimPrefix(dest, "#ref-") + "/)"
-		case strings.HasPrefix(dest, s.BaseURL+mediaEndpoint+"/"):
-			name := strings.TrimPrefix(dest, s.BaseURL+mediaEndpoint+"/")
-			data, err := s.staged(name)
-			if err != nil {
-				errs = append(errs, err)
-				return m
-			}
-			file := fileName(name)
-			uploads[file] = data
-			return "](" + file + ")"
-		case strings.HasPrefix(dest, s.BaseURL+"/"):
-			return "](" + strings.TrimPrefix(dest, s.BaseURL) + ")"
+	media := s.BaseURL + mediaEndpoint + "/"
+	body = imageDest.ReplaceAllStringFunc(body, func(m string) string {
+		parts := imageDest.FindStringSubmatch(m)
+		dest := strings.TrimSuffix(strings.TrimPrefix(parts[2], "<"), ">")
+		name, ok := strings.CutPrefix(dest, media)
+		if !ok {
+			return m
 		}
-		return m
+		data, err := s.staged(name)
+		if err != nil {
+			errs = append(errs, err)
+			return m
+		}
+		file := fileName(name)
+		uploads[file] = data
+		return parts[1] + file + ")"
 	})
 	return body, uploads, errors.Join(errs...)
 }

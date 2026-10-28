@@ -193,8 +193,8 @@ func TestCreate(t *testing.T) {
 		"threads = [\"tech\"]",
 		"generator = \"micropub\"",
 		"references = [\"marsh2020\"]",
-		"[(Marsh 2020, 12)](/works/marsh2020/)",
-		"[by hand](/log/hand/)",
+		"[(Marsh 2020, 12)](#ref-marsh2020)",
+		"[by hand](https://bw20.test/log/hand/)",
 		"![A raised bed]("+staged[:12]+".png)",
 	)
 	file(t, repo, "log/quiet/"+staged[:12]+".png")
@@ -387,4 +387,15 @@ func TestPushed(t *testing.T) {
 	if pushed != 1 {
 		t.Errorf("pushed %d times, want once: a refused post and a failed push aren't pushes", pushed)
 	}
+}
+
+// An image address pandoc wrote in <…> is taken as any other.
+func TestImageInAngleBrackets(t *testing.T) {
+	s, repo := setup(t)
+	image := upload(t, s)
+	p := quiet(image)
+	p["content"] = "As [(Marsh 2020, 12)](#ref-marsh2020) says.\n\n![A raised bed](<" + image + ">)\n"
+	expect(t, do(s, http.MethodPost, "/micropub", create(p)), http.StatusAccepted)
+	staged := strings.TrimPrefix(image, base+"/micropub/media/")
+	file(t, repo, "log/quiet/index.md", "![A raised bed]("+staged[:12]+".png)")
 }

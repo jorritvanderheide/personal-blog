@@ -150,7 +150,7 @@ func TestWithdrawn(t *testing.T) {
 	files := build(t)
 	// Still readable, as a retracted article is, and saying so before its text.
 	contains(t, files, "log/gone/index.html", `<meta name="robots" content="noindex">`,
-		`<p class="notice"><strong>Withdrawn on <time datetime="2026-04-01">1 April 2026</time>.</strong> The figures were wrong. It’s`, "Its words.")
+		`<p class="notice"><strong>Withdrawn on <time datetime="2026-04-01">1 April 2026</time>.</strong> The figures were wrong.<br>It’s`, "Its words.")
 	lacks(t, files, "log/gone/index.html", `rel="canonical"`)
 	contains(t, files, "log/gone/cite.bib", "@online{gone,")
 	// Off every list.

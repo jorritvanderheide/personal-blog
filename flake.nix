@@ -22,9 +22,6 @@
         in
         {
           inherit program;
-          # The name the module before small-press built, until dapple runs
-          # small-press's: take it out then.
-          personal-blog = program;
           site = pkgs.callPackage ./nix/site.nix {
             inherit program;
             # A working copy with changes has no count: no build number then.

@@ -54,7 +54,10 @@ For each request, one at a time:
   take from a request: the date, the slug, the aliases and a `doi`.
 - **Requests are JSON**, as In the Open sends them, and an update replaces
   what changed (`replace`); `add` and `delete` aren't taken. `q=source`
-  answers a post's `post-status` only, which is all In the Open asks.
+  answers with the post as it is in the repository, or only the properties
+  asked for: its text with images by their file names, its references from
+  their works' files, and its `post-status`. In the Open compares it with the
+  note before an update.
   A slug, an alias and a published post's date never change through the
   receiver.
 - **Uploads** are PNG or JPEG, at most 20 MB. They wait in the receiver's

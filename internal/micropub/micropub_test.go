@@ -173,7 +173,9 @@ func TestQuery(t *testing.T) {
 	expect(t, do(s, http.MethodGet, "/micropub?q=config", ""), http.StatusOK, `"media-endpoint":"https://bw20.test/micropub/media"`, `"references":1`)
 	expect(t, do(s, http.MethodGet, "/micropub?q=category", ""), http.StatusOK, `"categories":["tech"]`)
 	expect(t, do(s, http.MethodGet, "/micropub?q=config", ""), http.StatusOK, `"post-status":["published","draft"]`)
-	expect(t, do(s, http.MethodGet, "/micropub?q=source&url="+base+"/log/hand/", ""), http.StatusOK, `{"properties":{"post-status":["published"]}}`)
+	expect(t, do(s, http.MethodGet, "/micropub?q=source&properties[]=post-status&url="+base+"/log/hand/", ""), http.StatusOK, `{"properties":{"post-status":["published"]}}`)
+	expect(t, do(s, http.MethodGet, "/micropub?q=source&url="+base+"/log/hand/", ""), http.StatusOK,
+		`"type":["h-entry"]`, `"name":["By hand"]`, `"summary":["Written by hand."]`, `"content":["Words."]`, `"category":[]`, `"references":[]`)
 	expect(t, do(s, http.MethodGet, "/micropub?q=source&url="+base+"/log/nope/", ""), http.StatusBadRequest, "there's no post at")
 	expect(t, do(s, http.MethodGet, "/micropub?q=nope", ""), http.StatusBadRequest, "q=nope isn't something this site answers")
 }
@@ -458,4 +460,22 @@ func TestDraft(t *testing.T) {
 
 	p["post-status"] = "private"
 	expect(t, do(s, http.MethodPost, "/micropub", create(p)), http.StatusBadRequest, "post-status is published or draft")
+}
+
+// The whole post comes back as the site keeps it: what In the Open compares
+// a note with before an update.
+func TestSource(t *testing.T) {
+	s, _ := setup(t)
+	image := upload(t, s)
+	expect(t, do(s, http.MethodPost, "/micropub", create(quiet(image))), http.StatusAccepted)
+	staged := strings.TrimPrefix(image, base+"/micropub/media/")
+	expect(t, do(s, http.MethodGet, "/micropub?q=source&url="+base+"/log/quiet/", ""), http.StatusOK,
+		`"name":["The NixOS module system is a quiet revolution"]`,
+		`"category":["tech"]`,
+		`"references":[{"key":"marsh2020","text":"Marsh, Ann. 2020. *Archives*.","url":"https://doi.org/10.1/x"}]`,
+		`![A raised bed](`+staged[:12]+`.png)`,
+		`"post-status":["published"]`,
+	)
+	expect(t, do(s, http.MethodGet, "/micropub?q=source&properties[]=name&properties[]=nope&url="+base+"/log/quiet/", ""), http.StatusOK,
+		`{"properties":{"name":["The NixOS module system is a quiet revolution"]}}`)
 }

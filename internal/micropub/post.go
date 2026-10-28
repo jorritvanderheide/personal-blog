@@ -38,7 +38,7 @@ type request struct {
 type reference struct {
 	Key  string `json:"key"`
 	Text string `json:"text"`
-	URL  string `json:"url"`
+	URL  string `json:"url,omitempty"`
 }
 
 // frontMatter is a post's front matter as the receiver writes it.
@@ -318,9 +318,11 @@ func (s *Server) edit(fsys fs.FS, req request) (Changes, string, string, error) 
 	return changes, message, slug, s.writePost(changes, slug, fm, body, post.Images)
 }
 
-// source answers q=source for a post: only its post-status, which is all
-// In the Open asks.
-func (s *Server) source(fsys fs.FS, url string) (map[string]any, error) {
+// source answers q=source for a post: its properties as the site keeps them,
+// or only those asked for with properties[]. Its content is the text as it is
+// in the repository, its images by their names next to it, and its references
+// are the works' files as they are now.
+func (s *Server) source(fsys fs.FS, url string, wanted []string) (map[string]any, error) {
 	site, err := readSite(fsys)
 	if err != nil {
 		return nil, err
@@ -333,7 +335,30 @@ func (s *Server) source(fsys fs.FS, url string) (map[string]any, error) {
 	if post.Draft {
 		status = "draft"
 	}
-	return map[string]any{"properties": map[string][]string{"post-status": {status}}}, nil
+	refs := []reference{}
+	for _, key := range post.References {
+		if i := slices.IndexFunc(site.Works, func(w content.Work) bool { return w.Key == key }); i >= 0 {
+			refs = append(refs, reference{Key: key, Text: site.Works[i].Text, URL: site.Works[i].URL})
+		}
+	}
+	props := map[string]any{
+		"name":        []string{post.Title},
+		"summary":     []string{post.Summary},
+		"content":     []string{strings.TrimSpace(string(post.Body))},
+		"category":    append([]string{}, post.Threads...),
+		"references":  refs,
+		"post-status": []string{status},
+	}
+	if len(wanted) == 0 {
+		return map[string]any{"type": []string{"h-entry"}, "properties": props}, nil
+	}
+	only := map[string]any{}
+	for _, name := range wanted {
+		if value, ok := props[name]; ok {
+			only[name] = value
+		}
+	}
+	return map[string]any{"properties": only}, nil
 }
 
 // setReferences takes the references extension: the keys in the post's

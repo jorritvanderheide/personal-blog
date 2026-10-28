@@ -123,7 +123,7 @@ func (s *Server) query(w http.ResponseWriter, r *http.Request) error {
 		if err := s.Repo.Sync(); err != nil {
 			return err
 		}
-		source, err := s.source(s.Repo.Content(), r.URL.Query().Get("url"))
+		source, err := s.source(s.Repo.Content(), r.URL.Query().Get("url"), r.URL.Query()["properties[]"])
 		if err != nil {
 			return err
 		}

@@ -158,6 +158,18 @@ func TestDraft(t *testing.T) {
 	lacks(t, files, "log/quiet/index.html", "A draft.")
 }
 
+// A post leads on to its neighbours in the log, skipping what isn't in it.
+func TestOlderNewer(t *testing.T) {
+	files := whole(t, sample(t), build.Options{})
+	contains(t, files, "log/quiet/index.html", `<a class="older" href="/log/older/"><span>Older</span> Older</a>`)
+	lacks(t, files, "log/quiet/index.html", `class="newer"`)
+	contains(t, files, "log/older/index.html", `<a class="newer" href="/log/quiet/"><span>Newer</span> The NixOS module system`)
+	lacks(t, files, "log/older/index.html", `class="older"`)
+	for _, name := range []string{"log/gone/index.html", "log/soon/index.html"} {
+		lacks(t, files, name, `class="pager"`)
+	}
+}
+
 func TestLists(t *testing.T) {
 	files := whole(t, sample(t), build.Options{})
 	contains(t, files, "index.html", "<title>BW20</title>", "A small, finite website.", `<a href="/log/quiet/">`, `<a class="name" href="/" aria-current="page">`)

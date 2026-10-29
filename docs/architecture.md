@@ -47,6 +47,9 @@ From top to bottom:
    a DOI, the citation and the entry give the DOI rather than the address.
    The citation and the entry each select whole at a click, ready to copy:
    with no JavaScript there is no copy button.
+6. **Older and newer**: links to the posts either side of it in the log,
+   the older on the left. A draft or a withdrawn post isn't in the log, so
+   it has none. They aren't printed.
 
 A heading in a post can't have the id of one of the page's own sections,
 `references`, `linked-from` or `cite` (`sections` in `pages.go`): the build

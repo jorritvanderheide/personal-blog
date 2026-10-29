@@ -279,6 +279,35 @@ details pre {
   color: var(--muted);
 }
 
+/* Under a post, the older one on the left and the newer on the right, as
+   time reads; one above the other on a narrow screen. */
+.pager {
+  display: grid;
+  gap: 1rem 1.5rem;
+  margin-top: 3rem;
+}
+
+.pager a {
+  color: var(--accent);
+}
+
+.pager span {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+@media (min-width: 30rem) {
+  .pager {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pager .newer {
+    grid-column: 2;
+    text-align: right;
+  }
+}
+
 footer.site {
   margin-top: 3rem;
   padding-top: 0.75rem;
@@ -320,7 +349,8 @@ footer.site {
   .skip,
   header.site nav,
   details,
-  .hint {
+  .hint,
+  .pager {
     display: none;
   }
 

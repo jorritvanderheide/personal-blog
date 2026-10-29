@@ -31,4 +31,8 @@
 </details>
 </section>
 </article>
-{{end}}
+{{if or .Older .Newer}}<nav class="pager" aria-label="Older and newer posts">
+{{with .Older}}<a class="older" href="{{.Path}}"><span>Older</span> {{.Title}}</a>
+{{end}}{{with .Newer}}<a class="newer" href="{{.Path}}"><span>Newer</span> {{.Title}}</a>
+{{end}}</nav>
+{{end}}{{end}}

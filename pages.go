@@ -34,6 +34,8 @@ type page struct {
 	Posts      []*site.Post
 	Years      []year
 	Post       *site.Post
+	Older      *site.Post // the posts either side of it in the log, if it's in it
+	Newer      *site.Post
 	Text       template.HTML
 	References []build.Reference
 	Meta       template.HTML // the citation tags and JSON-LD (build.Meta)
@@ -92,6 +94,18 @@ func pages(s *site.Site, assets fs.FS, o build.Options) (build.Files, error) {
 	write("log/index.html", "log", page{Path: "/log/", Title: "Log", Description: "Every post, newest first.", Years: byYear(live)})
 	write("404.html", "404", page{Path: "/404.html", Title: "Not here", Description: s.Config.Description, NoIndex: true})
 
+	// A post's neighbours in the log. A draft or a withdrawn post isn't in
+	// it, so it has none.
+	older, newer := map[*site.Post]*site.Post{}, map[*site.Post]*site.Post{}
+	for i, p := range live {
+		if i > 0 {
+			newer[p] = live[i-1]
+		}
+		if i+1 < len(live) {
+			older[p] = live[i+1]
+		}
+	}
+
 	for _, p := range s.Posts {
 		name := path.Join("log", p.Slug, "index.html")
 		text, err := build.PostText(s, p)
@@ -112,6 +126,7 @@ func pages(s *site.Site, assets fs.FS, o build.Options) (build.Files, error) {
 		write(name, "post", page{
 			Path: p.Path(), Title: p.Title, Description: p.Summary, NoIndex: !p.Live(), Post: p, Text: text, References: refs,
 			Meta: meta, Cite: build.Citation(s.Config, p), BibTeX: build.BibTeX(s.Config, p),
+			Older: older[p], Newer: newer[p],
 		})
 	}
 

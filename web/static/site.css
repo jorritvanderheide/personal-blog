@@ -228,6 +228,28 @@ details pre {
   white-space: pre-wrap;
 }
 
+/* "Cite this post": the citation and the BibTeX entry each select whole at
+   a click, as the site runs no script for a copy button. The address in the
+   citation is this page's own, so it isn't a link to follow here. */
+.citation {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  -webkit-user-select: all;
+  user-select: all;
+}
+
+.citation a {
+  pointer-events: none;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hint {
+  margin-top: -0.5rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 footer.site {
   margin-top: 3rem;
   padding-top: 0.75rem;
@@ -267,7 +289,8 @@ footer.site {
 
   .skip,
   header.site nav,
-  details {
+  details,
+  .hint {
     display: none;
   }
 
@@ -279,6 +302,11 @@ footer.site {
     content: " (" attr(href) ")";
     font-size: 0.85em;
     overflow-wrap: anywhere;
+  }
+
+  /* The citation writes its address out already. */
+  main .citation a[href]::after {
+    content: none;
   }
 
   /* "Where it’s cited" leads to another page: on paper, it leads nowhere. */

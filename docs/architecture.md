@@ -45,6 +45,8 @@ From top to bottom:
 5. **Cite this post**: one formatted citation, in a fixed author-date form,
    and the BibTeX entry in a `<details>`, with a link to `cite.bib`. With
    a DOI, the citation and the entry give the DOI rather than the address.
+   The citation and the entry each select whole at a click, ready to copy:
+   with no JavaScript there is no copy button.
 
 A heading in a post can't have the id of one of the page's own sections,
 `references`, `linked-from` or `cite` (`sections` in `pages.go`): the build

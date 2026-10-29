@@ -22,12 +22,13 @@
 {{template "posts" .}}</section>
 {{end}}<section aria-labelledby="cite">
 <h2 id="cite">Cite this post</h2>
-<p>{{.Cite}}</p>
+<p class="citation">{{.Cite}}</p>
+<p class="hint">A click selects it all, to copy.</p>
 <details>
 <summary>BibTeX</summary>
-<pre>{{.BibTeX}}</pre>
+<pre class="citation">{{.BibTeX}}</pre>
+<p><a href="{{.Post.Path}}cite.bib" download>Download cite.bib</a></p>
 </details>
-<p><a href="{{.Post.Path}}cite.bib" download>cite.bib</a></p>
 </section>
 </article>
 {{end}}

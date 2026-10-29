@@ -126,7 +126,6 @@ func TestPost(t *testing.T) {
 		"<pre class=\"bibtex\" hidden>@online{quiet,",
 		`<a href="/log/quiet/cite.bib" download>cite.bib</a>`,
 		`<script src="/static/copy.js?v=`,
-		`<span class="select-hint">Click to select</span>`,
 		"<hr>\n<section aria-labelledby=\"cite\">",
 		`<meta property="og:type" content="article">`,
 		`<meta name="citation_title" content="The NixOS module system is a quiet revolution">`,
@@ -142,6 +141,9 @@ func TestPost(t *testing.T) {
 	// Only a post loads it.
 	lacks(t, files, "index.html", "copy.js")
 	lacks(t, files, "log/quiet/index.html", "<summary>BibTeX</summary>")
+	// The citation selects like any text.
+	lacks(t, files, "log/quiet/index.html", "Click to select")
+	lacks(t, files, "static/site.css", "user-select")
 }
 
 func TestWithdrawn(t *testing.T) {

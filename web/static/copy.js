@@ -1,8 +1,7 @@
 // Copy buttons on a post's page: an icon in the top right corner of each
-// code block and of the citation, and "Copy BibTeX" in place of the cite
-// row's "Click to select". The page needs none of this: without it, the
-// citation still selects whole at a click, to copy by hand, and the BibTeX
-// entry is in cite.bib. The entry is also in the page, hidden, for its
+// code block and of the citation, and "Copy BibTeX" before cite.bib in the
+// row under the citation. The page needs none of this: without it, the
+// citation is there to copy by hand, and the BibTeX entry is in cite.bib. The entry is also in the page, hidden, for its
 // button: the site's policy lets a page fetch nothing.
 (() => {
   const article = document.querySelector("article");
@@ -75,7 +74,10 @@
   const citation = cite.querySelector("p.citation");
   corner(citation, "Copy citation", () => [citation.textContent.trim(), citation.innerHTML]);
   const bibtex = cite.querySelector("pre.bibtex");
+  const dot = document.createElement("span");
+  dot.setAttribute("aria-hidden", "true");
+  dot.textContent = "·";
   cite
-    .querySelector(".select-hint")
-    .replaceWith(button("Copy BibTeX", () => [bibtex.textContent.trim()], false));
+    .querySelector(".cite-tools")
+    .prepend(button("Copy BibTeX", () => [bibtex.textContent.trim()], false), dot);
 })();

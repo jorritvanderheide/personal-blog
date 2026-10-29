@@ -142,6 +142,17 @@ img {
   mix-blend-mode: multiply;
 }
 
+/* A caption written on the line under its image comes after a line break,
+   which would leave an empty line below the image, as it is a block. */
+p > img + br {
+  display: none;
+}
+
+p > img + br + em {
+  display: block;
+  margin-top: 0.4rem;
+}
+
 @media (prefers-color-scheme: dark) {
   img {
     mix-blend-mode: normal;

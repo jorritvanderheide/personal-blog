@@ -40,7 +40,8 @@ From top to bottom:
    each, then to References and Cite this post. Folded above the text, or,
    where the screen is wide enough, in a column beside it, fixed in place
    as the page scrolls; the page has both, and shows one. It isn't printed.
-3. The text, with footnotes.
+3. The text, with footnotes, then a thin rule, as the footnotes have above
+   them, to set it apart from the sections that follow.
 4. **References**: `references` in order, each with `id="ref-<key>"`, which
    the in-text citations link to, with the reference as their tooltip. Each
    links on to its work's page, with every post that cites it.

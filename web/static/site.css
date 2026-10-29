@@ -252,6 +252,15 @@ ul.references li:target {
   font-size: 0.9rem;
 }
 
+/* A thin rule: above a post's footnotes, and between its text and the
+   references and the rest after it, the two alike. */
+hr {
+  height: 0;
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
 details pre {
   white-space: pre-wrap;
 }

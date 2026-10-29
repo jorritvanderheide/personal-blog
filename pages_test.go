@@ -118,6 +118,7 @@ func TestPost(t *testing.T) {
 		`<link rel="license" href="https://creativecommons.org/licenses/by/4.0/">`,
 		`<a rel="author" href="https://orcid.org/0009-0005-6464-7721">Jorrit van der Heide</a>`,
 		`<h2 id="more">More</h2>`,
+		"<hr>\n<section aria-labelledby=\"references\">",
 		`in <a href="/threads/tech/">tech</a>`,
 		`<a class="cited" href="/works/marsh2020/">Where it’s cited</a>`,
 		`<li id="ref-marsh2020">Marsh, Ann. 2020. <em>Archives &amp; Readers</em>. <a href="https://doi.org/10.1/x">`,

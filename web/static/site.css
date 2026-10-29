@@ -6,6 +6,7 @@
   --ink: #1f1f1c;
   --muted: #5d5c55;
   --line: #d9d6cc;
+  --code: #f1efe7;
   --accent: #2e6b5a;
   --measure: 38rem;
   color-scheme: light dark;
@@ -17,6 +18,7 @@
     --ink: #e8e6df;
     --muted: #a9a79e;
     --line: #3a3934;
+    --code: #21211f;
     --accent: #84c7b2;
   }
 }
@@ -166,10 +168,26 @@ code {
   font-size: 0.9em;
 }
 
+/* Code on a tint of its own, so it stands out from the text. A block keeps
+   its lines as written and scrolls sideways on a narrow screen. */
 pre {
   overflow-x: auto;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--line);
+  background: var(--code);
+  line-height: 1.45;
+  tab-size: 4;
+}
+
+pre code {
+  font-size: inherit;
+}
+
+:not(pre) > code {
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  background: var(--code);
+  overflow-wrap: break-word;
 }
 
 table {
@@ -285,6 +303,7 @@ footer.site {
     --ink: #000;
     --muted: #333;
     --line: #999;
+    --code: transparent;
     --accent: #000;
     color-scheme: light;
   }
@@ -329,6 +348,12 @@ footer.site {
   h2,
   h3 {
     break-after: avoid;
+  }
+
+  /* On paper nothing scrolls: a long line wraps rather than being cut off. */
+  pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
 
   img,

@@ -123,7 +123,7 @@ func TestPost(t *testing.T) {
 		`<a class="cited" href="/works/marsh2020/">Where it’s cited</a>`,
 		`<li id="ref-marsh2020">Marsh, Ann. 2020. <em>Archives &amp; Readers</em>. <a href="https://doi.org/10.1/x">`,
 		`<p class="citation">van der Heide, Jorrit. 2026. “The NixOS module system is a quiet revolution.” <em>BW20</em>, 15 March.`,
-		"<pre class=\"citation\">@online{quiet,",
+		"<pre class=\"bibtex\" hidden>@online{quiet,",
 		`<a href="/log/quiet/cite.bib" download>cite.bib</a>`,
 		`<script src="/static/copy.js?v=`,
 		`<span class="select-hint">Click to select</span>`,
@@ -140,6 +140,7 @@ func TestPost(t *testing.T) {
 	contains(t, files, "static/copy.js", "navigator.clipboard")
 	// Only a post loads it.
 	lacks(t, files, "index.html", "copy.js")
+	lacks(t, files, "log/quiet/index.html", "<summary>BibTeX</summary>")
 }
 
 func TestWithdrawn(t *testing.T) {

@@ -50,13 +50,13 @@ From top to bottom:
    Left out when there is none.
 6. **Cite this post**, after another thin rule when References or Linked
    from come before it: one formatted citation, in a fixed author-date
-   form, on a tint, and one quiet row under it with a link to `cite.bib`
-   and the BibTeX entry in a `<details>`. With a DOI, the citation and the
-   entry give the DOI rather than the address. The citation and the entry
-   each select whole at a click, ready to copy. `copy.js` adds a button to
-   copy each, "Copy citation" in place of the row's "Click to select" and
-   "Copy BibTeX" under the entry; the citation is copied formatted, so the
-   site's name stays in italics, and as plain text.
+   form, on a tint, and one quiet row under it: "Click to select", as the
+   citation selects whole at a click, and a link to `cite.bib`, the BibTeX
+   entry. With a DOI, the citation and the entry give the DOI rather than
+   the address. `copy.js` puts two buttons in place of "Click to select":
+   "Copy citation", formatted, so the site's name stays in italics, and as
+   plain text; and "Copy BibTeX", from the entry, which the page has
+   hidden, as the site's policy lets a page fetch nothing.
 7. **Older and newer**: links to the posts either side of it in the log,
    the older on the left. A draft or a withdrawn post isn't in the log, so
    it has none. They aren't printed.
@@ -70,9 +70,9 @@ fails on it.
 - **JavaScript only adds.** Every page works without it: folding is
   `<details>`, dark mode is `prefers-color-scheme`. The one script,
   `web/static/copy.js`, is loaded on a post's page only, and adds the copy
-  buttons to Cite this post; without it, the citation and the entry still
-  select whole at a click. small-press's policy runs the site's own script
-  files and nothing else.
+  buttons to Cite this post; without it, the citation still selects whole
+  at a click and the entry is in `cite.bib`. small-press's policy runs the
+  site's own script files and nothing else.
 - **CSS is written by hand**, with no build step: custom properties, mobile
   first, `:focus-visible`, `prefers-reduced-motion`, and print. A page
   prints as it should: the text, its references and how to cite it, without

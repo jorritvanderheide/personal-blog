@@ -34,12 +34,9 @@
 <p class="citation">{{.Cite}}</p>
 <div class="cite-tools">
 <span class="select-hint">Click to select</span> <span aria-hidden="true">·</span>
-<a href="{{.Post.Path}}cite.bib" download>cite.bib</a> <span class="dot" aria-hidden="true">·</span>
-<details>
-<summary>BibTeX</summary>
-<pre class="citation">{{.BibTeX}}</pre>
-</details>
+<a href="{{.Post.Path}}cite.bib" download>cite.bib</a>
 </div>
+<pre class="bibtex" hidden>{{.BibTeX}}</pre>
 </section>
 </article>
 {{if or .Older .Newer}}<nav class="pager" aria-label="Older and newer posts">

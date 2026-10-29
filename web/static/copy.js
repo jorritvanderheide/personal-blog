@@ -1,6 +1,8 @@
-// Copy buttons for "Cite this post". The page needs none of this: without
-// it, the citation and the BibTeX entry still select whole at a click, to
-// copy by hand, and that stays so with it.
+// Copy buttons for "Cite this post", in place of the row's "Click to
+// select". The page needs none of this: without it, the citation still
+// selects whole at a click, to copy by hand, and the BibTeX entry is in
+// cite.bib. The entry is also in the page, hidden, for its button: the
+// site's policy lets a page fetch nothing.
 (() => {
   const cite = document.querySelector('section[aria-labelledby="cite"]');
   if (!cite || !navigator.clipboard) return;
@@ -35,9 +37,14 @@
     return b;
   };
 
+  const dot = document.createElement("span");
+  dot.setAttribute("aria-hidden", "true");
+  dot.textContent = "·";
   cite
     .querySelector(".select-hint")
-    .replaceWith(button(cite.querySelector("p.citation"), "Copy citation", true));
-  const bibtex = cite.querySelector("pre.citation");
-  bibtex.after(button(bibtex, "Copy BibTeX", false));
+    .replaceWith(
+      button(cite.querySelector("p.citation"), "Copy citation", true),
+      dot,
+      button(cite.querySelector("pre.bibtex"), "Copy BibTeX", false),
+    );
 })();

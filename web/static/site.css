@@ -265,9 +265,9 @@ details pre {
   white-space: pre-wrap;
 }
 
-/* "Cite this post": the citation and the BibTeX entry each select whole at
-   a click, as the site runs no script for a copy button. The address in the
-   citation is this page's own, so it isn't a link to follow here. */
+/* "Cite this post": the citation selects whole at a click, to copy by hand
+   where copy.js doesn't run. The address in the citation is this page's
+   own, so it isn't a link to follow here. */
 .citation {
   padding: 0.75rem 1rem;
   background: var(--code);
@@ -281,9 +281,8 @@ details pre {
   text-decoration: none;
 }
 
-/* One quiet row under the citation: the hint, cite.bib and the BibTeX
-   fold. Open, the fold takes a line of its own, and the dot before it
-   goes. */
+/* One quiet row under the citation: the hint and cite.bib, or, where
+   copy.js runs, its two copy buttons in place of the hint. */
 .cite-tools {
   display: flex;
   flex-wrap: wrap;
@@ -296,18 +295,6 @@ details pre {
 
 .cite-tools a {
   color: inherit;
-}
-
-.cite-tools summary {
-  cursor: pointer;
-}
-
-.cite-tools details[open] {
-  flex-basis: 100%;
-}
-
-.cite-tools:has(details[open]) .dot {
-  display: none;
 }
 
 /* The copy buttons copy.js adds, which look like the row's links. */

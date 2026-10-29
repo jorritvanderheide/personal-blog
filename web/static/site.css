@@ -310,6 +310,18 @@ details pre {
   display: none;
 }
 
+/* The copy buttons copy.js adds, which look like the row's links. */
+button.copy {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
 /* Under a post, the older one on the left and the newer on the right, as
    time reads; one above the other on a narrow screen. */
 .pager {

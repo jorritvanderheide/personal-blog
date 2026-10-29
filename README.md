@@ -21,10 +21,10 @@ every work it cites, with every post that cites it. It carries the tags
 Google Scholar and Zotero read, a BibTeX entry, and an address that never
 changes.
 
-The rest stays small. There's no JavaScript and no server program for
-visitors: a blog only changes when something is published, so every page is
-decided when the site is built. Images are dithered, and posts don't go
-away, because a citation has to keep working.
+The rest stays small. Pages need no JavaScript, and there's no server
+program for visitors: a blog only changes when something is published, so
+every page is decided when the site is built. Images are dithered, and
+posts don't go away, because a citation has to keep working.
 
 <br/>
 
@@ -58,7 +58,9 @@ page.
 
 ## 3 Privacy
 
-- **No JavaScript**, and a content security policy that allows none.
+- **No JavaScript needed**: one small script of the site's own adds copy
+  buttons to a post's citation, and a content security policy runs nothing
+  else, no tracker and no other site's script.
 - **No cookies**, and no access log.
 - **AI crawlers are kept out**, in `robots.txt` and with a 403.
 

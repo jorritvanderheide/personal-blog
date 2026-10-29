@@ -125,6 +125,8 @@ func TestPost(t *testing.T) {
 		`<p class="citation">van der Heide, Jorrit. 2026. “The NixOS module system is a quiet revolution.” <em>BW20</em>, 15 March.`,
 		"<pre class=\"citation\">@online{quiet,",
 		`<a href="/log/quiet/cite.bib" download>cite.bib</a>`,
+		`<script src="/static/copy.js?v=`,
+		`<span class="select-hint">Click to select</span>`,
 		"<hr>\n<section aria-labelledby=\"cite\">",
 		`<meta property="og:type" content="article">`,
 		`<meta name="citation_title" content="The NixOS module system is a quiet revolution">`,
@@ -135,6 +137,9 @@ func TestPost(t *testing.T) {
 	contains(t, files, "log/older/index.html", "Linked from", `<a href="/log/quiet/">`)
 	lacks(t, files, "log/quiet/index.html", "Linked from")
 	contains(t, files, "static/site.css", ":root")
+	contains(t, files, "static/copy.js", "navigator.clipboard")
+	// Only a post loads it.
+	lacks(t, files, "index.html", "copy.js")
 }
 
 func TestWithdrawn(t *testing.T) {

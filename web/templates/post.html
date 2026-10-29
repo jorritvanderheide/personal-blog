@@ -1,6 +1,7 @@
 {{define "head"}}<meta property="og:type" content="article">
 <meta property="article:published_time" content="{{stamp .Post.Date}}">
 {{.Meta}}
+<script src="{{asset "copy.js"}}" defer></script>
 {{end}}
 {{define "main"}}
 <article>
@@ -32,7 +33,7 @@
 <h2 id="cite">Cite this post</h2>
 <p class="citation">{{.Cite}}</p>
 <div class="cite-tools">
-<span>Click to select</span> <span aria-hidden="true">·</span>
+<span class="select-hint">Click to select</span> <span aria-hidden="true">·</span>
 <a href="{{.Post.Path}}cite.bib" download>cite.bib</a> <span class="dot" aria-hidden="true">·</span>
 <details>
 <summary>BibTeX</summary>

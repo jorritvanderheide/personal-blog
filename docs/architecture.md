@@ -53,8 +53,10 @@ From top to bottom:
    form, on a tint, and one quiet row under it with a link to `cite.bib`
    and the BibTeX entry in a `<details>`. With a DOI, the citation and the
    entry give the DOI rather than the address. The citation and the entry
-   each select whole at a click, ready to copy: with no JavaScript there
-   is no copy button.
+   each select whole at a click, ready to copy. `copy.js` adds a button to
+   copy each, "Copy citation" in place of the row's "Click to select" and
+   "Copy BibTeX" under the entry; the citation is copied formatted, so the
+   site's name stays in italics, and as plain text.
 7. **Older and newer**: links to the posts either side of it in the log,
    the older on the left. A draft or a withdrawn post isn't in the log, so
    it has none. They aren't printed.
@@ -65,8 +67,12 @@ fails on it.
 
 ### How they look
 
-- **No JavaScript.** Folding is `<details>`, dark mode is
-  `prefers-color-scheme`.
+- **JavaScript only adds.** Every page works without it: folding is
+  `<details>`, dark mode is `prefers-color-scheme`. The one script,
+  `web/static/copy.js`, is loaded on a post's page only, and adds the copy
+  buttons to Cite this post; without it, the citation and the entry still
+  select whole at a click. small-press's policy runs the site's own script
+  files and nothing else.
 - **CSS is written by hand**, with no build step: custom properties, mobile
   first, `:focus-visible`, `prefers-reduced-motion`, and print. A page
   prints as it should: the text, its references and how to cite it, without

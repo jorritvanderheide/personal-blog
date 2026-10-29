@@ -9,9 +9,8 @@ draft = true
 
 Sentence
 
-![a screenshot](c8286409e610.png)
-
-a screenshot
+![girl with dog](5290b38a20db.png)  
+*Caption*
 
 Sentence
 

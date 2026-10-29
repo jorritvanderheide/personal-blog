@@ -131,11 +131,12 @@ func TestPost(t *testing.T) {
 		`<meta property="og:type" content="article">`,
 		`<meta name="citation_title" content="The NixOS module system is a quiet revolution">`,
 		`<script type="application/ld+json">`,
-		"Build 42.",
 	)
 	// Linked from the newer post.
 	contains(t, files, "log/older/index.html", "Linked from", `<a href="/log/quiet/">`)
 	lacks(t, files, "log/quiet/index.html", "Linked from")
+	// The deploy gives a build number, which no page shows.
+	lacks(t, files, "log/quiet/index.html", "Build 42")
 	contains(t, files, "static/site.css", ":root")
 	contains(t, files, "static/copy.js", "navigator.clipboard")
 	// Only a post loads it.

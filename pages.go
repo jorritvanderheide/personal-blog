@@ -29,7 +29,6 @@ type page struct {
 	Title       string // without the site's name; "" on the home page
 	Description string
 	NoIndex     bool
-	Build       int
 
 	Posts      []*site.Post
 	Years      []year
@@ -56,7 +55,7 @@ type year struct {
 
 // pages writes every page, and the static files, with the templates and
 // stylesheet in assets (package web, or web/ on disk in development).
-func pages(s *site.Site, assets fs.FS, o build.Options) (build.Files, error) {
+func pages(s *site.Site, assets fs.FS, _ build.Options) (build.Files, error) {
 	files := build.Files{}
 	var errs []error
 	fail := func(name string, err error) { errs = append(errs, fmt.Errorf("%s: %w", name, err)) }
@@ -76,7 +75,7 @@ func pages(s *site.Site, assets fs.FS, o build.Options) (build.Files, error) {
 		templates[kind] = t
 	}
 	write := func(name, kind string, p page) {
-		p.Site, p.Build = s, o.Build
+		p.Site = s
 		var buf bytes.Buffer
 		if err := templates[kind].ExecuteTemplate(&buf, "base", p); err != nil {
 			fail(name, err)

@@ -84,7 +84,7 @@ fails on it.
 - **Accessible by default:** a skip link, `aria-current` in the menu, a
   heading order that holds, alt text required on every image.
 - **The author's ORCID iD** is linked at the foot of every page, with the
-  licence, CC BY 4.0, the feed, and the build number.
+  licence, CC BY 4.0, and the feed.
 
 ## Running
 

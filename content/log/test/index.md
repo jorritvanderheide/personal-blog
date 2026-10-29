@@ -134,12 +134,4 @@ An embedded heading from another note:
 
 Inline tags: test test/nested source/ai
 
-## Footnotes
-
-A second footnote, to check numbering.[^2] A named footnote that is defined at the end.[^3]
-
 [^1]: This is an inline footnote.
-
-[^2]: A second footnote with **formatting** and a link.
-
-[^3]: A footnote with a name instead of a number.

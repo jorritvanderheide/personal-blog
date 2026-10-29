@@ -59,8 +59,9 @@ fails on it.
 - **CSS is written by hand**, with no build step: custom properties, mobile
   first, `:focus-visible`, `prefers-reduced-motion`, and print. A page
   prints as it should: the text, its references and how to cite it, without
-  the menu, with each web link's address after it, and code wrapped
-  rather than cut off.
+  the menu, with each web link's address after it, except in the
+  references and the citation, which write their addresses out already,
+  and code wrapped rather than cut off.
 - **Accessible by default:** a skip link, `aria-current` in the menu, a
   heading order that holds, alt text required on every image.
 - **The author's ORCID iD** is linked at the foot of every page, with the

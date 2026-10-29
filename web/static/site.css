@@ -334,8 +334,10 @@ footer.site {
     overflow-wrap: anywhere;
   }
 
-  /* The citation writes its address out already. */
-  main .citation a[href]::after {
+  /* The citation and every reference write their addresses out already. */
+  main .citation a[href]::after,
+  main ul.references a[href]::after,
+  main p.reference a[href]::after {
     content: none;
   }
 

@@ -71,7 +71,8 @@ fails on it.
   `<details>`, dark mode is `prefers-color-scheme`. The one script,
   `web/static/copy.js`, is loaded on a post's page only, and adds copy
   buttons: an icon in the top right corner of each code block and of the
-  citation, and "Copy BibTeX". Without it, code and the citation are
+  citation, shown, where the pointer can hover, only while it is over the
+  block or the icon has keyboard focus, and "Copy BibTeX". Without it, code and the citation are
   selected by hand and the entry is in `cite.bib`.
   small-press's policy runs the site's own script files and nothing else.
 - **CSS is written by hand**, with no build step: custom properties, mobile

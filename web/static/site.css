@@ -338,6 +338,21 @@ button.copy-icon:hover {
   color: var(--ink);
 }
 
+/* Where the pointer can hover, the icon shows only while it is over the
+   block, or while the icon has focus from the keyboard. A touch screen
+   keeps it in sight. */
+@media (hover: hover) {
+  button.copy-icon {
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .copyable:hover > button.copy-icon,
+  button.copy-icon:focus-visible {
+    opacity: 1;
+  }
+}
+
 button.copy-icon svg {
   width: 1.1rem;
   height: 1.1rem;

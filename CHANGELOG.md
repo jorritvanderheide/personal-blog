@@ -30,3 +30,13 @@ goes live, and from then on each heading is the date a change went live.
   the feed or the sitemap, until In the Open publishes it.
 - The program is built on small-press, a library other sites share, with
   this site's own pages on top; the site it builds is the same, to the byte.
+- "Cite this post" selects whole at a click, the citation and the BibTeX
+  entry each, ready to copy; `cite.bib` is in the BibTeX fold.
+- Code stands out from the text, on a tint of its own, and wraps on paper
+  rather than being cut off.
+- An image with a caption is a figure, the caption right under it.
+- On paper, a reference and the citation give their addresses once.
+- Under each post, links to the older and the newer one.
+- A post with three sections or more has a table of contents: folded above
+  the text, or in a column beside it that stays in view on a wide screen.
+- A reference's tooltip and citation tags keep its DOI.

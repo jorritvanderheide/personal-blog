@@ -2,7 +2,7 @@ module codeberg.org/BW20/personal-blog
 
 go 1.26.8
 
-require codeberg.org/BW20/small-press v0.1.1
+require codeberg.org/BW20/small-press v0.1.2
 
 require (
 	github.com/BurntSushi/toml v1.6.0 // indirect

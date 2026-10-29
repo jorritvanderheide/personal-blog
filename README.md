@@ -59,8 +59,8 @@ page.
 ## 3 Privacy
 
 - **No JavaScript needed**: one small script of the site's own adds copy
-  buttons to a post's citation, and a content security policy runs nothing
-  else, no tracker and no other site's script.
+  buttons to a post's code and citation, and a content security policy
+  runs nothing else, no tracker and no other site's script.
 - **No cookies**, and no access log.
 - **AI crawlers are kept out**, in `robots.txt` and with a 403.
 

@@ -297,7 +297,7 @@ details pre {
   color: inherit;
 }
 
-/* The copy buttons copy.js adds, which look like the row's links. */
+/* "Copy BibTeX", which copy.js adds, and which looks like the row's links. */
 button.copy {
   padding: 0;
   border: 0;
@@ -307,6 +307,48 @@ button.copy {
   text-decoration: underline;
   text-underline-offset: 0.15em;
   cursor: pointer;
+}
+
+/* The copy icon copy.js puts in the top right corner of a code block and
+   of the citation, in a box of their own, with room kept for it. */
+.copyable {
+  position: relative;
+}
+
+.copyable > pre,
+.copyable > .citation {
+  padding-right: 3rem;
+}
+
+button.copy-icon {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: var(--code);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+button.copy-icon:hover {
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+button.copy-icon svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* Under a post, the older one on the left and the newer on the right, as
@@ -440,6 +482,7 @@ footer.site {
   header.site nav,
   details,
   .cite-tools,
+  .copy-icon,
   .pager,
   .contents {
     display: none;

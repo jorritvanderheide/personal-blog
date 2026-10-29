@@ -31,10 +31,11 @@ goes live, and from then on each heading is the date a change went live.
 - The program is built on small-press, a library other sites share, with
   this site's own pages on top; the site it builds is the same, to the byte.
 - "Cite this post" is a citation on a tint, selected whole at a click,
-  ready to copy, with `cite.bib` in one row under it, and buttons that
-  copy the citation and the BibTeX entry, where JavaScript runs.
-- Code stands out from the text, on a tint of its own, and wraps on paper
-  rather than being cut off.
+  ready to copy, with `cite.bib` in one row under it; where JavaScript
+  runs, a copy icon in its corner and a button that copies the BibTeX entry.
+- Code stands out from the text, on a tint of its own, with a copy icon in
+  its corner where JavaScript runs, and wraps on paper rather than being
+  cut off.
 - An image with a caption is a figure, the caption right under it.
 - On paper, a reference and the citation give their addresses once.
 - Under each post, links to the older and the newer one.

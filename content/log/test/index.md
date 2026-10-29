@@ -9,7 +9,7 @@ draft = true
 
 Sentence
 
-![1600\|alt](ce96697e2a4a.jpg)  
+![alt\|1600](ce96697e2a4a.jpg)  
 *Caption*
 
 ``` sh

@@ -134,4 +134,4 @@ An embedded heading from another note:
 
 Inline tags: test test/nested source/ai
 
-[^1]: This is an inline footnote.
+[^1]: This is an inline footnote!

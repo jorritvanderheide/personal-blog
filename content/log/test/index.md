@@ -78,8 +78,8 @@ That was a quote[^2]
 > A quote with several paragraphs.
 >
 > > A nested quote inside it.
-> >
-> > Back in the outer quote.
+>
+> Back in the outer quote.
 
 ## Callouts
 
@@ -124,64 +124,10 @@ That was a quote[^2]
 > > **The inner callout**  
 > > Inside the outer one.
 
-## Code
-
-Inline: `mask run all`.
-
-``` sh
-mask run all
-```
-
-``` nix
-devShells = forAllSystems (pkgs: {
-    default = pkgs.mkShell {
-        packages = with pkgs; [
-            go
-            gopls
-        ];
-        env = {
-            CGO_ENABLED = "0";
-            GOTOOLCHAIN = "local";
-        };
-    };
-});
-```
-
-``` go
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, blog")
-}
-```
-
-``` json
-{
-  "name": "test",
-  "published": false
-}
-```
-
-A code block without a language:
-
-    plain text, no highlighting
-
-Four backticks, to show a code fence inside a code block:
-
-```` md
-```sh
-echo "nested fence"
-```
-````
-
 ## Tables
 
 | Element   | Syntax     | Renders as |
 |-----------|------------|------------|
-| Bold      | `**text**` | **text**   |
-| Italic    | `*text*`   | *text*     |
 | Highlight | `==text==` | text       |
 | Wikilink  | `[[Note]]` | Signature  |
 
@@ -233,14 +179,6 @@ An embedded heading from another note:
 ## Tags
 
 Inline tags: test test/nested source/ai
-
-## Comments and HTML
-
-This sentence has a comment that must not show up: and this text follows it.
-
-## Properties
-
-The frontmatter of this note carries `title`, `summary`, `tags`, `post-status` and `published-url`. Check that none of them show up in the body, and that `title` and `summary` are used for the page title and description.
 
 ## Footnotes
 

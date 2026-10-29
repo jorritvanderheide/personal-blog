@@ -9,11 +9,30 @@ draft = true
 
 Sentence
 
-![girl with dog](5290b38a20db.png)  
+![frok](cae02a9442e1.png)  
 *Caption*
+
+``` sh
+mask run all
+```
 
 Sentence
 
 > he proposes to use authenticity as a proxy for veracity based on the belief that the ubiquitous use of (cryptographic) techniques to establish the authenticity of a message (e.g., via a signature) would help people make their own credibility judgments ([Hoepman 2025, 2](#ref-hoepmanAuthenticityEffectiveAntidote2025))
 
 thas was a quote
+
+``` nix
+devShells = forAllSystems (pkgs: {
+        default = pkgs.mkShell {
+          packages = with pkgs; [
+            go
+            gopls
+          ];
+          env = {
+            CGO_ENABLED = "0";
+            GOTOOLCHAIN = "local";
+          };
+        };
+      });
+```

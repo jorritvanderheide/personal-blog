@@ -10,7 +10,13 @@
 {{if .Post.Draft}}<p class="meta"><strong>A draft.</strong> Only its address leads here: it’s in none of the site’s lists, nor its feed, until it’s published.</p>
 {{end}}{{if not .Post.Withdrawn.IsZero}}<p class="notice"><strong>Withdrawn on <time datetime="{{iso .Post.Withdrawn}}">{{date .Post.Withdrawn}}</time>.</strong>{{with .Post.WithdrawnReason}} {{.}}<br>{{else}} {{end}}It’s no longer in the site’s lists or its feed. Its address stays, so links and citations to it still lead here.</p>
 {{end}}</header>
-{{.Text}}
+{{if .Contents}}<details class="contents">
+<summary>Contents</summary>
+{{template "contents" .}}</details>
+<div class="contents"><nav aria-label="Contents">
+<p>Contents</p>
+{{template "contents" .}}</nav></div>
+{{end}}{{.Text}}
 {{with .References}}<section aria-labelledby="references">
 <h2 id="references">References</h2>
 <ul class="references">
@@ -36,3 +42,9 @@
 {{end}}{{with .Newer}}<a class="newer" href="{{.Path}}"><span>Newer</span> {{.Title}}</a>
 {{end}}</nav>
 {{end}}{{end}}
+{{define "contents"}}<ol>
+{{range .Contents}}<li><a href="#{{.ID}}">{{.Words}}</a></li>
+{{end}}{{if .References}}<li><a href="#references">References</a></li>
+{{end}}<li><a href="#cite">Cite this post</a></li>
+</ol>
+{{end}}

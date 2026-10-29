@@ -308,6 +308,74 @@ details pre {
   }
 }
 
+/* A longer post's table of contents. It is in the page twice: folded above
+   the text, and in a column beside it that stays in view as the reader
+   scrolls, where the screen is wide enough. Only one of them shows. */
+details.contents {
+  margin-bottom: 1.5rem;
+}
+
+/* A section jumped to keeps some room above it, as the column does. */
+[id] {
+  scroll-margin-top: 1.5rem;
+}
+
+.contents ol {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.contents li {
+  margin-bottom: 0.4rem;
+}
+
+div.contents {
+  display: none;
+}
+
+div.contents p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+nav[aria-label="Contents"] a:hover {
+  color: var(--ink);
+}
+
+/* Wide enough for the text and a column of 14rem beside it, with the text
+   where it always is. In ems, which a media query takes from the browser's
+   own size, so the 112.5% of html is in it: 81em is 72rem of the page. */
+@media (min-width: 81em) {
+  article {
+    position: relative;
+  }
+
+  details.contents {
+    display: none;
+  }
+
+  /* As tall as the post, so the list in it can stay in view to its end. */
+  div.contents {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(100% + 2.5rem);
+    width: 14rem;
+  }
+
+  div.contents nav {
+    position: sticky;
+    top: 1.5rem;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+  }
+}
+
 footer.site {
   margin-top: 3rem;
   padding-top: 0.75rem;
@@ -350,7 +418,8 @@ footer.site {
   header.site nav,
   details,
   .hint,
-  .pager {
+  .pager,
+  .contents {
     display: none;
   }
 

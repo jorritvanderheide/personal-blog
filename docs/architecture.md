@@ -36,18 +36,22 @@ From top to bottom:
 1. The title, the exact date (*15 March 2026*, in `<time datetime>`), when
    it was updated, if it was, and its threads. A reader citing it needs the
    date as it is.
-2. The text, with footnotes.
-3. **References**: `references` in order, each with `id="ref-<key>"`, which
+2. **Contents**, for a post with three sections (`##`) or more: a link to
+   each, then to References and Cite this post. Folded above the text, or,
+   where the screen is wide enough, in a column beside it that stays in
+   view; the page has both, and shows one. It isn't printed.
+3. The text, with footnotes.
+4. **References**: `references` in order, each with `id="ref-<key>"`, which
    the in-text citations link to, with the reference as their tooltip. Each
    links on to its work's page, with every post that cites it.
-4. **Linked from**: every post whose body links to this one, newest first.
+5. **Linked from**: every post whose body links to this one, newest first.
    Left out when there is none.
-5. **Cite this post**: one formatted citation, in a fixed author-date form,
+6. **Cite this post**: one formatted citation, in a fixed author-date form,
    and the BibTeX entry in a `<details>`, with a link to `cite.bib`. With
    a DOI, the citation and the entry give the DOI rather than the address.
    The citation and the entry each select whole at a click, ready to copy:
    with no JavaScript there is no copy button.
-6. **Older and newer**: links to the posts either side of it in the log,
+7. **Older and newer**: links to the posts either side of it in the log,
    the older on the left. A draft or a withdrawn post isn't in the log, so
    it has none. They aren't printed.
 

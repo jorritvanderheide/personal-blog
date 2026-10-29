@@ -36,6 +36,7 @@ type page struct {
 	Post       *site.Post
 	Older      *site.Post // the posts either side of it in the log, if it's in it
 	Newer      *site.Post
+	Contents   []render.Heading // the post's ## headings, when it has enough for a table of contents
 	Text       template.HTML
 	References []build.Reference
 	Meta       template.HTML // the citation tags and JSON-LD (build.Meta)
@@ -126,7 +127,7 @@ func pages(s *site.Site, assets fs.FS, o build.Options) (build.Files, error) {
 		write(name, "post", page{
 			Path: p.Path(), Title: p.Title, Description: p.Summary, NoIndex: !p.Live(), Post: p, Text: text, References: refs,
 			Meta: meta, Cite: build.Citation(s.Config, p), BibTeX: build.BibTeX(s.Config, p),
-			Older: older[p], Newer: newer[p],
+			Older: older[p], Newer: newer[p], Contents: contents(p),
 		})
 	}
 
@@ -170,4 +171,19 @@ func byYear(posts []*site.Post) []year {
 		years[len(years)-1].Posts = append(years[len(years)-1].Posts, p)
 	}
 	return years
+}
+
+// contents is a post's table of contents: its ## headings, or none when it
+// has fewer than three, as a short post doesn't need one.
+func contents(p *site.Post) []render.Heading {
+	var headings []render.Heading
+	for _, h := range p.Doc.Headings() {
+		if h.Level == 2 {
+			headings = append(headings, h)
+		}
+	}
+	if len(headings) < 3 {
+		return nil
+	}
+	return headings
 }

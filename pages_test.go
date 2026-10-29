@@ -170,6 +170,22 @@ func TestOlderNewer(t *testing.T) {
 	}
 }
 
+// A post with three sections or more has a table of contents, of its ##
+// headings and the page's own sections; a shorter one has none.
+func TestContents(t *testing.T) {
+	c := sample(t)
+	c.Posts[0].Body = []byte("As [(Marsh 2020)](#ref-marsh2020) says.\n\n![A raised bed](bed.jpg)\n\n## One\n\nText.\n\n## Two\n\n### Deeper\n\nText.\n\n## Three\n\nText.")
+	files := whole(t, c, build.Options{})
+	contains(t, files, "log/quiet/index.html",
+		"<details class=\"contents\">\n<summary>Contents</summary>",
+		`<nav aria-label="Contents">`,
+		"<li><a href=\"#one\">One</a></li>\n<li><a href=\"#two\">Two</a></li>\n<li><a href=\"#three\">Three</a></li>\n<li><a href=\"#references\">References</a></li>\n<li><a href=\"#cite\">Cite this post</a></li>",
+	)
+	lacks(t, files, "log/quiet/index.html", `href="#deeper"`)
+	// One ## heading isn't enough.
+	lacks(t, whole(t, sample(t), build.Options{}), "log/quiet/index.html", `class="contents"`)
+}
+
 func TestLists(t *testing.T) {
 	files := whole(t, sample(t), build.Options{})
 	contains(t, files, "index.html", "<title>BW20</title>", "A small, finite website.", `<a href="/log/quiet/">`, `<a class="name" href="/" aria-current="page">`)

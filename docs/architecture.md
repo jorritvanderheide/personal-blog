@@ -37,9 +37,10 @@ From top to bottom:
    it was updated, if it was, and its threads. A reader citing it needs the
    date as it is.
 2. **Contents**, for a post with three sections (`##`) or more: a link to
-   each, then to References and Cite this post. Folded above the text, or,
-   where the screen is wide enough, in a column beside it, fixed in place
-   as the page scrolls; the page has both, and shows one. It isn't printed.
+   the top of the page and to each section, then to References and Cite
+   this post. Folded above the text, or, where the screen is wide enough,
+   in a column beside it, fixed in place as the page scrolls; the page has
+   both, and shows one. It isn't printed.
 3. The text, with footnotes, then a thin rule, as the footnotes have above
    them, to set it apart from the sections that follow.
 4. **References**: `references` in order, each with `id="ref-<key>"`, which

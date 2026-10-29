@@ -180,7 +180,7 @@ func TestContents(t *testing.T) {
 	contains(t, files, "log/quiet/index.html",
 		"<details class=\"contents\">\n<summary>Contents</summary>",
 		`<nav aria-label="Contents">`,
-		"<li><a href=\"#one\">One</a></li>\n<li><a href=\"#two\">Two</a></li>\n<li><a href=\"#three\">Three</a></li>\n<li><a href=\"#references\">References</a></li>\n<li><a href=\"#cite\">Cite this post</a></li>",
+		"<li><a href=\"#top\">Top</a></li>\n<li><a href=\"#one\">One</a></li>\n<li><a href=\"#two\">Two</a></li>\n<li><a href=\"#three\">Three</a></li>\n<li><a href=\"#references\">References</a></li>\n<li><a href=\"#cite\">Cite this post</a></li>",
 	)
 	lacks(t, files, "log/quiet/index.html", `href="#deeper"`)
 	// One ## heading isn't enough.

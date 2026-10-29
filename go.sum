@@ -1,5 +1,5 @@
-codeberg.org/BW20/small-press v0.1.0 h1:MjH0SqeRBzhQ+c6Vpe0o2Sb5DhiOhu9jTOfOf77D3GM=
-codeberg.org/BW20/small-press v0.1.0/go.mod h1:Oba/bnMm79VODvbhXCBsHLHUb3ptZUUoN8eusu4AuS4=
+codeberg.org/BW20/small-press v0.1.1 h1:VQCxiKt0/tCuzy70lb5/Wo/AK+020F5ktCDCiZLCY+k=
+codeberg.org/BW20/small-press v0.1.1/go.mod h1:Oba/bnMm79VODvbhXCBsHLHUb3ptZUUoN8eusu4AuS4=
 github.com/BurntSushi/toml v1.6.0 h1:dRaEfpa2VI55EwlIW72hMRHdWouJeRF7TPYhI+AUQjk=
 github.com/BurntSushi/toml v1.6.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
 github.com/yuin/goldmark v1.8.6 h1:d0VcaP1sx9GkFVkoW+KtggpGi2KZ965i14b0+bDQST4=

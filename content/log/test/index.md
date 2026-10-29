@@ -24,15 +24,15 @@ thas was a quote
 
 ``` nix
 devShells = forAllSystems (pkgs: {
-        default = pkgs.mkShell {
-          packages = with pkgs; [
+    default = pkgs.mkShell {
+        packages = with pkgs; [
             go
             gopls
-          ];
-          env = {
+        ];
+        env = {
             CGO_ENABLED = "0";
             GOTOOLCHAIN = "local";
-          };
         };
-      });
+    };
+});
 ```

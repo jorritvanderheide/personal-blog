@@ -314,7 +314,7 @@ details.contents {
   margin-bottom: 1.5rem;
 }
 
-/* A section jumped to keeps some room above it, as the column does. */
+/* A section jumped to keeps some room above it. */
 [id] {
   scroll-margin-top: 1.5rem;
 }
@@ -349,28 +349,20 @@ nav[aria-label="Contents"] a:hover {
    where it always is. In ems, which a media query takes from the browser's
    own size, so the 112.5% of html is in it: 81em is 72rem of the page. */
 @media (min-width: 81em) {
-  article {
-    position: relative;
-  }
-
   details.contents {
     display: none;
   }
 
-  /* As tall as the post, so the list in it can stay in view to its end. */
+  /* Fixed in place, level with the title, and 2.5rem right of the text:
+     from the middle of the window, half the text's 35.5rem (the body's
+     38rem less its padding), then the gap. */
   div.contents {
     display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: calc(100% + 2.5rem);
+    position: fixed;
+    top: 6rem;
+    left: calc(50% + 17.75rem + 2.5rem);
     width: 14rem;
-  }
-
-  div.contents nav {
-    position: sticky;
-    top: 1.5rem;
-    max-height: calc(100vh - 3rem);
+    max-height: calc(100vh - 7.5rem);
     overflow-y: auto;
   }
 }

@@ -38,8 +38,8 @@ From top to bottom:
    date as it is.
 2. **Contents**, for a post with three sections (`##`) or more: a link to
    each, then to References and Cite this post. Folded above the text, or,
-   where the screen is wide enough, in a column beside it that stays in
-   view; the page has both, and shows one. It isn't printed.
+   where the screen is wide enough, in a column beside it, fixed in place
+   as the page scrolls; the page has both, and shows one. It isn't printed.
 3. The text, with footnotes.
 4. **References**: `references` in order, each with `id="ref-<key>"`, which
    the in-text citations link to, with the reference as their tooltip. Each

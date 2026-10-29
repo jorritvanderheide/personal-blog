@@ -38,5 +38,5 @@ goes live, and from then on each heading is the date a change went live.
 - On paper, a reference and the citation give their addresses once.
 - Under each post, links to the older and the newer one.
 - A post with three sections or more has a table of contents: folded above
-  the text, or in a column beside it that stays in view on a wide screen.
+  the text, or fixed in place beside it on a wide screen.
 - A reference's tooltip and citation tags keep its DOI.

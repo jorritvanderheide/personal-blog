@@ -48,11 +48,13 @@ From top to bottom:
    links on to its work's page, with every post that cites it.
 5. **Linked from**: every post whose body links to this one, newest first.
    Left out when there is none.
-6. **Cite this post**: one formatted citation, in a fixed author-date form,
-   and the BibTeX entry in a `<details>`, with a link to `cite.bib`. With
-   a DOI, the citation and the entry give the DOI rather than the address.
-   The citation and the entry each select whole at a click, ready to copy:
-   with no JavaScript there is no copy button.
+6. **Cite this post**, after another thin rule when References or Linked
+   from come before it: one formatted citation, in a fixed author-date
+   form, on a tint, and one quiet row under it with a link to `cite.bib`
+   and the BibTeX entry in a `<details>`. With a DOI, the citation and the
+   entry give the DOI rather than the address. The citation and the entry
+   each select whole at a click, ready to copy: with no JavaScript there
+   is no copy button.
 7. **Older and newer**: links to the posts either side of it in the log,
    the older on the left. A draft or a withdrawn post isn't in the log, so
    it has none. They aren't printed.

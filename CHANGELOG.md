@@ -30,8 +30,8 @@ goes live, and from then on each heading is the date a change went live.
   the feed or the sitemap, until In the Open publishes it.
 - The program is built on small-press, a library other sites share, with
   this site's own pages on top; the site it builds is the same, to the byte.
-- "Cite this post" selects whole at a click, the citation and the BibTeX
-  entry each, ready to copy; `cite.bib` is in the BibTeX fold.
+- "Cite this post" is a citation on a tint, selected whole at a click,
+  ready to copy, with `cite.bib` and the BibTeX entry in one row under it.
 - Code stands out from the text, on a tint of its own, and wraps on paper
   rather than being cut off.
 - An image with a caption is a figure, the caption right under it.

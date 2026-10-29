@@ -27,15 +27,18 @@
 {{end}}{{with .Post.LinkedFrom}}<section aria-labelledby="linked-from">
 <h2 id="linked-from">Linked from</h2>
 {{template "posts" .}}</section>
+{{end}}{{if or .References .Post.LinkedFrom}}<hr>
 {{end}}<section aria-labelledby="cite">
 <h2 id="cite">Cite this post</h2>
 <p class="citation">{{.Cite}}</p>
-<p class="hint">A click selects it all, to copy.</p>
+<div class="cite-tools">
+<span>Click to select</span> <span aria-hidden="true">·</span>
+<a href="{{.Post.Path}}cite.bib" download>cite.bib</a> <span class="dot" aria-hidden="true">·</span>
 <details>
 <summary>BibTeX</summary>
 <pre class="citation">{{.BibTeX}}</pre>
-<p><a href="{{.Post.Path}}cite.bib" download>Download cite.bib</a></p>
 </details>
+</div>
 </section>
 </article>
 {{if or .Older .Newer}}<nav class="pager" aria-label="Older and newer posts">

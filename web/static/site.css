@@ -270,7 +270,7 @@ details pre {
    citation is this page's own, so it isn't a link to follow here. */
 .citation {
   padding: 0.75rem 1rem;
-  border: 1px solid var(--line);
+  background: var(--code);
   -webkit-user-select: all;
   user-select: all;
 }
@@ -281,10 +281,33 @@ details pre {
   text-decoration: none;
 }
 
-.hint {
+/* One quiet row under the citation: the hint, cite.bib and the BibTeX
+   fold. Open, the fold takes a line of its own, and the dot before it
+   goes. */
+.cite-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.5rem;
   margin-top: -0.5rem;
   font-size: 0.9rem;
   color: var(--muted);
+}
+
+.cite-tools a {
+  color: inherit;
+}
+
+.cite-tools summary {
+  cursor: pointer;
+}
+
+.cite-tools details[open] {
+  flex-basis: 100%;
+}
+
+.cite-tools:has(details[open]) .dot {
+  display: none;
 }
 
 /* Under a post, the older one on the left and the newer on the right, as
@@ -417,7 +440,7 @@ footer.site {
   .skip,
   header.site nav,
   details,
-  .hint,
+  .cite-tools,
   .pager,
   .contents {
     display: none;

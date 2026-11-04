@@ -2,7 +2,7 @@
 # post is by, the line on the home page, and the menu.
 title = 'BW20'
 url = 'https://bw20.nl'
-description = 'Essays and field notes on technology, society, and sustainable practice.'
+description = 'What gets written here.'
 
 [author]
 given = 'Jorrit'

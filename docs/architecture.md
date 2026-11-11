@@ -83,6 +83,11 @@ fails on it.
   and code wrapped rather than cut off.
 - **Accessible by default:** a skip link, `aria-current` in the menu, a
   heading order that holds, alt text required on every image.
+- **Images keep their dithered pixels.** small-press dithers every image to
+  at most 800 pixels, and a screen with more pixels than that enlarges it.
+  `image-rendering: pixelated` keeps each dot sharp there, where smoothing
+  would blur the pattern into grey. The paper shows through the light greys
+  (`mix-blend-mode: multiply`), and in dark mode they're dimmed instead.
 - **The author's ORCID iD** is linked at the foot of every page, with the
   licence, CC BY 4.0, and the feed.
 

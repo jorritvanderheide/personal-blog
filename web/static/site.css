@@ -142,6 +142,8 @@ img {
   height: auto;
   /* Dithered in greys: the paper shows through the light ones. */
   mix-blend-mode: multiply;
+  /* Enlarged on a dense screen, each dot stays sharp rather than blurring into grey. */
+  image-rendering: pixelated;
 }
 
 /* An image with its caption under it. */

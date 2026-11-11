@@ -37,6 +37,7 @@ goes live, and from then on each heading is the date a change went live.
   its corner where JavaScript runs, and wraps on paper rather than being
   cut off.
 - An image with a caption is a figure, the caption right under it.
+- A dithered image keeps its sharp dots on a screen that enlarges it.
 - On paper, a reference and the citation give their addresses once.
 - Under each post, links to the older and the newer one.
 - A post with three sections or more has a table of contents: folded above
